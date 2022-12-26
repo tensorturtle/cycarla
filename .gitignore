@@ -1,6 +1,6 @@
 # Saved application state
 # such as bluetooth addresses, etc
-.appdata/*.temp
+cycarla/.appdata/*.temp
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
