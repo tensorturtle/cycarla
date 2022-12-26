@@ -17,6 +17,12 @@ from bleak.exc import BleakDBusError
 from pycycling.sterzo import Sterzo
 from pycycling.cycling_speed_cadence_service import CyclingSpeedCadenceService
 
+# detect OS
+import platform
+PLATFORM = platform.system()
+print(f"Platform: {PLATFORM}")
+
+
 STERZO_SERVICE = "347b0001-7635-408b-8918-8ff3949ce592"
 SPEED_CADENCE_SERVICE = "00001816-0000-1000-8000-00805f9b34fb"
 
@@ -57,7 +63,7 @@ async def connect_to_device(d: BLEDevice):
                     print("Unknown device connected")
         except (asyncio.exceptions.CancelledError, asyncio.exceptions.TimeoutError, BleakDBusError):
             continue
-    
+
 def filter_cycling_accessories(devices: List[BLEDevice]) -> List[BLEDevice]:
     '''
     Given a list of BLE devices (as returned by BleakScanner.discover),
@@ -71,7 +77,7 @@ def filter_cycling_accessories(devices: List[BLEDevice]) -> List[BLEDevice]:
             relevant_devices.append(d)
         if SPEED_CADENCE_SERVICE in d.metadata["uuids"]:
             relevant_devices.append(d)
-    
+
     return relevant_devices
 
 async def scan_bt():
@@ -103,8 +109,9 @@ if __name__ == "__main__":
     while len(BT_DEVICES) < 2:
         # unpair previously connected bluetooth devices by ID
         for id in PAIR_HISTORY:
-            subprocess.call(["bluetoothctl", "remove", id], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-            #os.system(f"sudo bluetoothctl remove {id}")
+            if PLATFORM == "Linux":
+                subprocess.call(["bluetoothctl", "remove", id], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+                #os.system(f"sudo bluetoothctl remove {id}")
         print("Scanning...")
         t = Thread(target=threaded_scan)
         t.start()
@@ -116,9 +123,9 @@ if __name__ == "__main__":
         t.join()
         print("Done scanning")
         print(BT_DEVICES)
-    
+
     print("2 Devices found. Immediately connecting...")
-    # write BT_DEVICES contents to a file 
+    # write BT_DEVICES contents to a file
     # so that we can remember to unpair them
     # the next time we run this script
     with open(".appdata/bt_history.temp", "w") as f:
@@ -133,11 +140,11 @@ if __name__ == "__main__":
         p = multiprocessing.Process(target=asyncio.run, args=(connect_to_device(d),))
         procs.append(p)
         p.start()
-    
+
     for i in range(20):
         print(20-i)
         time.sleep(1)
-    
+
 
     print("Killing first process for fun")
     p = procs[1]
@@ -152,7 +159,7 @@ if __name__ == "__main__":
     procs.append(p_new)
     p_new.start()
 
-    
+
     # this try-except block fixes problem where KeyboardInterrupt is made useless by multiprocessing
     try:
         for p in procs:
@@ -163,10 +170,3 @@ if __name__ == "__main__":
         for p in procs:
             p.terminate()
             p.join()
-        
-        print("Done")
-
-
-
-
-
