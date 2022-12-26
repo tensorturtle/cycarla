@@ -1,0 +1,63 @@
+BTService {
+    layout: horizontal;
+    background: $boost;
+    height: 5;
+    margin: 0;
+    min-width: 40;
+    padding: 1;
+}
+
+BTConnectionStatus {
+    content-align: center middle;
+    text-opacity: 60%;
+    height: 3;
+}
+
+Button {
+    width: 15;
+}
+
+#bt_enable {
+    dock: left;
+}
+
+#bt_disable{
+    dock: left;
+    display: none;
+}
+
+#bt_next {
+    dock: right;
+    display: none;
+}
+
+.enabled {
+    text-style: bold;
+    background: silver;
+    color: $text;
+}
+
+.enabled BTConnectionStatus {
+    text-opacity: 100%;
+}
+
+.enabled #bt_enable {
+    display: none;
+}
+
+.enabled #bt_disable {
+    display: block;
+}
+
+.enabled #bt_next {
+    display: none;
+}
+
+.connected {
+    background: lightgreen;
+    color: $text;
+}
+
+.connected #bt_next {
+    display: block;
+}
