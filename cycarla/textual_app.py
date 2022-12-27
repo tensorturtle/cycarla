@@ -2,34 +2,101 @@ from textual.app import App, ComposeResult
 from textual.containers import Container
 from textual.widgets import Header, Footer, Button, Static
 from textual.reactive import reactive
+from textual.screen import Screen
+from textual import log
+
+import asyncio
 
 # mock stuff mainly
 import time
 from time import monotonic
 import random
 
+import sys
+
+import platform
+PLATFORM = platform.system()
+
+import threading
+import multiprocessing
+import subprocess
+
+# bluetooth utilities
+from mock_bleak import connect_to_device, scan_bt, threaded_scan, scan_bt_async_runner, BT_DEVICES, LATEST_STEERING_ANGLE, LATEST_SPEED
+
+PROCS = [] # multiprocessing processes
+THREADS = []
+
+PAIR_HISTORY = []
+
+# App state flags
+SCANNING_STAGE = True # True means: we are searching (including restarting bluetooth). False means: stop searching. Pair and stream data from devices.
+
 # Interface to bleak
 
 live_clients = {}
+from enum import Enum
+class PycyclingService(Enum):
+    SPEED = "00001816-0000-1000-8000-00805f9b34fb"
+    STERZO = "347b0001-7635-408b-8918-8ff3949ce592"
 
+class FindControllerScreen(Screen):
+    def compose(self) -> ComposeResult:
+        yield Header()
+        yield Container(
+            AvailableDevices(),
+            BTService(PycyclingService.STERZO), 
+            BTService(PycyclingService.SPEED),
+        )
+        
+        yield Button("Pair all", id="pair_all")
+        yield Footer()
+    
+    def action_pair_all(self) -> None:
+        global PAIR_HISTORY
+        global BT_DEVICES
+        global SCANNING_STAGE
+
+        SCANNING_STAGE = False
+        PAIR_HISTORY = []
+        with open(".appdata/bt_history.temp", "r") as f:
+            for line in f:
+                PAIR_HISTORY.append(line.strip())
+
+        for d in BT_DEVICES:
+            if d.address not in PAIR_HISTORY:
+                PAIR_HISTORY.append(d.address)
+            p_new = multiprocessing.Process(target=asyncio.run, args=(connect_to_device(d),))
+            PROCS.append(p_new)
+            p_new.start()
+        
+        # save PAIR_HISTORY to file
+        with open(".appdata/bt_history.temp", "w") as f:
+            for d in PAIR_HISTORY:
+                f.write(f"{d}\n")
+        
+        self.app.pop_screen()
+    
+    def on_button_pressed(self, event: Button.Pressed) -> None:
+        if event.button.id == "pair_all":
+            self.action_pair_all()
+    
 class BTConnectionStatus(Static):
     '''
-    A widget that shows the status of a bluetooth connection
+    A widget that shows the status of a bluetooth service
     '''
-    def __init__(self, bt_address):
+    def __init__(self, service_type: PycyclingService):
         super().__init__()
-        self.bt_address = bt_address
+        self.service_type = service_type
 
     connection_status = reactive("DISCONNECTED")
 
     def on_mount(self) -> None:
-        self.set_interval(1/30, self.update_connection_status)
-        pass
+        self.set_interval(1/20, self.update_connection_status)
     
     def update_connection_status(self) -> None:
-        if self.connection_status == "CONNECTING":
-            self.connection_status =  mock_check_connection()
-        self.update(self.connection_status)
+        self.connection_status = mock_connection_status(self.service_type)
+        self.update(self.service_type.name)
     
     def watch_connection_status(self, time: float) -> None:
         '''
@@ -52,24 +119,22 @@ class BTConnectionStatus(Static):
     def disconnect(self) -> None:
         self.connection_status = "DISCONNECTED"
     
-def mock_connection_status() -> str:
-    return random.choice([
-        "DISCONNECTED",
-        "CONNECTING",
-        "CONNECTED",
-    ])
-
-def mock_check_connection() -> str:
-    return "CONNECTED"
-
-def check_bt_connection() -> str:
-    pass
+def mock_connection_status(service: PycyclingService) -> str:
+    global BT_DEVICES
+    for bt_device in BT_DEVICES:
+        if service.value in bt_device.metadata["uuids"]:
+            return "CONNECTED"
+    return "DISCONNECTED"
 
 
 class BTService(Static):
     '''
     A bluetooth connection widget for one type of device 
     '''
+    def __init__(self, service_type: PycyclingService):
+        super().__init__()
+        self.service_type = service_type
+
     def on_button_pressed(self, event: Button.Pressed) -> None:
         '''
         Handle button presses
@@ -90,33 +155,34 @@ class BTService(Static):
         yield Button("Enable", id="bt_enable", variant="success")
         yield Button("Disable", id="bt_disable", variant="error")
         yield Button("Choose Next", id="bt_next")
-        yield BTConnectionStatus("DISCONNECTED")
-    
-    def action_bt_connect(self) -> None:
-        '''
-        An action to connect to a bluetooth device
-        '''
-        print("Connecting to bluetooth device...")
-    
-    def action_bt_disconnect(self) -> None:
-        '''
-        An action to disconnect from a bluetooth device
-        '''
-        print("Disconnecting from bluetooth device...")
-    
-    def action_bt_next(self) -> None:
-        '''
-        An action to move to the next bluetooth device
-        '''
-        print("Moving to next bluetooth device...")
+        yield BTConnectionStatus(self.service_type)
     
 
+class AvailableDevices(Static):
 
-STERZO_ADDRESS = "EA:1B:D7:96:1A:A1" 
-RVR_ADDRESS = "D4:73:B6:4C:0E:72"
+    def on_mount(self) -> None:
+        global PROCS
+        for pr in PROCS:
+            pr.terminate()
+        self.set_interval(1/10, self.update_devices)
+    
+    def update_devices(self) -> None:
+        global SCANNING_STAGE
+        global BT_DEVICES
+        self.update(f"Available Devices {BT_DEVICES}.\nSearching status: {SCANNING_STAGE}")
 
-live_clients.update({STERZO_ADDRESS: None})
-live_clients.update({RVR_ADDRESS: None})
+class StreamingSensor(Static):
+
+    def on_mount(self) -> None:
+        self.set_interval(1/20, self.update_sensor)
+
+    def update_sensor(self) -> None:
+        global PROCS
+        global LATEST_SPEED
+        global LATEST_STEERING_ANGLE
+
+        self.update(f"Speed: {LATEST_SPEED.value} m/s, Steering Angle: {LATEST_STEERING_ANGLE.value} degrees. Processes: {PROCS}")
+
 
 class CycarlaApp(App):
     '''
@@ -127,29 +193,90 @@ class CycarlaApp(App):
     Also provides a Terminal-based User Interface to see connection status.
     '''
     CSS_PATH = "cycarla_style.css"
-    BINDINGS = [("q", "quit", "Quit Application"),
-                ]
+    SCREENS = {
+        "find_controller": FindControllerScreen,
+    }
+    BINDINGS = [
+        ("e", "exit", "Exit Application"),
+        ("f", "push_screen_find_controller", "Find Controller"),
+        ]
+
+    def on_mount(self) -> None:
+        # push find_controller screen
+        self.push_screen("find_controller")
 
     def compose(self) -> ComposeResult:
         '''
         Create child widgets for the app
         '''
         yield Header()
-        yield Footer()
         yield Container(
-            BTService(STERZO_ADDRESS), 
-            BTService(RVR_ADDRESS)
+            #AvailableDevices(),
+            StreamingSensor(),
+            #BTService(PycyclingService.STERZO), 
+            #BTService(PycyclingService.SPEED)
             )
-
-    def action_toggle_dark(self) -> None:
-        '''
-        An action to toggle dark mode
-        '''
-        self.dark = not self.dark
+        yield Footer()
     
-    def action_print_hello(self) -> None:
-        print("Hello World!")
+    def action_push_screen_find_controller(self) -> None:
+        '''
+        Push the find_controller screen
+        '''
+        # Reset bluetooth connections
+        global BT_DEVICES
+        global SCANNING_STAGE
+        global PROCS
+        BT_DEVICES = []
+        SCANNING_STAGE = True
+        for pr in PROCS:
+            pr.terminate()
+        self.push_screen("find_controller")
+    
+    def action_exit(self) -> None:
+        '''
+        Exit the app.
+        The default 'quit' action fails to exit because of 
+        multithreading.
+        Also, threads must be 'daemon=True' for clean exit.
+        '''
+        global PROCS
+        for pr in PROCS:
+            pr.terminate()
+        self.exit()
+
+    
+def restart_system_bluetooth():
+    if PLATFORM == "Linux":
+        subprocess.call(["bluetoothctl", "power", "off"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        subprocess.call(["bluetoothctl", "power", "on"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
+
+def repeat_threaded_scan():
+    global BT_DEVICES
+    global SCANNING_STAGE
+    global PAIR_HISTORY
+    while True:
+        if SCANNING_STAGE:
+            for id in PAIR_HISTORY:
+                if PLATFORM == "Linux":
+                    subprocess.call(["bluetoothctl", "remove", id], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL) # run without printing to console
+            BT_DEVICES = asyncio.run(scan_bt_async_runner())
+        time.sleep(0.1) # sleep for a little bit to prevent tight loop when condition is false
 
 if __name__ == "__main__":
+    import os
+    if os.path.exists(".appdata/bt_history.temp"):
+        with open(".appdata/bt_history.temp", "r") as f:
+            for line in f:
+                PAIR_HISTORY.append(line.strip())
+
+    t_scanner = threading.Thread(target=repeat_threaded_scan, daemon=True)
+    THREADS.append(t_scanner)
+
+    for t in THREADS:
+        t.start()
+
     app = CycarlaApp()
     app.run()
+
+

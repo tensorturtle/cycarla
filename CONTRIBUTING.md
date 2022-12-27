@@ -1,6 +1,7 @@
 # Platforms
 
-CyCARLA targets Ubuntu 20.04 and macOS 12.6 (Monterey).
+CyCARLA targets Ubuntu 20.04 and Windows 10,
+because CARLA is only supported on these platforms.
 
 # Development Environment
 

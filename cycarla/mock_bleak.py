@@ -9,6 +9,7 @@ import os
 import subprocess
 
 import asyncio
+import multiprocessing
 
 from bleak import BleakScanner, BleakClient
 from bleak.backends.device import BLEDevice
@@ -20,13 +21,14 @@ from pycycling.cycling_speed_cadence_service import CyclingSpeedCadenceService
 # detect OS
 import platform
 PLATFORM = platform.system()
-print(f"Platform: {PLATFORM}")
-
 
 STERZO_SERVICE = "347b0001-7635-408b-8918-8ff3949ce592"
 SPEED_CADENCE_SERVICE = "00001816-0000-1000-8000-00805f9b34fb"
 
 BT_DEVICES = []
+
+LATEST_STEERING_ANGLE = multiprocessing.Value('f', 0.0) 
+LATEST_SPEED = multiprocessing.Value('f', 0.0)
 
 async def connect_to_device(d: BLEDevice):
     # sometimes, the bluetooth device loses connection
@@ -42,7 +44,9 @@ async def connect_to_device(d: BLEDevice):
                     sterzo = Sterzo(client)
 
                     def steering_handler(steering_angle):
-                        print(steering_angle)
+                        global LATEST_STEERING_ANGLE
+                        LATEST_STEERING_ANGLE.value = steering_angle
+                        print(f"Steering angle: {steering_angle}")
 
                     sterzo.set_steering_measurement_callback(steering_handler)
                     await sterzo.enable_steering_measurement_notifications()
@@ -54,6 +58,8 @@ async def connect_to_device(d: BLEDevice):
                     trainer = CyclingSpeedCadenceService(client)
 
                     def my_page_handler(data):
+                        global LATEST_SPEED
+                        LATEST_SPEED.value = data.cumulative_wheel_revs
                         print(data)
                     trainer.set_csc_measurement_handler(my_page_handler)
                     await trainer.enable_csc_measurement_notifications()
@@ -86,7 +92,7 @@ async def scan_bt():
     return filter_cycling_accessories(devices)
     #return devices
 
-async def async_main():
+async def scan_bt_async_runner():
     global BT_DEVICES
     devices = await scan_bt()
     BT_DEVICES = devices
@@ -95,7 +101,7 @@ async def async_main():
 
 def threaded_scan():
     global BT_DEVICES
-    BT_DEVICES = asyncio.run(async_main())
+    BT_DEVICES = asyncio.run(scan_bt_async_runner())
 
 if __name__ == "__main__":
     PAIR_HISTORY = []
@@ -110,18 +116,14 @@ if __name__ == "__main__":
         # unpair previously connected bluetooth devices by ID
         for id in PAIR_HISTORY:
             if PLATFORM == "Linux":
-                subprocess.call(["bluetoothctl", "remove", id], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-                #os.system(f"sudo bluetoothctl remove {id}")
-        print("Scanning...")
+                subprocess.call(["bluetoothctl", "remove", id], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL) # run without printing to console
         t = Thread(target=threaded_scan)
         t.start()
-        print("Please wait")
         # we can do other things while the scan is running
         for i in range(5):
             print(5-i)
             time.sleep(1)
         t.join()
-        print("Done scanning")
         print(BT_DEVICES)
 
     print("2 Devices found. Immediately connecting...")
