@@ -31,13 +31,20 @@ LATEST_STEERING_ANGLE = multiprocessing.Value('f', 0.0)
 LATEST_SPEED = multiprocessing.Value('f', 0.0)
 
 async def connect_to_device(d: BLEDevice):
+    # when this function is called,
+    # there is a background thread that is scanning
+    # as part of the scan, it removes bluetooth devices
+    # therefore we need to wait for that thread to finish
+    # the thread is sent a signal to stop scanning, but it can take a few seconds
+    time.sleep(3)
+
     # sometimes, the bluetooth device loses connection
     # between the time it is discovered and the time
     # we try to connect to it. In this case, we just
     # try again. That's what the while True and try except is for.
     while True:
         try:
-            async with BleakClient(d, timeout=5.0) as client:
+            async with BleakClient(d, timeout=10.0) as client:
                 if STERZO_SERVICE in d.metadata["uuids"]:
                     print("Sterzo connected")
 

@@ -56,19 +56,23 @@ class FindControllerScreen(Screen):
         global PAIR_HISTORY
         global BT_DEVICES
         global SCANNING_STAGE
+        global PROCS
 
         SCANNING_STAGE = False
         PAIR_HISTORY = []
         with open(".appdata/bt_history.temp", "r") as f:
             for line in f:
                 PAIR_HISTORY.append(line.strip())
-
+        
         for d in BT_DEVICES:
             if d.address not in PAIR_HISTORY:
                 PAIR_HISTORY.append(d.address)
             p_new = multiprocessing.Process(target=asyncio.run, args=(connect_to_device(d),))
             PROCS.append(p_new)
-            p_new.start()
+        
+        for p in PROCS:
+            p.start()
+
         
         # save PAIR_HISTORY to file
         with open(".appdata/bt_history.temp", "w") as f:
@@ -164,6 +168,7 @@ class AvailableDevices(Static):
         global PROCS
         for pr in PROCS:
             pr.terminate()
+        PROCS = []
         self.set_interval(1/10, self.update_devices)
     
     def update_devices(self) -> None:
@@ -230,6 +235,7 @@ class CycarlaApp(App):
         SCANNING_STAGE = True
         for pr in PROCS:
             pr.terminate()
+        PROCS = []
         self.push_screen("find_controller")
     
     def action_exit(self) -> None:
@@ -237,11 +243,11 @@ class CycarlaApp(App):
         Exit the app.
         The default 'quit' action fails to exit because of 
         multithreading.
-        Also, threads must be 'daemon=True' for clean exit.
         '''
         global PROCS
         for pr in PROCS:
             pr.terminate()
+        PROCS = []
         self.exit()
 
     
@@ -261,7 +267,7 @@ def repeat_threaded_scan():
                 if PLATFORM == "Linux":
                     subprocess.call(["bluetoothctl", "remove", id], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL) # run without printing to console
             BT_DEVICES = asyncio.run(scan_bt_async_runner())
-        time.sleep(0.1) # sleep for a little bit to prevent tight loop when condition is false
+        time.sleep(0.01) # sleep for a little bit to prevent tight loop when condition is false
 
 if __name__ == "__main__":
     import os
