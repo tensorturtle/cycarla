@@ -13,6 +13,7 @@ from time import monotonic
 import random
 
 import sys
+import psutil
 
 import platform
 PLATFORM = platform.system()
@@ -26,6 +27,9 @@ from manual_control import game_loop
 # bluetooth utilities
 from mock_bleak import connect_to_device, scan_bt, threaded_scan, scan_bt_async_runner, BT_DEVICES, LATEST_STEERING_ANGLE, LATEST_SPEED
 
+import globals
+globals.globals_init()
+
 PROCS = [] # multiprocessing processes
 THREADS = []
 
@@ -33,7 +37,6 @@ PAIR_HISTORY = []
 
 # App state flags
 SCANNING_STAGE = True # True means: we are searching (including restarting bluetooth). False means: stop searching. Pair and stream data from devices.
-CARLA_WINDOW = True # True means: we have a carla client window open. False means: we don't have a carla window open.
 
 # Interface to bleak
 
@@ -74,7 +77,6 @@ class FindControllerScreen(Screen):
             PROCS.append(p_new)
         
         for p in PROCS:
-            time.sleep(2)
             p.start()
 
         
@@ -171,7 +173,7 @@ class AvailableDevices(Static):
     def on_mount(self) -> None:
         global PROCS
         for pr in PROCS:
-            pr.terminate()
+            pr.kill()
         PROCS = []
         self.set_interval(1/10, self.update_devices)
     
@@ -238,7 +240,7 @@ class CycarlaApp(App):
         BT_DEVICES = []
         SCANNING_STAGE = True
         for pr in PROCS:
-            pr.terminate()
+            pr.kill()
         PROCS = []
         self.push_screen("find_controller")
     
@@ -249,17 +251,13 @@ class CycarlaApp(App):
         multithreading.
         '''
         global PROCS
-        global CARLA_WINDOW
-        CARLA_WINDOW=False
+        globals.CARLA_WINDOW=False
 
         for pr in PROCS:
-            pr.terminate()
+            pr.kill()
         PROCS = []
 
-
         self.exit()
-
-
     
 def restart_system_bluetooth():
     if PLATFORM == "Linux":
@@ -280,11 +278,10 @@ def repeat_threaded_scan():
         time.sleep(0.01) # sleep for a little bit to prevent tight loop when condition is false
 
 def threaded_carla_main(args):
-    global CARLA_WINDOW
     while True:
         try:
             #print("Starting CARLA client...")
-            game_loop(args, CARLA_WINDOW)
+            game_loop(args)
         except RuntimeError as e:
             # For unknown reasons the traffic manager has a binding error
             # Which is solved by 'pkill -9 python'
@@ -294,6 +291,9 @@ def threaded_carla_main(args):
             os.system("pkill -9 python")
             time.sleep(2)
             continue
+        except KeyboardInterrupt:
+            print("KeyboardInterrupt from carla")
+            break
 
 if __name__ == "__main__":
     import argparse
@@ -363,7 +363,7 @@ if __name__ == "__main__":
     THREADS.append(t_scanner)
 
     p_carla = threading.Thread(target=threaded_carla_main, args=(args,), daemon=True)
-    p_carla.start()
+    THREADS.append(p_carla)
 
     for t in THREADS:
         t.start()
@@ -371,6 +371,7 @@ if __name__ == "__main__":
     app = CycarlaApp()
     app.run()
 
-    print("Press Ctrl+C to exit CARLA window.")
-
-
+    # clean up child processes
+    p_children = psutil.Process(os.getpid()).children(recursive=True)
+    for p in p_children:
+        p.kill()

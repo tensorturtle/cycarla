@@ -30,13 +30,15 @@ BT_DEVICES = []
 LATEST_STEERING_ANGLE = multiprocessing.Value('f', 0.0) 
 LATEST_SPEED = multiprocessing.Value('f', 0.0)
 
+import random
+
 async def connect_to_device(d: BLEDevice):
     # when this function is called,
     # there is a background thread that is scanning
     # as part of the scan, it removes bluetooth devices
     # therefore we need to wait for that thread to finish
     # the thread is sent a signal to stop scanning, but it can take a few seconds
-    time.sleep(3)
+    time.sleep(5)
 
     # sometimes, the bluetooth device loses connection
     # between the time it is discovered and the time
