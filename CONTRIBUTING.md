@@ -25,9 +25,17 @@ At the bare minimum, the following are required:
 
 ## Features
 
+### Short-Term
+
 + [ ] Implement Resistance control based on incline and in-CARLA kinematics via Bluetooth FTMS
   + [ ] Add BLE-FTMS profile and example to `pycycling`
-+ [ ] 
++ [ ] Autopilot mode for bikes
+
+### Long-term
++ [ ] Customizable bike / kit / character
++ [ ] Cycling-friendly maps
++ [ ] Race features
++ [ ] Hilly terrain
 
 ## Maintenance / Meta
 
