@@ -29,6 +29,8 @@ BT_DEVICES = []
 
 LATEST_STEERING_ANGLE = multiprocessing.Value('f', 0.0) 
 LATEST_SPEED = multiprocessing.Value('f', 0.0)
+STERZO_THROTTLE = multiprocessing.Value('f', 0.0)
+
 
 import random
 
@@ -53,9 +55,9 @@ async def connect_to_device(d: BLEDevice):
                     sterzo = Sterzo(client)
 
                     def steering_handler(steering_angle):
-                        global LATEST_STEERING_ANGLE
                         LATEST_STEERING_ANGLE.value = steering_angle
-                        print(f"Steering angle: {steering_angle}")
+                        if isinstance(steering_angle, float):
+                            STERZO_THROTTLE.value = abs(steering_angle) / 30.0
 
                     sterzo.set_steering_measurement_callback(steering_handler)
                     await sterzo.enable_steering_measurement_notifications()
@@ -67,7 +69,6 @@ async def connect_to_device(d: BLEDevice):
                     trainer = CyclingSpeedCadenceService(client)
 
                     def my_page_handler(data):
-                        global LATEST_SPEED
                         LATEST_SPEED.value = data.cumulative_wheel_revs
                         print(data)
                     trainer.set_csc_measurement_handler(my_page_handler)

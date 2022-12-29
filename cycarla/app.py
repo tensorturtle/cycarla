@@ -25,7 +25,7 @@ import subprocess
 from manual_control import game_loop
 
 # bluetooth utilities
-from mock_bleak import connect_to_device, scan_bt, threaded_scan, scan_bt_async_runner, BT_DEVICES, LATEST_STEERING_ANGLE, LATEST_SPEED
+from mock_bleak import connect_to_device, scan_bt, threaded_scan, scan_bt_async_runner, BT_DEVICES, LATEST_STEERING_ANGLE, LATEST_SPEED, STERZO_THROTTLE
 
 import globals
 globals.globals_init()
@@ -189,10 +189,8 @@ class StreamingSensor(Static):
 
     def update_sensor(self) -> None:
         global PROCS
-        global LATEST_SPEED
-        global LATEST_STEERING_ANGLE
 
-        self.update(f"Speed: {LATEST_SPEED.value} m/s, Steering Angle: {LATEST_STEERING_ANGLE.value} degrees. Processes: {PROCS}")
+        self.update(f"Speed: {LATEST_SPEED.value} m/s, Steering Angle: {LATEST_STEERING_ANGLE.value}, normalize: {STERZO_THROTTLE.value} degrees. Processes: {PROCS}")
 
 
 class CycarlaApp(App):

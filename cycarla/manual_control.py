@@ -59,6 +59,7 @@ from __future__ import print_function
 
 import globals
 
+from mock_bleak import STERZO_THROTTLE
 
 # ==============================================================================
 # -- find carla module ---------------------------------------------------------
@@ -571,10 +572,12 @@ class KeyboardControl(object):
             world.player.apply_control(self._control)
 
     def _parse_vehicle_keys(self, keys, milliseconds):
+        global STERZO_THROTTLE
         if keys[K_UP] or keys[K_w]:
             self._control.throttle = min(self._control.throttle + 0.01, 1.00)
         else:
-            self._control.throttle = 0.0
+            #self._control.throttle = 0.0
+            self._control.throttle = STERZO_THROTTLE.value
 
         if keys[K_DOWN] or keys[K_s]:
             self._control.brake = min(self._control.brake + 0.2, 1)
