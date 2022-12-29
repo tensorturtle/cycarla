@@ -5,6 +5,8 @@ import time
 from typing import List
 from threading import Thread
 
+import math
+
 import os
 import subprocess
 
@@ -56,8 +58,9 @@ async def connect_to_device(d: BLEDevice):
 
                     def steering_handler(steering_angle):
                         LATEST_STEERING_ANGLE.value = steering_angle
-                        if isinstance(steering_angle, float):
-                            STERZO_THROTTLE.value = abs(steering_angle) / 30.0
+                        if math.isnan(steering_angle):
+                            steering_angle = 0.0
+                        STERZO_THROTTLE.value = abs(steering_angle) / 30.0
 
                     sterzo.set_steering_measurement_callback(steering_handler)
                     await sterzo.enable_steering_measurement_notifications()

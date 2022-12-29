@@ -58,6 +58,7 @@ Use ARROWS or WASD keys for control.
 from __future__ import print_function
 
 import globals
+import math
 
 from mock_bleak import STERZO_THROTTLE
 
@@ -576,7 +577,6 @@ class KeyboardControl(object):
         if keys[K_UP] or keys[K_w]:
             self._control.throttle = min(self._control.throttle + 0.01, 1.00)
         else:
-            #self._control.throttle = 0.0
             self._control.throttle = STERZO_THROTTLE.value
 
         if keys[K_DOWN] or keys[K_s]:

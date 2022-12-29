@@ -12,7 +12,6 @@ import time
 from time import monotonic
 import random
 
-import sys
 import psutil
 
 import platform
@@ -201,7 +200,7 @@ class CycarlaApp(App):
     and sends processed outputs to CARLA client app via Websockets.
     Also provides a Terminal-based User Interface to see connection status.
     '''
-    CSS_PATH = "cycarla_style.css"
+    CSS_PATH = "css/stylesheet.css"
     SCREENS = {
         "find_controller": FindControllerScreen,
     }
@@ -273,7 +272,7 @@ def repeat_threaded_scan():
                 if PLATFORM == "Linux":
                     subprocess.call(["bluetoothctl", "remove", id], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL) # run without printing to console
             BT_DEVICES = asyncio.run(scan_bt_async_runner())
-        time.sleep(0.01) # sleep for a little bit to prevent tight loop when condition is false
+        time.sleep(0.1) # sleep for a little bit to prevent tight loop when condition is false
 
 def threaded_carla_main(args):
     while True:

@@ -6,6 +6,9 @@ license = "Proprietary"
 authors = ["Jason Sohn <tensorturtle@gmail.com>"]
 readme = "README.md"
 
+[tool.poetry.scripts]
+app = "cycarla/app.py:main"
+
 [tool.poetry.dependencies]
 python = "~3.8.1"
 rich = "^12.6.0"
@@ -16,6 +19,7 @@ carla = "0.9.13"
 pygame = "^2.1.2"
 numpy = "^1.24.1"
 psutil = "^5.9.4"
+pyinstaller = "^5.7.0"
 
 
 [tool.poetry.group.test.dependencies]
