@@ -117,6 +117,7 @@ def threaded_scan():
     BT_DEVICES = asyncio.run(scan_bt_async_runner())
 
 if __name__ == "__main__":
+    # OBSOLETE: If we properly remove bluetooth connections on program exit, we don't need to store PAIR_HISTORY in a file
     PAIR_HISTORY = []
     # read previously paired devices from file
     if os.path.exists(".appdata/bt_history.temp"):

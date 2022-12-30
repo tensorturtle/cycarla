@@ -17,6 +17,8 @@ import psutil
 import platform
 PLATFORM = platform.system()
 
+import os
+os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide" # hide pygame welcome message
 import threading
 import multiprocessing
 import subprocess
@@ -32,7 +34,7 @@ globals.globals_init()
 PROCS = [] # multiprocessing processes
 THREADS = []
 
-PAIR_HISTORY = []
+PAIR_HISTORY = [] # We store the addresses of bluetooth devices that have previously been paired to this computer in a file. If the program exits gracefully (pressing 'e' for exit), bluetooth devices will be unpaired and removed, so this functionality is redundant. If the program is force exited (CTRL-C, for example), the bluetooth devices will remain paired to this machine, preventing it from pairing anew. In that case, we read from the saved file and unpair the devices before scanning for new ones. 
 
 # App state flags
 SCANNING_STAGE = True # True means: we are searching (including restarting bluetooth). False means: stop searching. Pair and stream data from devices.
@@ -50,13 +52,13 @@ class FindControllerScreen(Screen):
         yield Header()
         yield Container(
             AvailableDevices(),
-            BTService(PycyclingService.STERZO), 
+            BTService(PycyclingService.STERZO),
             BTService(PycyclingService.SPEED),
         )
-        
+
         yield Button("Pair all", id="pair_all")
         yield Footer()
-    
+
     def action_pair_all(self) -> None:
         global PAIR_HISTORY
         global BT_DEVICES
@@ -68,28 +70,28 @@ class FindControllerScreen(Screen):
         with open(".appdata/bt_history.temp", "r") as f:
             for line in f:
                 PAIR_HISTORY.append(line.strip())
-        
+
         for d in BT_DEVICES:
             if d.address not in PAIR_HISTORY:
                 PAIR_HISTORY.append(d.address)
             p_new = multiprocessing.Process(target=asyncio.run, args=(connect_to_device(d),))
             PROCS.append(p_new)
-        
+
         for p in PROCS:
             p.start()
 
-        
+
         # save PAIR_HISTORY to file
         with open(".appdata/bt_history.temp", "w") as f:
             for d in PAIR_HISTORY:
                 f.write(f"{d}\n")
-        
+
         self.app.pop_screen()
-    
+
     def on_button_pressed(self, event: Button.Pressed) -> None:
         if event.button.id == "pair_all":
             self.action_pair_all()
-    
+
 class BTConnectionStatus(Static):
     '''
     A widget that shows the status of a bluetooth service
@@ -102,11 +104,11 @@ class BTConnectionStatus(Static):
 
     def on_mount(self) -> None:
         self.set_interval(1/20, self.update_connection_status)
-    
+
     def update_connection_status(self) -> None:
         self.connection_status = mock_connection_status(self.service_type)
         self.update(self.service_type.name)
-    
+
     def watch_connection_status(self, time: float) -> None:
         '''
         The 'watch' keyword means that this function will be called
@@ -121,13 +123,13 @@ class BTConnectionStatus(Static):
         elif self.connection_status == "DISCONNECTED":
             self.remove_class("connected")
             self.remove_class("enabled")
-    
+
     def attempt_connect(self) -> None:
         self.connection_status = "CONNECTING"
-    
+
     def disconnect(self) -> None:
         self.connection_status = "DISCONNECTED"
-    
+
 def mock_connection_status(service: PycyclingService) -> str:
     global BT_DEVICES
     for bt_device in BT_DEVICES:
@@ -138,7 +140,7 @@ def mock_connection_status(service: PycyclingService) -> str:
 
 class BTService(Static):
     '''
-    A bluetooth connection widget for one type of device 
+    A bluetooth connection widget for one type of device
     '''
     def __init__(self, service_type: PycyclingService):
         super().__init__()
@@ -165,7 +167,7 @@ class BTService(Static):
         yield Button("Disable", id="bt_disable", variant="error")
         yield Button("Choose Next", id="bt_next")
         yield BTConnectionStatus(self.service_type)
-    
+
 
 class AvailableDevices(Static):
 
@@ -175,7 +177,7 @@ class AvailableDevices(Static):
             pr.kill()
         PROCS = []
         self.set_interval(1/10, self.update_devices)
-    
+
     def update_devices(self) -> None:
         global SCANNING_STAGE
         global BT_DEVICES
@@ -221,11 +223,11 @@ class CycarlaApp(App):
         yield Container(
             #AvailableDevices(),
             StreamingSensor(),
-            #BTService(PycyclingService.STERZO), 
+            #BTService(PycyclingService.STERZO),
             #BTService(PycyclingService.SPEED)
             )
         yield Footer()
-    
+
     def action_push_screen_find_controller(self) -> None:
         '''
         Push the find_controller screen
@@ -240,22 +242,26 @@ class CycarlaApp(App):
             pr.kill()
         PROCS = []
         self.push_screen("find_controller")
-    
+
     def action_exit(self) -> None:
         '''
-        Exit the app.
-        The default 'quit' action fails to exit because of 
-        multithreading.
+        Final app cleanup
+
+        The default 'quit' action in the textual framework does not clean up after multiprocessing child processes, so this replaces it.
         '''
         global PROCS
         globals.CARLA_WINDOW=False
+
+        for device in BT_DEVICES:
+            subprocess.call(["bluetoothctl", "remove", device.address], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+
 
         for pr in PROCS:
             pr.kill()
         PROCS = []
 
         self.exit()
-    
+
 def restart_system_bluetooth():
     if PLATFORM == "Linux":
         subprocess.call(["bluetoothctl", "power", "off"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
@@ -293,6 +299,7 @@ def threaded_carla_main(args):
             break
 
 if __name__ == "__main__":
+    print("Starting CyCARLA...")
     import argparse
     argparser = argparse.ArgumentParser(
         description='CARLA Manual Control Client')
@@ -350,7 +357,6 @@ if __name__ == "__main__":
     args.width, args.height = [int(x) for x in args.res.split('x')]
 
 
-    import os
     if os.path.exists(".appdata/bt_history.temp"):
         with open(".appdata/bt_history.temp", "r") as f:
             for line in f:
@@ -364,7 +370,8 @@ if __name__ == "__main__":
 
     for t in THREADS:
         t.start()
-    
+
+
     app = CycarlaApp()
     app.run()
 
