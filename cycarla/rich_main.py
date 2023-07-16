@@ -10,7 +10,7 @@ from rich.panel import Panel
 from rich.progress import BarColumn, Progress, SpinnerColumn, TextColumn
 from rich.syntax import Syntax
 from rich.table import Table
-from rich.live import Live 
+from rich.live import Live
 
 from const import *
 
@@ -45,7 +45,7 @@ class Footer:
             "[b]Jason Sohn[/b] 2022 <jasonsohn@pm.me>",
         )
         return Panel(grid, style="white")
-    
+
 def random_number() -> int:
     return random.randint(0, 100)
 
@@ -56,7 +56,7 @@ def main():
     layout = make_rich_layout()
     layout["header"].update(Header())
     layout["footer"].update(Footer())
-    
+
 
     with Live(layout, refresh_per_second=1) as live:
         while True:

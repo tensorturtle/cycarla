@@ -34,7 +34,7 @@ globals.globals_init()
 PROCS = [] # multiprocessing processes
 THREADS = []
 
-PAIR_HISTORY = [] # We store the addresses of bluetooth devices that have previously been paired to this computer in a file. If the program exits gracefully (pressing 'e' for exit), bluetooth devices will be unpaired and removed, so this functionality is redundant. If the program is force exited (CTRL-C, for example), the bluetooth devices will remain paired to this machine, preventing it from pairing anew. In that case, we read from the saved file and unpair the devices before scanning for new ones. 
+PAIR_HISTORY = [] # We store the addresses of bluetooth devices that have previously been paired to this computer in a file. If the program exits gracefully (pressing 'e' for exit), bluetooth devices will be unpaired and removed, so this functionality is redundant. If the program is force exited (CTRL-C, for example), the bluetooth devices will remain paired to this machine, preventing it from pairing anew. In that case, we read from the saved file and unpair the devices before scanning for new ones.
 
 # App state flags
 SCANNING_STAGE = True # True means: we are searching (including restarting bluetooth). False means: stop searching. Pair and stream data from devices.
@@ -163,8 +163,8 @@ class BTService(Static):
         '''
         Create child widgets for this widget
         '''
-        yield Button("Enable", id="bt_enable", variant="success")
-        yield Button("Disable", id="bt_disable", variant="error")
+        yield Button("Disabled", id="bt_enable", variant="error")
+        yield Button("Enabled", id="bt_disable", variant="success")
         yield Button("Choose Next", id="bt_next")
         yield BTConnectionStatus(self.service_type)
 
