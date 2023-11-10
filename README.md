@@ -1,5 +1,6 @@
 # CyCARLA
-**Ride your bike in CARLA virtual simulator with off-the-shelf indoor cycling accessories.**
+
+Open World Cycling Simulator based on Unreal Engine and CARLA
 
 ## Installation
 
