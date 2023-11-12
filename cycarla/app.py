@@ -17,6 +17,8 @@ import psutil
 import platform
 PLATFORM = platform.system()
 
+from pathlib import Path
+
 import os
 os.environ['PYGAME_HIDE_SUPPORT_PROMPT'] = "hide" # hide pygame welcome message
 import threading
@@ -67,9 +69,12 @@ class FindControllerScreen(Screen):
 
         SCANNING_STAGE = False
         PAIR_HISTORY = []
-        with open(".appdata/bt_history.temp", "r") as f:
-            for line in f:
-                PAIR_HISTORY.append(line.strip())
+
+        bt_temp_path = Path(".appdata/bt_history.temp")
+        if bt_temp_file.exists():
+            with open(".appdata/bt_history.temp", "r") as f:
+                for line in f:
+                    PAIR_HISTORY.append(line.strip())
 
         for d in BT_DEVICES:
             if d.address not in PAIR_HISTORY:
