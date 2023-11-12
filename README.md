@@ -1,10 +1,10 @@
-# CyCARLA 2.0
+# CyCARLA 0.2.0
 
 `cycarla-controller` is a `create-react-app` project.
 
 `cycarla-server` is a `poetry` project inside a `docker`.
 
-# CyCARLA
+# CyCARLA 0.1.0
 
 Open World Cycling Simulator based on Unreal Engine and CARLA
 
