@@ -12,6 +12,9 @@ carla = "0.9.14"
 pygame = "^2.1.2"
 flask = "^3.0.0"
 flask-socketio = "^5.3.6"
+bleak = "^0.21.1"
+#pycycling = "^0.3.1"
+pycycling = {path = "/workspaces/cycarla/cycarla-server/pycycling", develop=true}
 
 [build-system]
 requires = ["poetry-core"]

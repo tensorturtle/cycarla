@@ -14,7 +14,8 @@ python = "~3.8.10"
 rich = "^12.6.0"
 bleak = "^0.19.5"
 textual = {extras = ["dev"], version = "^0.8.0"}
-pycycling = "^0.2.2"
+#pycycling = "^0.2.2"
+pycycling = { path="/home/tensorturtle/Repos/pycycling", develop=true }
 carla = "0.9.14"
 pygame = "^2.1.2"
 numpy = "^1.24.1"

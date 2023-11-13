@@ -10,6 +10,11 @@ RUN apt-get update && apt-get install -y \
     software-properties-common \
     && rm -rf /var/lib/apt/lists/*
 
+# Install bluez to access bluetoothctl from container
+RUN apt-get update && apt-get install -y \
+    bluez \
+    && rm -rf /var/lib/apt/lists/*
+
 # Python 3.8 (last version 'carla' package supports)
 RUN add-apt-repository ppa:deadsnakes/ppa \
     && apt-get update \
