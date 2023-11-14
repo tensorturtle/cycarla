@@ -1,9 +1,7 @@
-from bleak import BleakScanner
-
+import subprocess
 from enum import Enum
 
-import platform
-import subprocess
+from bleak import BleakScanner
 
 def restart_system_bluetooth():
     '''
@@ -30,7 +28,10 @@ def filter_cycling_accessories(devices):
         'smart_trainers': [],
     }
 
-    for bledevice, advertisement_data in devices.values():
+    for k,v in devices.items():
+        bledevice, advertisement_data = v
+        print("type of bledevice: ", type(bledevice))
+        print("type of advertisement_data: ", type(advertisement_data))
         services = advertisement_data.service_uuids
         if BLECyclingService.STERZO.value in services: 
             relevant_devices['sterzos'].append(bledevice)
@@ -43,12 +44,7 @@ async def scan_bt():
     restart_system_bluetooth()
     scanner = BleakScanner()
     devices = await scanner.discover(timeout=2.0, return_adv=True)
-    cycling_devices = filter_cycling_accessories(devices)
-    serialized_cycling_devices = {
-        'sterzos': [serialize_bledevice(d) for d in cycling_devices['sterzos']],
-        'smart_trainers': [serialize_bledevice(d) for d in cycling_devices['smart_trainers']],
-    }
-    return serialized_cycling_devices
+    return filter_cycling_accessories(devices)
 
 async def scan_bt_async_runner():
     return await scan_bt()

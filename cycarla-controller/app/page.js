@@ -3,45 +3,16 @@ import { socket } from './socket';
 import Image from 'next/image'
 import { useState, useEffect } from 'react';
 import BTModal from './components/BTModal';
+import { SteeringVisualizer } from './components/SteeringVisualizer';
 
-function SteeringVisualizer({ steeringAngle }) {
-  // rotate an image based on the steering angle
-  // 0 degrees is straight ahead, positive is right, negative is left
-  const rotate = `rotate(${steeringAngle}deg)`;
-
-  // use handlebar.png
-
-
-  return (
-    <div className="relative w-96 h-96">
-      {/* <Image
-        className="absolute top-0 left-0 w-full h-full"
-        src="/handlebar.png"
-        alt="Handlebar"
-        layout="fill"
-        objectFit="contain"
-      /> */}
-      <div
-        className="absolute top-0 left-0 w-full h-full"
-        style={{ transform: rotate }}
-      >
-        <Image
-          className="absolute top-0 left-0 w-full h-full"
-          src="/handlebar.png"
-          alt="Handlebar"
-          layout="fill"
-          objectFit="contain"
-        />
-      </div>
-    </div>
-  );
-}
 
 export default function Home() {
   const [isWebsocketConnected, setWebsocketConnected] = useState(socket.connected);
   const [ btGreen, setBtGreen] = useState(false)
 
+  // live updated data from sensors
   const [steeringAngle, setSteeringAngle] = useState(0.0);
+  const [power, setPower] = useState(0.0);
 
   const [isBTModalOpen, setBTModelOpen] = useState(false);
   const openBTModal = () => setBTModelOpen(true);
@@ -67,10 +38,17 @@ export default function Home() {
       setSteeringAngle(message);
     }
 
+    function onPower(message) {
+      console.log('power', message)
+      setPower(message);
+    }
+
+
     socket.on('connect', onConnect);
     socket.on('disconnect', onDisconnect);
     socket.on('heartbeat', onHeartbeat);
     socket.on('steering_angle', onSteeringAngle);
+    socket.on('power', onPower)
 
     return () => {
       // all socket registration events should be removed when the component unmounts
@@ -79,6 +57,7 @@ export default function Home() {
       socket.off('disconnect', onDisconnect);
       socket.off('heartbeat', onHeartbeat)
       socket.off('steering_angle', onSteeringAngle)
+      socket.off('power', onPower)
     }
   }, [])
 
@@ -109,8 +88,7 @@ export default function Home() {
           </a>
         </div>
       </div>
-
-        <div>
+      <div>
         <Image
           className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
           src="/next.svg"
@@ -120,9 +98,17 @@ export default function Home() {
           priority
         />
       </div>
-      <SteeringVisualizer steeringAngle={steeringAngle} />
-
-      <button onClick={openBTModal}>Open Modal</button>
+      {/* <div className="relative flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-0 pt-0 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit static w-auto rounded-xl border bg-gray-200 p-4 dark:bg-zinc-800/30"> */}
+      <div className="m-2 relative flex w-full justify-center backdrop-blur-2xl w-auto rounded-xl border border-gray-800 p-4 dark:bg-zinc-800/30">
+        <div className="flex gap-16 items-center justify-center">
+          <SteeringVisualizer steeringAngle={steeringAngle} />
+          <div className="flex flex-col justify-center items-center">
+            <div className="text-8xl">
+              {power} W
+            </div>
+          </div>
+        </div>
+      </div>
 
       <div className="mb-32 gap-2 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
         <button 
