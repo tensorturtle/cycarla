@@ -1,60 +1,45 @@
 # CyCARLA 0.2.0
 
-`cycarla-controller` is a `create-react-app` project.
+Open World Cycling Simulator based on Unreal Engine and CARLA
+
+
+`cycarla-controller` is a `create-next-app` project.
 
 `cycarla-server` is a `poetry` project inside a `docker`.
 
-# CyCARLA 0.1.0
-
-Open World Cycling Simulator based on Unreal Engine and CARLA
 
 ## Installation
 
-CyCARLA requires
+**CARLA 0.9.14**
 
-+ CARLA 0.9.14
-+ Poetry
-+ Python 3.8 (`carla` Python client supports up to 3.8)
-+ Docker (to run CARLA)
+**Docker**
 
-Install Docker
 ```
 curl -fsSL https://get.docker.com -o get-docker.sh
 sh get-docker.sh
 ```
 
-Pull CARLA image
-
 ```
 docker pull carlasim/carla:0.9.14
 ```
 
-Install Poetry
+**nodejs and npm**
+
+
+## Quickstart
+
+Run the following in each separate shell:
 
 ```
-curl -sSL https://install.python-poetry.org | python3 -
+docker run --privileged --gpus all --net=host -e DISPLAY=$DISPLAY carlasim/carla:0.9.14 /bin/bash ./CarlaUE4.sh
 ```
 
-Install Python 3.8, so that `python3.8` starts the python interpreter.
-
-## Launch Carla
-
 ```
-sudo docker run --privileged --gpus all --net=host -e DISPLAY=$DISPLAY carlasim/carla:0.9.14 /bin/bash ./CarlaUE4.sh
+cd cycarla-controller
+npm run dev
 ```
 
-## Launch App
-
-From the repository root, run:
 ```
-poetry shell
+cd cycarla-server
+docker run --rm -it --network=host --privileged -v /var/run/dbus:/var/run/dbus -v .:/workspaces/cycarla/cycarla-server cycarla_server /workspaces/cycarla/cycarla-server/entrypoint.sh
 ```
-Navigate to package:
-```
-cd cycarla
-```
-Run Terminal UI app:
-```
-python3 app.py
-```
-

@@ -1,57 +1,108 @@
 import asyncio 
-from flask import Flask, jsonify
+import base64
+from argparse import Namespace
+
+import cv2
+from flask import Flask
 # from flask_cors import CORS
 from flask_socketio import SocketIO
-from bleak import BleakClient
 from bleak.backends.device import BLEDevice
 
-from pycycling.sterzo import Sterzo
-from pycycling.cycling_power_service import CyclingPowerService
-
-from ble_utils import scan_bt_async_runner, serialize_bledevice
+from ble_utils import scan_bt_async_runner
+from carla_control import *
+from pycycling_input import PycyclingInput, LiveControlState
 
 app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins="*")
 
-NUM_CLIENTS = 0
+live_control_state = LiveControlState()
 
-COUNTER = 0
+def game_loop(args):
+    pygame.init()
+    pygame.font.init()
+    world = None
+    original_settings = None
 
-class PycyclingInput:
-    def __init__(self, sterzo_device, powermeter_device):
-        self.sterzo_device = sterzo_device
-        self.powermeter_device = powermeter_device
+    frame_counter = 0
 
-    async def run_all(self):
-        loop = asyncio.get_running_loop()
-        loop.create_task(self.connect_to_powermeter())
-        loop.create_task(self.connect_to_sterzo())
-        await asyncio.sleep(1e10) # run forever
+    try:
+        client = carla.Client(args.host, args.port)
+        client.set_timeout(1000.0)
 
-    
-    async def connect_to_sterzo(self):
-        async with BleakClient(self.sterzo_device) as client:
-            def steering_handler(steering_angle):
-                print(f"Steering angle: {steering_angle}")
-                socketio.emit('steering_angle', steering_angle)
+        sim_world = client.get_world()
+        if args.sync:
+            original_settings = sim_world.get_settings()
+            settings = sim_world.get_settings()
+            if not settings.synchronous_mode:
+                settings.synchronous_mode = True
+                settings.fixed_delta_seconds = -1.05
+            sim_world.apply_settings(settings)
 
-            await client.is_connected()
-            sterzo = Sterzo(client)
-            sterzo.set_steering_measurement_callback(steering_handler)
-            await sterzo.enable_steering_measurement_notifications()
-            await asyncio.sleep(1e10) # run forever
-    
-    async def connect_to_powermeter(self):
-        async with BleakClient(self.powermeter_device) as client:
-            def power_handler(power):
-                print(f"Power: {power.instantaneous_power}")
-                socketio.emit('power', power.instantaneous_power)
-            
-            await client.is_connected()
-            powermeter = CyclingPowerService(client)
-            powermeter.set_cycling_power_measurement_handler(power_handler)
-            await powermeter.enable_cycling_power_measurement_notifications()
-            await asyncio.sleep(1e10) # run forever
+            traffic_manager = client.get_trafficmanager()
+            traffic_manager.set_synchronous_mode(True)
+
+        if args.autopilot and not sim_world.get_settings().synchronous_mode:
+            print("WARNING: You are currently in asynchronous mode and could "
+                  "experience some issues with the traffic simulation")
+
+        display = pygame.display.set_mode(
+            (args.width, args.height),
+            pygame.HWSURFACE | pygame.DOUBLEBUF)
+        pygame.display.flip()
+
+        hud = HUD(args.width, args.height)
+        world = World(sim_world, hud, args)
+
+        controller = ControlCarlaWithCyclingBLE(world) # replaces KeyboardControl(world) in demo code
+
+        if args.sync:
+            sim_world.tick()
+        else:
+            sim_world.wait_for_tick()
+
+        clock = pygame.time.Clock()
+
+        while True:
+            if args.sync:
+                sim_world.tick()
+            clock.tick_busy_loop(59)
+            # if controller.parse_events(client, world, clock, args.sync):
+            #     return
+            controller.update_player_control(
+                live_control_state.steer,
+                live_control_state.throttle,
+                live_control_state.brake,
+            )
+            world.tick(clock)
+            world.render(display)
+            pygame.display.flip()
+
+            screen_surface = pygame.display.get_surface()
+            screen_buffer = pygame.surfarray.array3d(screen_surface)
+            screen_buffer = np.transpose(screen_buffer, (1, 0, 2))
+
+            screen_buffer = cv2.cvtColor(screen_buffer, cv2.COLOR_RGB2BGR)
+            _, buffer = cv2.imencode('.jpg', screen_buffer)
+            jpg_as_text = base64.b64encode(buffer).decode()
+            socketio.emit('carla_frame', jpg_as_text)
+
+            frame_counter += 1
+
+
+    finally:
+
+        if original_settings:
+            sim_world.apply_settings(original_settings)
+
+        if (world and world.recording_enabled):
+            client.stop_recorder()
+
+        if world is not None:
+            world.destroy()
+
+        pygame.quit()
+
+
 
 @socketio.on('bt_scan')
 def handle_bt_scan():
@@ -63,6 +114,9 @@ def handle_bt_scan():
             # TODO: What if there are multiple devices for each category?
             cycling_ble_devices['sterzos'][0],
             cycling_ble_devices['smart_trainers'][0],
+            socketio=socketio,
+            on_steering_update=live_control_state.update_steer,
+            on_power_update=live_control_state.update_throttle,
         )
 
         asyncio.run(pycycling_input.run_all())
@@ -70,32 +124,38 @@ def handle_bt_scan():
 
 @socketio.on('connect')
 def handle_connect():
-    global NUM_CLIENTS
-    NUM_CLIENTS += 1
     print('Client connected')
-
-    socketio.start_background_task(send_heartbeat)
-
-def send_heartbeat():
-    global COUNTER
-    global NUM_CLIENTS
-    if NUM_CLIENTS == 1:
-        while True:
-            # print('Sending heartbeat')
-            # print("Number of clients: " + str(NUM_CLIENTS))
-
-            socketio.emit('heartbeat', COUNTER)
-            socketio.sleep(1)
 
 @socketio.on('disconnect')
 def handle_disconnect():
-    global NUM_CLIENTS
-    NUM_CLIENTS -= 1
     print('Client disconnected')
 
 @socketio.on('message')
 def handle_message(message):
     print('Received message: ' + message)
 
+@socketio.on('start_game')
+def handle_start_game():
+    socketio.start_background_task(start_game_loop)
+
+def start_game_loop():
+    args = Namespace(
+    debug=False,
+    host='127.0.0.1',
+    port=2000,
+    autopilot=False,
+    res='1920x1080',
+    filter='vehicle.diamondback.century',
+    generation='2',
+    rolename='hero',
+    gamma=2.2,
+    sync=False
+    )
+    args.width, args.height = [int(x) for x in args.res.split('x')]
+
+    print("Starting game loop")
+    game_loop(args)
+
+
 if __name__ == '__main__':
-    socketio.run(app, debug=True, host='127.0.0.1', port=5000)
+    socketio.run(app, debug=True, host='0.0.0.0', port=5000)

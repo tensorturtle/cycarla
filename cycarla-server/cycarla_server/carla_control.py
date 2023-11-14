@@ -9,7 +9,6 @@
 # Allows controlling a vehicle with a keyboard. For a simpler and more
 # documented example, please take a look at tutorial.py.
 
-
 """
 Welcome to CARLA manual control.
 
@@ -57,10 +56,6 @@ Use ARROWS or WASD keys for control.
 
 from __future__ import print_function
 
-import globals
-import math
-
-from mock_bleak import STERZO_THROTTLE
 
 # ==============================================================================
 # -- find carla module ---------------------------------------------------------
@@ -121,6 +116,7 @@ try:
     from pygame.locals import K_b
     from pygame.locals import K_c
     from pygame.locals import K_d
+    from pygame.locals import K_f
     from pygame.locals import K_g
     from pygame.locals import K_h
     from pygame.locals import K_i
@@ -147,6 +143,30 @@ try:
 except ImportError:
     raise RuntimeError('cannot import numpy, make sure numpy package is installed')
 
+# ==============================================================================
+# -- CyCARLA replacement for KeyboardControl  ----------------------------------
+# ==============================================================================
+
+class ControlCarlaWithCyclingBLE():
+    '''
+    Class that handles BLE input from the cycling accessories to control CARLA vehicles.
+    '''
+    def __init__(self, world):
+        self.world = world
+        if not isinstance(world.player, carla.Vehicle):
+            raise ValueError("Player must be a vehicle")
+        
+        self._control = carla.VehicleControl()
+        self._lights = carla.VehicleLightState.NONE
+        world.player.set_autopilot(False)
+        world.player.set_light_state(self._lights)
+    
+    def update_player_control(self, steer, throttle, brake):
+        self._control.steer = steer
+        self._control.throttle = throttle
+        self._control.brake = brake
+
+        self.world.player.apply_control(self._control)
 
 # ==============================================================================
 # -- Global functions ----------------------------------------------------------
@@ -178,7 +198,7 @@ def get_actor_blueprints(world, filter, generation):
     try:
         int_generation = int(generation)
         # Check if generation is in available generations
-        if int_generation in [1, 2]:
+        if int_generation in [1, 2, 3]:
             bps = [x for x in bps if int(x.get_attribute('generation')) == int_generation]
             return bps
         else:
@@ -248,8 +268,13 @@ class World(object):
         cam_index = self.camera_manager.index if self.camera_manager is not None else 0
         cam_pos_index = self.camera_manager.transform_index if self.camera_manager is not None else 0
         # Get a random blueprint.
-        blueprint = random.choice(get_actor_blueprints(self.world, self._actor_filter, self._actor_generation))
+        blueprint_list = get_actor_blueprints(self.world, self._actor_filter, self._actor_generation)
+        if not blueprint_list:
+            raise ValueError("Couldn't find any blueprints with the specified filters")
+        blueprint = random.choice(blueprint_list)
         blueprint.set_attribute('role_name', self.actor_role_name)
+        if blueprint.has_attribute('terramechanics'):
+            blueprint.set_attribute('terramechanics', 'true')
         if blueprint.has_attribute('color'):
             color = random.choice(blueprint.get_attribute('color').recommended_values)
             blueprint.set_attribute('color', color)
@@ -289,7 +314,12 @@ class World(object):
         self.gnss_sensor = GnssSensor(self.player)
         self.imu_sensor = IMUSensor(self.player)
         self.camera_manager = CameraManager(self.player, self.hud, self._gamma)
-        self.camera_manager.transform_index = cam_pos_index
+
+
+        self.camera_manager.transform_index = 0
+        
+        
+        
         self.camera_manager.set_sensor(cam_index, notify=False)
         actor_type = get_actor_display_name(self.player)
         self.hud.notification(actor_type)
@@ -375,8 +405,11 @@ class KeyboardControl(object):
     """Class that handles keyboard input."""
     def __init__(self, world, start_in_autopilot):
         self._autopilot_enabled = start_in_autopilot
+        self._ackermann_enabled = False
+        self._ackermann_reverse = 1
         if isinstance(world.player, carla.Vehicle):
             self._control = carla.VehicleControl()
+            self._ackermann_control = carla.VehicleAckermannControl()
             self._lights = carla.VehicleLightState.NONE
             world.player.set_autopilot(self._autopilot_enabled)
             world.player.set_light_state(self._lights)
@@ -505,8 +538,19 @@ class KeyboardControl(object):
                         world.recording_start += 1
                     world.hud.notification("Recording start time is %d" % (world.recording_start))
                 if isinstance(self._control, carla.VehicleControl):
+                    if event.key == K_f:
+                        # Toggle ackermann controller
+                        self._ackermann_enabled = not self._ackermann_enabled
+                        world.hud.show_ackermann_info(self._ackermann_enabled)
+                        world.hud.notification("Ackermann Controller %s" %
+                                               ("Enabled" if self._ackermann_enabled else "Disabled"))
                     if event.key == K_q:
-                        self._control.gear = 1 if self._control.reverse else -1
+                        if not self._ackermann_enabled:
+                            self._control.gear = 1 if self._control.reverse else -1
+                        else:
+                            self._ackermann_reverse *= -1
+                            # Reset ackermann control
+                            self._ackermann_control = carla.VehicleAckermannControl()
                     elif event.key == K_m:
                         self._control.manual_gear_shift = not self._control.manual_gear_shift
                         self._control.gear = world.player.get_control().gear
@@ -568,21 +612,39 @@ class KeyboardControl(object):
                 if current_lights != self._lights: # Change the light state only if necessary
                     self._lights = current_lights
                     world.player.set_light_state(carla.VehicleLightState(self._lights))
+                # Apply control
+                if not self._ackermann_enabled:
+                    world.player.apply_control(self._control)
+                else:
+                    world.player.apply_ackermann_control(self._ackermann_control)
+                    # Update control to the last one applied by the ackermann controller.
+                    self._control = world.player.get_control()
+                    # Update hud with the newest ackermann control
+                    world.hud.update_ackermann_control(self._ackermann_control)
+
             elif isinstance(self._control, carla.WalkerControl):
                 self._parse_walker_keys(pygame.key.get_pressed(), clock.get_time(), world)
-            world.player.apply_control(self._control)
+                world.player.apply_control(self._control)
 
     def _parse_vehicle_keys(self, keys, milliseconds):
-        global STERZO_THROTTLE
         if keys[K_UP] or keys[K_w]:
-            self._control.throttle = min(self._control.throttle + 0.01, 1.00)
+            if not self._ackermann_enabled:
+                self._control.throttle = min(self._control.throttle + 0.1, 1.00)
+            else:
+                self._ackermann_control.speed += round(milliseconds * 0.005, 2) * self._ackermann_reverse
         else:
-            self._control.throttle = STERZO_THROTTLE.value
+            if not self._ackermann_enabled:
+                self._control.throttle = 0.0
 
         if keys[K_DOWN] or keys[K_s]:
-            self._control.brake = min(self._control.brake + 0.2, 1)
+            if not self._ackermann_enabled:
+                self._control.brake = min(self._control.brake + 0.2, 1)
+            else:
+                self._ackermann_control.speed -= min(abs(self._ackermann_control.speed), round(milliseconds * 0.005, 2)) * self._ackermann_reverse
+                self._ackermann_control.speed = max(0, abs(self._ackermann_control.speed)) * self._ackermann_reverse
         else:
-            self._control.brake = 0
+            if not self._ackermann_enabled:
+                self._control.brake = 0
 
         steer_increment = 5e-4 * milliseconds
         if keys[K_LEFT] or keys[K_a]:
@@ -598,8 +660,11 @@ class KeyboardControl(object):
         else:
             self._steer_cache = 0.0
         self._steer_cache = min(0.7, max(-0.7, self._steer_cache))
-        self._control.steer = round(self._steer_cache, 1)
-        self._control.hand_brake = keys[K_SPACE]
+        if not self._ackermann_enabled:
+            self._control.steer = round(self._steer_cache, 1)
+            self._control.hand_brake = keys[K_SPACE]
+        else:
+            self._ackermann_control.steer = round(self._steer_cache, 1)
 
     def _parse_walker_keys(self, keys, milliseconds, world):
         self._control.speed = 0.0
@@ -633,7 +698,7 @@ class HUD(object):
         font = pygame.font.Font(pygame.font.get_default_font(), 20)
         font_name = 'courier' if os.name == 'nt' else 'mono'
         fonts = [x for x in pygame.font.get_fonts() if font_name in x]
-        default_font = 'ubuntumono'
+        default_font = 'ubuntu'
         mono = default_font if default_font in fonts else fonts[0]
         mono = pygame.font.match_font(mono)
         self._font_mono = pygame.font.Font(mono, 12 if os.name == 'nt' else 14)
@@ -645,6 +710,9 @@ class HUD(object):
         self._show_info = True
         self._info_text = []
         self._server_clock = pygame.time.Clock()
+
+        self._show_ackermann_info = False
+        self._ackermann_control = carla.VehicleAckermannControl()
 
     def on_world_tick(self, timestamp):
         self._server_clock.tick()
@@ -694,6 +762,12 @@ class HUD(object):
                 ('Hand brake:', c.hand_brake),
                 ('Manual:', c.manual_gear_shift),
                 'Gear:        %s' % {-1: 'R', 0: 'N'}.get(c.gear, c.gear)]
+            if self._show_ackermann_info:
+                self._info_text += [
+                    '',
+                    'Ackermann Controller:',
+                    '  Target speed: % 8.0f km/h' % (3.6*self._ackermann_control.speed),
+                ]
         elif isinstance(c, carla.WalkerControl):
             self._info_text += [
                 ('Speed:', c.speed, 0.0, 5.556),
@@ -713,6 +787,12 @@ class HUD(object):
                     break
                 vehicle_type = get_actor_display_name(vehicle, truncate=22)
                 self._info_text.append('% 4dm %s' % (d, vehicle_type))
+
+    def show_ackermann_info(self, enabled):
+        self._show_ackermann_info = enabled
+
+    def update_ackermann_control(self, ackermann_control):
+        self._ackermann_control = ackermann_control
 
     def toggle_info(self):
         self._show_info = not self._show_info
@@ -1044,17 +1124,17 @@ class CameraManager(object):
 
         if not self._parent.type_id.startswith("walker.pedestrian"):
             self._camera_transforms = [
-                (carla.Transform(carla.Location(x=-2.0*bound_x, y=+0.0*bound_y, z=2.0*bound_z), carla.Rotation(pitch=8.0)), Attachment.SpringArm),
+                (carla.Transform(carla.Location(x=-6*bound_x, y=+0.0*bound_y, z=2.5*bound_z), carla.Rotation(pitch=30.0)), Attachment.SpringArmGhost),
                 (carla.Transform(carla.Location(x=+0.8*bound_x, y=+0.0*bound_y, z=1.3*bound_z)), Attachment.Rigid),
-                (carla.Transform(carla.Location(x=+1.9*bound_x, y=+1.0*bound_y, z=1.2*bound_z)), Attachment.SpringArm),
-                (carla.Transform(carla.Location(x=-2.8*bound_x, y=+0.0*bound_y, z=4.6*bound_z), carla.Rotation(pitch=6.0)), Attachment.SpringArm),
+                (carla.Transform(carla.Location(x=+1.9*bound_x, y=+1.0*bound_y, z=1.2*bound_z)), Attachment.SpringArmGhost),
+                (carla.Transform(carla.Location(x=-2.8*bound_x, y=+0.0*bound_y, z=4.6*bound_z), carla.Rotation(pitch=6.0)), Attachment.SpringArmGhost),
                 (carla.Transform(carla.Location(x=-1.0, y=-1.0*bound_y, z=0.4*bound_z)), Attachment.Rigid)]
         else:
             self._camera_transforms = [
-                (carla.Transform(carla.Location(x=-2.5, z=0.0), carla.Rotation(pitch=-8.0)), Attachment.SpringArm),
+                (carla.Transform(carla.Location(x=-2.5, z=1.0), carla.Rotation(pitch=-0.0)), Attachment.SpringArmGhost),
                 (carla.Transform(carla.Location(x=1.6, z=1.7)), Attachment.Rigid),
-                (carla.Transform(carla.Location(x=2.5, y=0.5, z=0.0), carla.Rotation(pitch=-8.0)), Attachment.SpringArm),
-                (carla.Transform(carla.Location(x=-4.0, z=2.0), carla.Rotation(pitch=6.0)), Attachment.SpringArm),
+                (carla.Transform(carla.Location(x=2.5, y=0.5, z=0.0), carla.Rotation(pitch=-8.0)), Attachment.SpringArmGhost),
+                (carla.Transform(carla.Location(x=-4.0, z=2.0), carla.Rotation(pitch=6.0)), Attachment.SpringArmGhost),
                 (carla.Transform(carla.Location(x=0, y=-2.5, z=-0.0), carla.Rotation(yaw=90.0)), Attachment.Rigid)]
 
         self.transform_index = 1
@@ -1075,6 +1155,7 @@ class CameraManager(object):
                 'chromatic_aberration_intensity': '0.5',
                 'chromatic_aberration_offset': '0'}],
             ['sensor.camera.optical_flow', cc.Raw, 'Optical Flow', {}],
+            ['sensor.camera.normals', cc.Raw, 'Camera Normals', {}],
         ]
         world = self._parent.get_world()
         bp_library = world.get_blueprint_library()
@@ -1178,82 +1259,6 @@ class CameraManager(object):
         if self.recording:
             image.save_to_disk('_out/%08d' % image.frame)
 
-
-# ==============================================================================
-# -- game_loop() ---------------------------------------------------------------
-# ==============================================================================
-
-
-def game_loop(args):
-    # ALIVE is an external global variable that is asking this function to stop and return if set to False
-    pygame.init()
-    pygame.font.init()
-    world = None
-    original_settings = None
-
-    try:
-        client = carla.Client(args.host, args.port)
-        client.set_timeout(20.0)
-
-        sim_world = client.get_world()
-        if args.sync:
-            original_settings = sim_world.get_settings()
-            settings = sim_world.get_settings()
-            if not settings.synchronous_mode:
-                settings.synchronous_mode = True
-                settings.fixed_delta_seconds = 0.05
-            sim_world.apply_settings(settings)
-
-            traffic_manager = client.get_trafficmanager()
-            traffic_manager.set_synchronous_mode(True)
-
-        if args.autopilot and not sim_world.get_settings().synchronous_mode:
-            print("WARNING: You are currently in asynchronous mode and could "
-                  "experience some issues with the traffic simulation")
-
-        display = pygame.display.set_mode(
-            (args.width, args.height),
-            pygame.HWSURFACE | pygame.DOUBLEBUF)
-        display.fill((0,0,0))
-        pygame.display.flip()
-
-        hud = HUD(args.width, args.height)
-        world = World(sim_world, hud, args)
-        controller = KeyboardControl(world, args.autopilot)
-
-        if args.sync:
-            sim_world.tick()
-        else:
-            sim_world.wait_for_tick()
-
-        clock = pygame.time.Clock()
-        while True:
-            print("CARLA_WINDOW: ", globals.CARLA_WINDOW)
-            if globals.CARLA_WINDOW == False:
-                raise KeyboardInterrupt 
-            if args.sync:
-                sim_world.tick()
-            clock.tick_busy_loop(60)
-            if controller.parse_events(client, world, clock, args.sync):
-                return
-            world.tick(clock)
-            world.render(display)
-            pygame.display.flip()
-
-    finally:
-
-        if original_settings:
-            sim_world.apply_settings(original_settings)
-
-        if (world and world.recording_enabled):
-            client.stop_recorder()
-
-        if world is not None:
-            world.destroy()
-
-        pygame.quit()
-
-
 # ==============================================================================
 # -- main() --------------------------------------------------------------------
 # ==============================================================================
@@ -1326,9 +1331,8 @@ def main():
 
         game_loop(args)
 
-    except (KeyboardInterrupt):
+    except KeyboardInterrupt:
         print('\nCancelled by user. Bye!')
-
 
 
 if __name__ == '__main__':

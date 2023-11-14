@@ -24,12 +24,6 @@ const BTModal = ({ isOpen, onClose, socket, btGreen, setBtGreen }) => {
             <div className="text-xl font-bold mb-4">Connect Bluetooth Cycling Accessories</div>
             <ul className="list-disc list-inside">
             <li>You can generate <strong>1 question per credit</strong>.</li>
-            <li>PrepGPT creates questions similar to the <strong>Digital SAT Reading & Writing Modules</strong>.</li>
-            <li>Generation is a non-deterministic process, so <strong>qualified review is required</strong> before using them for instruction or student evaluation.</li>
-            <li>PrepGPT may refuse to generate questions for unsuitable topics.</li>
-            <li>Quality of generated questions may vary depending on the topic you choose.</li>
-            <li>When you cancel a generation request, you will be refunded the remaining amount excluding already-generated questions.</li>
-  
             </ul>
             <button onClick={onClose} className="w-full bg-blue-500 hover:bg-blue-700 text-white font-bold py-4 px-4 mt-8 mb-4 rounded">Ok, let's go!</button>
           </div>

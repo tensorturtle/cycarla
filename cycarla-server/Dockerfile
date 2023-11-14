@@ -19,6 +19,7 @@ RUN apt-get update && apt-get install -y \
 RUN add-apt-repository ppa:deadsnakes/ppa \
     && apt-get update \
     && apt-get install -y python3.8 \
+    && apt-get install -y python3.8-distutils \
     && rm -rf /var/lib/apt/lists/*
 
 # Poetry itself and install deps using it
@@ -26,8 +27,17 @@ COPY pyproject.toml /
 RUN apt-get update \
     && apt-get install -y curl python3-pip  \
     && curl -sSL https://install.python-poetry.org | python3 - \
-    && export PATH="/root/.local/bin:$PATH" \
-    && poetry install
+    && export PATH="/root/.local/bin:$PATH"
+
+# Install fonts for pygame
+RUN apt-get update \ 
+    && apt-get install -y fontconfig \
+    && rm -rf /var/lib/apt/lists/*
+
+# Install cv2 dependency
+RUN apt-get update \
+    && apt-get install -y libgl1 \
+    && rm -rf /var/lib/apt/lists/*
 
 ENV PATH="/root/.local/bin:$PATH"
 

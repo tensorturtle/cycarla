@@ -1,18 +1,25 @@
 'use client'
 import { socket } from './socket';
 import Image from 'next/image'
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import BTModal from './components/BTModal';
 import { SteeringVisualizer } from './components/SteeringVisualizer';
 
 
 export default function Home() {
   const [isWebsocketConnected, setWebsocketConnected] = useState(socket.connected);
+
   const [ btGreen, setBtGreen] = useState(false)
+  const lastSteeringAngleCall = useRef(null);
+  const lastPowerCall = useRef(null);
+  const btGreenTimeout = useRef(null);
 
   // live updated data from sensors
   const [steeringAngle, setSteeringAngle] = useState(0.0);
   const [power, setPower] = useState(0.0);
+
+  // JPEG image as text from carla
+  const [carlaFrame, setCarlaFrame] = useState(null);
 
   const [isBTModalOpen, setBTModelOpen] = useState(false);
   const openBTModal = () => setBTModelOpen(true);
@@ -28,27 +35,41 @@ export default function Home() {
     }
 
     function onHeartbeat(message) {
-      console.log('heartbeat', message)
-      console.log("time: ", new Date().toLocaleString())
-      // setLastHeartbeatMessage(message);
     }
 
     function onSteeringAngle(message) {
-      console.log('steering_angle', message)
       setSteeringAngle(message);
+      lastSteeringAngleCall.current = Date.now();
+      checkBtGreen();
     }
 
     function onPower(message) {
-      console.log('power', message)
       setPower(message);
+      lastPowerCall.current = Date.now();
+      checkBtGreen();
     }
 
+    function checkBtGreen() {
+      if (lastSteeringAngleCall.current && lastPowerCall.current) {
+        const now = Date.now();
+        if (now - lastSteeringAngleCall.current <= 3000 && now - lastPowerCall.current <= 3000) {
+          setBtGreen(true);
+          if (btGreenTimeout.current) clearTimeout(btGreenTimeout.current);
+          btGreenTimeout.current = setTimeout(() => setBtGreen(false), 3000);
+        }
+      }
+    }
+
+    function onCarlaFrame(message) {
+      setCarlaFrame(message);
+    }
 
     socket.on('connect', onConnect);
     socket.on('disconnect', onDisconnect);
     socket.on('heartbeat', onHeartbeat);
     socket.on('steering_angle', onSteeringAngle);
     socket.on('power', onPower)
+    socket.on('carla_frame', onCarlaFrame)
 
     return () => {
       // all socket registration events should be removed when the component unmounts
@@ -58,9 +79,14 @@ export default function Home() {
       socket.off('heartbeat', onHeartbeat)
       socket.off('steering_angle', onSteeringAngle)
       socket.off('power', onPower)
+      socket.off('carla_frame', onCarlaFrame)
     }
   }, [])
 
+  const handleStartGame = () => {
+    console.log("Starting Game")
+    socket.emit('start_game')
+  }
 
   return (
     <main className="flex min-h-screen flex-col items-center justify-between p-24">
@@ -89,14 +115,7 @@ export default function Home() {
         </div>
       </div>
       <div>
-        <Image
-          className="relative dark:drop-shadow-[0_0_0.3rem_#ffffff70] dark:invert"
-          src="/next.svg"
-          alt="Next.js Logo"
-          width={180}
-          height={37}
-          priority
-        />
+        <img src={`data:image/jpeg;base64,${carlaFrame}`} />
       </div>
       {/* <div className="relative flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-0 pt-0 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit static w-auto rounded-xl border bg-gray-200 p-4 dark:bg-zinc-800/30"> */}
       <div className="m-2 relative flex w-full justify-center backdrop-blur-2xl w-auto rounded-xl border border-gray-800 p-4 dark:bg-zinc-800/30">
@@ -146,6 +165,31 @@ export default function Home() {
             /> */}
             <h2 className={`mb-3 text-2xl font-semibold`}>
             Websocket Connection{' '}
+            </h2>
+            <div className="mt-0 mb-1 ml-4">
+            <svg height="20" width="20">
+              <circle cx="10" cy="10" r="10" fill={isWebsocketConnected ? "green" : "red"} />
+            </svg>
+            </div>
+          </div>
+          <div className="flex items-center">
+            <p className="text-sm opacity-50 text-center">
+              Websocket connection to CyCARLA Server
+            </p>
+
+          </div>
+        </button>
+
+        <button 
+          onClick={handleStartGame}
+          className="group rounded-lg border border-gray-800  px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
+        >
+          <div className="flex items-center justify-between">
+            {/* <div
+              className={`m-3 h-5 w-8 rounded-full ${isGreen ? 'bg-green-500' : 'bg-red-500'}`}
+            /> */}
+            <h2 className={`mb-3 text-2xl font-semibold`}>
+            Start Carla Game{' '}
             </h2>
             <div className="mt-0 mb-1 ml-4">
             <svg height="20" width="20">

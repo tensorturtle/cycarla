@@ -15,6 +15,8 @@ flask-socketio = "^5.3.6"
 bleak = "^0.21.1"
 #pycycling = "^0.3.1"
 pycycling = {path = "/workspaces/cycarla/cycarla-server/pycycling", develop=true}
+numpy = "1.22.0"
+opencv-python = "^4.8.1.78"
 
 [build-system]
 requires = ["poetry-core"]
