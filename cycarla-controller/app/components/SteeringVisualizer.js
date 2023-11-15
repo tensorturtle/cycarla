@@ -6,7 +6,7 @@ export function SteeringVisualizer({ steeringAngle }) {
     const rotate = `rotate(${steeringAngle}deg)`;
   
     return (
-      <div className="relative w-48 h-48">
+      <div className="relative w-24 h-24">
         <div
           className="absolute top-0 left-0 w-full h-full"
           style={{ transform: rotate }}

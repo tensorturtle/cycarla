@@ -10,9 +10,17 @@ export default function Home() {
   const [isWebsocketConnected, setWebsocketConnected] = useState(socket.connected);
 
   const [ btGreen, setBtGreen] = useState(false)
+
+  const [ isGameOn, setIsGameOn] = useState(false)
+  const [ awaitingGameStart, setAwaitingGameStart] = useState(true)
+
   const lastSteeringAngleCall = useRef(null);
   const lastPowerCall = useRef(null);
   const btGreenTimeout = useRef(null);
+
+  // bluetooth connection names
+  const [ sterzoDevice, setSterzoDevice] = useState(null)
+  const [ powerDevice, setPowerDevice] = useState(null)
 
   // live updated data from sensors
   const [steeringAngle, setSteeringAngle] = useState(0.0);
@@ -23,6 +31,11 @@ export default function Home() {
 
   const [isBTModalOpen, setBTModelOpen] = useState(false);
   const openBTModal = () => setBTModelOpen(true);
+
+  // On startup, finish any potentially running game
+  useEffect(() => {
+    socket.emit('finish_game')
+  }, [])
 
   // Websocket handlers
   useEffect(() => {
@@ -64,12 +77,53 @@ export default function Home() {
       setCarlaFrame(message);
     }
 
+    function onGameLaunched(message) {
+      setIsGameOn(true);
+      setAwaitingGameStart(false);
+    }
+
+    function onGameFinished(message) {
+      setIsGameOn(false);
+      setAwaitingGameStart(true);
+    }
+
+    function onSterzoDevice(message) {
+      setSterzoDevice(message);
+    }
+
+    function onPowerDevice(message) {
+      setPowerDevice(message);
+    }
+
+    function onSimulationLiveData(message) {
+      console.log("SimulationLiveData:")
+      console.log(message);
+    }
+
+    function onReporterNotification(message) {
+      console.log("ReporterNotification:")
+      console.log(message);
+    }
+
+    function onReporterError(message) {
+      console.log("ReporterError:")
+      console.log(message);
+    }
+
     socket.on('connect', onConnect);
     socket.on('disconnect', onDisconnect);
     socket.on('heartbeat', onHeartbeat);
     socket.on('steering_angle', onSteeringAngle);
     socket.on('power', onPower)
     socket.on('carla_frame', onCarlaFrame)
+    socket.on('game_launched', onGameLaunched)
+    socket.on('game_finished', onGameFinished)
+    socket.on('sterzo_device', onSterzoDevice)
+    socket.on('power_device', onPowerDevice)
+    socket.on('simulation_live_data', onSimulationLiveData)
+    socket.on('reporter_notification', onReporterNotification)
+    socket.on('reporter_error', onReporterError)
+    
 
     return () => {
       // all socket registration events should be removed when the component unmounts
@@ -80,64 +134,96 @@ export default function Home() {
       socket.off('steering_angle', onSteeringAngle)
       socket.off('power', onPower)
       socket.off('carla_frame', onCarlaFrame)
+      socket.off('game_launched', onGameLaunched)
+      socket.off('game_finished', onGameFinished)
+      socket.off('sterzo_device', onSterzoDevice)
+      socket.off('power_device', onPowerDevice)
+      socket.off('simulation_live_data', onSimulationLiveData)
+      socket.off('reporter_notification', onReporterNotification)
+      socket.off('reporter_error', onReporterError)
     }
   }, [])
 
   const handleStartGame = () => {
-    console.log("Starting Game")
+    setAwaitingGameStart(false)
+    console.log("Requesting starting Game")
     socket.emit('start_game')
   }
 
+  const handleFinishGame = () => {
+    console.log("Requesting finishing Game")
+    socket.emit('finish_game')
+  }
+
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between p-24">
+    <main className="flex min-h-screen flex-col items-center justify-between ">
       <BTModal isOpen={isBTModalOpen} onClose={() => setBTModelOpen(false)} socket={socket} btGreen={btGreen}  setBtGreen={setBtGreen} />
-      <div className="z-10 max-w-5xl w-full items-center justify-between font-mono text-sm lg:flex">
-        <p className="fixed left-0 top-0 flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-6 pt-8 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit lg:static lg:w-auto  lg:rounded-xl lg:border lg:bg-gray-200 lg:p-4 lg:dark:bg-zinc-800/30">
-          Get started by editing&nbsp;
-          <code className="font-mono font-bold">app/page.js</code>
-        </p>
-        <div className="fixed bottom-0 left-0 flex h-48 w-full items-end justify-center bg-gradient-to-t from-white via-white dark:from-black dark:via-black lg:static lg:h-auto lg:w-auto lg:bg-none">
-          <a
-            className="pointer-events-none flex place-items-center gap-2 p-8 lg:pointer-events-auto lg:p-0"
-            href="https://github.com/tensorturtle/cycarla"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
+      <div className="z-10 max-w-5xl w-full items-center justify-between lg:flex">
+        <div className="fixed left-0 top-0 flex w-full justify-center border-gray-300 backdrop-blur-xl dark:bg-zinc-800/50 lg:w-auto lg:p-4 lg:m-4 lg:bg-inherit rounded">
+
+          <Image
               src="/dalle-cycarla-logo.png"
               alt="Cycarla Logo"
-              className="dark:invert"
-              width={100}
-              height={100}
+              className="dark:invert w-16 h-16 lg:w-32 lg:h-32"
+              width={200}
+              height={200}
               priority
             />
-          </a>
-        </div>
-      </div>
-      <div>
-        <img src={`data:image/jpeg;base64,${carlaFrame}`} />
-      </div>
-      {/* <div className="relative flex w-full justify-center border-b border-gray-300 bg-gradient-to-b from-zinc-200 pb-0 pt-0 backdrop-blur-2xl dark:border-neutral-800 dark:bg-zinc-800/30 dark:from-inherit static w-auto rounded-xl border bg-gray-200 p-4 dark:bg-zinc-800/30"> */}
-      <div className="m-2 relative flex w-full justify-center backdrop-blur-2xl w-auto rounded-xl border border-gray-800 p-4 dark:bg-zinc-800/30">
-        <div className="flex gap-16 items-center justify-center">
-          <SteeringVisualizer steeringAngle={steeringAngle} />
-          <div className="flex flex-col justify-center items-center">
-            <div className="text-8xl">
-              {power} W
-            </div>
-          </div>
         </div>
       </div>
 
-      <div className="mb-32 gap-2 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
+      <div className="relative pt-16 lg:pt-0">
+        <div className="relative">
+          <img src={`data:image/jpeg;base64,${carlaFrame}`} />
+
+          <div className="absolute top-0 right-0">
+            <div className="m-2 relative flex px-10 justify-center backdrop-blur-md w-auto rounded-xl border border-gray-800 bg-zinc-800/50">
+              <div className="flex gap-10 items-center justify-center">
+                <SteeringVisualizer steeringAngle={steeringAngle} />
+                <div className="flex flex-col justify-center items-center">
+                  <div className="text-6xl font-bold">
+                    {power} W
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          {isGameOn === false && (
+            <div className="absolute top-0 left-0 right-0 bottom-0 bg-black/80 flex justify-center items-center">
+              <span className="text-white font-bold text-2xl">Press 'Start' for new game</span>
+            </div>
+            )}
+        </div>
+      </div>
+
+      <div className="pb-32 pt-2 gap-2 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-3 lg:text-left">
+        <button 
+          onClick={() => window.location.reload()}
+          className="group rounded-lg border border-gray-800  px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
+          >
+          <div className="flex items-center justify-between">
+            <h2 className={`mb-3 text-2xl font-semibold`}>
+            Websocket Server{' '}
+            </h2>
+            <div className="mt-0 mb-1 ml-4">
+            <svg height="20" width="20">
+              <circle cx="10" cy="10" r="10" fill={isWebsocketConnected ? "green" : "red"} />
+            </svg>
+            </div>
+          </div>
+          <div className="flex items-center">
+            <p className="text-sm opacity-50 text-center">
+              Click to reload (Game also restarts)
+            </p>
+
+          </div>
+        </button>
+
         <button 
           onClick={openBTModal}
           className="group rounded-lg border border-gray-800  px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
         >
           <div className="flex items-center justify-between">
-            {/* <div
-              className={`m-3 h-5 w-8 rounded-full ${isGreen ? 'bg-green-500' : 'bg-red-500'}`}
-            /> */}
             <h2 className={`mb-3 text-2xl font-semibold`}>
             Bluetooth Connection{' '}
             </h2>
@@ -147,97 +233,38 @@ export default function Home() {
             </svg>
             </div>
           </div>
-          <div className="flex items-center">
-            <p className="text-sm opacity-50 text-center">
-              Connect to indoor cycling accessories via Bluetooth.
-            </p>
-
+          <div className="flex flex-col items-center">
+            <div className="text-sm opacity-50">Steering: {sterzoDevice}</div>
+            <div className="text-sm opacity-50">Power: {powerDevice}</div>
           </div>
         </button>
 
-        <button 
-          onClick={null}
+        <div 
           className="group rounded-lg border border-gray-800  px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-        >
+          >
           <div className="flex items-center justify-between">
             {/* <div
               className={`m-3 h-5 w-8 rounded-full ${isGreen ? 'bg-green-500' : 'bg-red-500'}`}
             /> */}
             <h2 className={`mb-3 text-2xl font-semibold`}>
-            Websocket Connection{' '}
+              Carla Game{' '}
             </h2>
             <div className="mt-0 mb-1 ml-4">
             <svg height="20" width="20">
-              <circle cx="10" cy="10" r="10" fill={isWebsocketConnected ? "green" : "red"} />
+              <circle cx="10" cy="10" r="10" fill={isGameOn ? "green" : "red"} />
             </svg>
             </div>
-          </div>
-          <div className="flex items-center">
-            <p className="text-sm opacity-50 text-center">
-              Websocket connection to CyCARLA Server
-            </p>
 
           </div>
-        </button>
-
-        <button 
-          onClick={handleStartGame}
-          className="group rounded-lg border border-gray-800  px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-        >
-          <div className="flex items-center justify-between">
-            {/* <div
-              className={`m-3 h-5 w-8 rounded-full ${isGreen ? 'bg-green-500' : 'bg-red-500'}`}
-            /> */}
-            <h2 className={`mb-3 text-2xl font-semibold`}>
-            Start Carla Game{' '}
-            </h2>
-            <div className="mt-0 mb-1 ml-4">
-            <svg height="20" width="20">
-              <circle cx="10" cy="10" r="10" fill={isWebsocketConnected ? "green" : "red"} />
-            </svg>
-            </div>
+          <div className="flex justify-between items-center px-4">
+            <button disabled={!awaitingGameStart} onClick={handleStartGame} className="bg-green-500 hover:bg-green-600 text-white font-bold py-4 px-8 rounded">
+              Start
+            </button>
+            <button onClick={handleFinishGame} className="bg-red-500 hover:bg-red-600 text-white font-bold py-4 px-8 rounded">
+              Finish
+            </button>
           </div>
-          <div className="flex items-center">
-            <p className="text-sm opacity-50 text-center">
-              Websocket connection to CyCARLA Server
-            </p>
-
-          </div>
-        </button>
-
-        <a
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Templates{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Explore starter templates for Next.js.
-          </p>
-        </a>
-
-        <a
-          href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-          className="group rounded-lg border border-transparent px-5 py-4 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <h2 className={`mb-3 text-2xl font-semibold`}>
-            Deploy{' '}
-            <span className="inline-block transition-transform group-hover:translate-x-1 motion-reduce:transform-none">
-              -&gt;
-            </span>
-          </h2>
-          <p className={`m-0 max-w-[30ch] text-sm opacity-50`}>
-            Instantly deploy your Next.js site to a shareable URL with Vercel.
-          </p>
-        </a>
+        </div>
       </div>
     </main>
   )

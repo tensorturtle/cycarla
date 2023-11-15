@@ -15,9 +15,21 @@ from pycycling_input import PycyclingInput, LiveControlState
 app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins="*")
 
+class GameState():
+    def __init__(self):
+        self.game_launched = False
+    
+    def set_game_launched(self, game_launched):
+        self.game_launched = game_launched
+
+game_state = GameState()
+
+FIRST_GAME_LOOP = True
+
 live_control_state = LiveControlState()
 
-def game_loop(args):
+def game_loop(args, game_state: GameState):
+    global FIRST_GAME_LOOP
     pygame.init()
     pygame.font.init()
     world = None
@@ -30,6 +42,11 @@ def game_loop(args):
         client.set_timeout(1000.0)
 
         sim_world = client.get_world()
+
+        if FIRST_GAME_LOOP:
+            # set map
+            client.load_world('Town07')
+            FIRST_GAME_LOOP = False            
         if args.sync:
             original_settings = sim_world.get_settings()
             settings = sim_world.get_settings()
@@ -50,8 +67,8 @@ def game_loop(args):
             pygame.HWSURFACE | pygame.DOUBLEBUF)
         pygame.display.flip()
 
-        hud = HUD(args.width, args.height)
-        world = World(sim_world, hud, args)
+        reporter = Reporter(args.width, args.height, socketio)
+        world = World(sim_world, reporter, args)
 
         controller = ControlCarlaWithCyclingBLE(world) # replaces KeyboardControl(world) in demo code
 
@@ -62,7 +79,14 @@ def game_loop(args):
 
         clock = pygame.time.Clock()
 
+        # Send game start message
+        socketio.emit('game_launched', 'true')
+
         while True:
+            if not game_state.game_launched:
+                socketio.emit('game_finished', 'true')
+                break
+
             if args.sync:
                 sim_world.tick()
             clock.tick_busy_loop(59)
@@ -108,8 +132,10 @@ def game_loop(args):
 def handle_bt_scan():
     cycling_ble_devices = asyncio.run(scan_bt_async_runner())
 
+
+
     if len(cycling_ble_devices['sterzos']) > 0 and len(cycling_ble_devices['smart_trainers']) > 0:
-        assert isinstance(cycling_ble_devices['sterzos'][0], BLEDevice)
+
         pycycling_input = PycyclingInput(
             # TODO: What if there are multiple devices for each category?
             cycling_ble_devices['sterzos'][0],
@@ -137,6 +163,11 @@ def handle_message(message):
 @socketio.on('start_game')
 def handle_start_game():
     socketio.start_background_task(start_game_loop)
+    game_state.set_game_launched(True)
+
+@socketio.on('finish_game')
+def handle_finish_game():
+    game_state.set_game_launched(False)
 
 def start_game_loop():
     args = Namespace(
@@ -144,7 +175,7 @@ def start_game_loop():
     host='127.0.0.1',
     port=2000,
     autopilot=False,
-    res='1920x1080',
+    res='1280x720', # defines the maximum size of image shown in frontend
     filter='vehicle.diamondback.century',
     generation='2',
     rolename='hero',
@@ -154,7 +185,7 @@ def start_game_loop():
     args.width, args.height = [int(x) for x in args.res.split('x')]
 
     print("Starting game loop")
-    game_loop(args)
+    game_loop(args, game_state)
 
 
 if __name__ == '__main__':

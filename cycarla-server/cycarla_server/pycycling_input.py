@@ -53,9 +53,10 @@ class PycyclingInput:
     async def connect_to_sterzo(self):
         async with BleakClient(self.sterzo_device) as client:
             def steering_handler(steering_angle):
-                print(f"Steering angle: {steering_angle}")
+                #print(f"Steering angle: {steering_angle}")
                 self.on_steering_update(steering_angle)
                 self.socketio.emit('steering_angle', steering_angle)
+                self.socketio.emit('sterzo_device', self.sterzo_device.name)
 
             await client.is_connected()
             sterzo = Sterzo(client)
@@ -66,9 +67,10 @@ class PycyclingInput:
     async def connect_to_powermeter(self):
         async with BleakClient(self.powermeter_device) as client:
             def power_handler(power):
-                print(f"Power: {power.instantaneous_power}")
+                #print(f"Power: {power.instantaneous_power}")
                 self.on_power_update(power.instantaneous_power)
                 self.socketio.emit('power', power.instantaneous_power)
+                self.socketio.emit('power_device', self.powermeter_device.name)
             
             await client.is_connected()
             powermeter = CyclingPowerService(client)
