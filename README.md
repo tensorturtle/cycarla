@@ -25,21 +25,27 @@ docker pull carlasim/carla:0.9.14
 
 **nodejs and npm**
 
+## Super-Quickstart
 
-## Quickstart
-
-Run the following in each separate shell:
-
+Shell 1:
 ```
-docker run --privileged --gpus all --net=host -e DISPLAY=$DISPLAY carlasim/carla:0.9.14 /bin/bash ./CarlaUE4.sh
+./run_carla.sh
 ```
 
+Shell 2:
 ```
-cd cycarla-controller
-npm run dev
+./run_dev_server.sh
+```
+```
+cd /workspaces/cycarla/cycarla-server
+./entrypoint.sh
 ```
 
+You can run `./run_server.sh` but it doesn't cache the python package installs, so it's not recommended for development.
+
+Shell 3:
 ```
-cd cycarla-server
-docker run --rm -it --network=host --privileged -v /var/run/dbus:/var/run/dbus -v .:/workspaces/cycarla/cycarla-server cycarla_server /workspaces/cycarla/cycarla-server/entrypoint.sh
+./run_controller.sh
 ```
+
+Go to `localhost:3000` with web browser.
