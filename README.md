@@ -1,6 +1,6 @@
 ![banner](logo/cycarla-github-banner.png)
 
-Pronounced: *"si-karla"*
+Pronounced: *"sai-karla"*
 
 # CyCARLA 0.2.0
 
