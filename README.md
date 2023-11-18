@@ -1,29 +1,52 @@
-# CyCARLA
-**Ride your bike in CARLA virtual simulator with off-the-shelf indoor cycling accessories.**
+![banner](logos/cycarla-github-banner.png)
+# CyCARLA 0.2.0
 
-## Launch Carla
+Open World Cycling Simulator based on Unreal Engine and CARLA
 
-```
-/opt/carla-simulator/CarlaUE4.sh -RenderOffScreen
-```
 
-## Launch App
+`cycarla-controller` is a `create-next-app` project.
 
-```
-poetry shell
-```
-From repository root,
-```
-cd cycarla
-```
+`cycarla-server` is a `poetry` project inside a `docker`.
+
+
+## Installation
+
+**CARLA 0.9.14**
+
+**Docker**
 
 ```
-python3 app.py
+curl -fsSL https://get.docker.com -o get-docker.sh
+sh get-docker.sh
 ```
 
-## Hacks
+```
+docker pull carlasim/carla:0.9.14
+```
 
-which should be solved more elegantly
+**nodejs and npm**
 
-+ [ ] Bluetooth devices stay paired when app exits. The hack is to remember which devices were connected in a file, and then unpair them on app start. This won't work well if the bluetooth accessory will be used by other hosts.
-+ [ ] All child processes and found and SIGKILLed on app exit. This hack prevents app from not returning to terminal because of some multiprocessing process that doesn't end. However, it is not a graceful shutdown.
+## Super-Quickstart
+
+Shell 1:
+```
+./run_carla.sh
+```
+
+Shell 2:
+```
+./run_dev_server.sh
+```
+```
+cd /workspaces/cycarla/cycarla-server
+./entrypoint.sh
+```
+
+You can run `./run_server.sh` but it doesn't cache the python package installs, so it's not recommended for development.
+
+Shell 3:
+```
+./run_controller.sh
+```
+
+Go to `localhost:3000` with web browser.
