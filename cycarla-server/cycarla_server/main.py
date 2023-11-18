@@ -18,9 +18,14 @@ socketio = SocketIO(app, cors_allowed_origins="*")
 class GameState():
     def __init__(self):
         self.game_launched = False
+        self.autopilot = False
     
     def set_game_launched(self, game_launched):
         self.game_launched = game_launched
+    
+    def set_autopilot(self, on):
+        self.autopilot = on
+        socketio.emit('autopilot_actual', on)
 
 game_state = GameState()
 
@@ -40,7 +45,7 @@ def game_loop(args, game_state: GameState):
     try:
         client = carla.Client(args.host, args.port)
         client.set_timeout(1000.0)
-
+        
         sim_world = client.get_world()
 
         if FIRST_GAME_LOOP:
@@ -82,6 +87,18 @@ def game_loop(args, game_state: GameState):
         # Send game start message
         socketio.emit('game_launched', 'true')
 
+        if game_state.autopilot:                
+            world.player.set_autopilot(False)
+            world.restart()
+            world.player.set_autopilot(True)
+
+        # get all traffic lights and turn them green forever
+        traffic_lights = client.get_world().get_actors().filter('traffic.traffic_light')
+        for tl in traffic_lights:
+            tl.freeze(True)
+            tl.set_state(carla.TrafficLightState.Green)
+
+        prior_autopilot = game_state.autopilot
         while True:
             if not game_state.game_launched:
                 socketio.emit('game_finished', 'true')
@@ -89,14 +106,27 @@ def game_loop(args, game_state: GameState):
 
             if args.sync:
                 sim_world.tick()
+
             clock.tick_busy_loop(59)
-            # if controller.parse_events(client, world, clock, args.sync):
-            #     return
-            controller.update_player_control(
-                live_control_state.steer,
-                live_control_state.throttle,
-                live_control_state.brake,
-            )
+
+            if game_state.autopilot != prior_autopilot:
+                # switching between manual and autopilot
+                if game_state.autopilot:
+                    # world.player.set_autopilot(False)
+                    # world.restart()
+                    world.player.set_autopilot(True)
+                else:
+                    # world.player.set_autopilot(False)
+                    # world.restart()
+                    world.player.set_autopilot(False)
+                prior_autopilot = game_state.autopilot
+
+            if not game_state.autopilot:
+                controller.update_player_control(
+                    live_control_state.steer,
+                    live_control_state.throttle,
+                    live_control_state.brake,
+                )
             world.tick(clock)
             world.render(display)
             pygame.display.flip()
@@ -131,8 +161,6 @@ def game_loop(args, game_state: GameState):
 @socketio.on('bt_scan')
 def handle_bt_scan():
     cycling_ble_devices = asyncio.run(scan_bt_async_runner())
-
-
 
     if len(cycling_ble_devices['sterzos']) > 0 and len(cycling_ble_devices['smart_trainers']) > 0:
 
@@ -169,18 +197,22 @@ def handle_start_game():
 def handle_finish_game():
     game_state.set_game_launched(False)
 
+@socketio.on('autopilot')
+def handle_autopilot():
+    game_state.set_autopilot(not game_state.autopilot)
+
 def start_game_loop():
     args = Namespace(
     debug=False,
     host='127.0.0.1',
     port=2000,
-    autopilot=False,
+    autopilot=True,
     res='1280x720', # defines the maximum size of image shown in frontend
     filter='vehicle.diamondback.century',
     generation='2',
     rolename='hero',
     gamma=2.2,
-    sync=False
+    sync=True,
     )
     args.width, args.height = [int(x) for x in args.res.split('x')]
 
