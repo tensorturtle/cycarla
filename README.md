@@ -1,6 +1,6 @@
 ![banner](logo/cycarla-github-banner.png)
 
-# CYCARLA: Let's liberate indoor cycling!
+# Liberty for indoor cycling!
 
 Pronounced: *"sai-karla"*
 
