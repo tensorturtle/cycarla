@@ -2,7 +2,24 @@
 
 Pronounced: *"sai-karla"*
 
-# Indoor cycling should be fun, too.
+# Free as in Freedom
+
+Cycling is about freedom. Explore the world, just like riding outside. 
+
+Freedom to modify the game. Freedom is why we ride
+
+# Free as in Free Beer
+
+Also, Cycarla is free for everyone.
+
+To get started, you'll need a Linux computer with a GPU.
+
+In the terminal, enter:
+```
+git clone https://github.com/tensorturtle/cycarla
+```
+
+
 
 # CyCARLA 0.2.0
 
