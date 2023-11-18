@@ -1,4 +1,4 @@
-![banner](logos/cycarla-github-banner.png)
+![banner](logo/cycarla-github-banner.png)
 # CyCARLA 0.2.0
 
 Open World Cycling Simulator based on Unreal Engine and CARLA
