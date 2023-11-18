@@ -2,6 +2,8 @@
 
 Pronounced: *"sai-karla"*
 
+# Indoor cycling should be fun, too.
+
 # CyCARLA 0.2.0
 
 Open World Cycling Simulator based on Unreal Engine and CARLA
