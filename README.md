@@ -2,23 +2,20 @@
 
 Pronounced: *"sai-karla"*
 
-# Free as in Freedom
+# CYCARLA: Let's liberate indoor cycling!
 
-Cycling is about freedom. Explore the world, just like riding outside. 
+## Free as in Freedom
 
-Freedom to modify the game. Freedom is why we ride
+Freedom  is why we ride. CYCARLA liberates indoor cycling.
 
-# Free as in Free Beer
++ Freedom to explore the world, just like riding outside. 
++ Freedom to modify the game: The entire codebase is open source.
+
+## Free as in Free Beer
 
 Also, Cycarla is free for everyone.
 
-To get started, you'll need a Linux computer with a GPU.
-
-In the terminal, enter:
-```
-git clone https://github.com/tensorturtle/cycarla
-```
-
+Currently we support Linux machines with a GPU. See below for recommended specs.
 
 
 # CyCARLA 0.2.0
@@ -32,6 +29,10 @@ Open World Cycling Simulator based on Unreal Engine and CARLA
 
 
 ## Installation
+
+```
+git clone https://github.com/tensorturtle/cycarla
+```
 
 **CARLA 0.9.14**
 
