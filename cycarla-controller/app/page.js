@@ -9,7 +9,7 @@ import BTModal from './components/BTModal';
 import { SteeringVisualizer } from './components/SteeringVisualizer';
 
 // If loading a variable font, you don't need to specify the font weight
-const inter = Noto_Sans_Mono({
+const noto_sans_mono = Noto_Sans_Mono({
   subsets: ['latin'],
   display: 'swap',
 })
@@ -381,7 +381,7 @@ export default function Home() {
           <div className="absolute bottom-0 left-0">
             <div className="m-2 relative flex px-10 justify-center backdrop-blur-md w-max rounded-xl bg-black/50">
               <div className="flex flex-col gap-1 items-left justify-center font-size-xl">
-                <div className={inter.className}>
+                <div className={noto_sans_mono.className}>
                   <button className="text-white font-bold text-2xl" onClick={sendAutopilotToggle}>{autopilotActual ? "Autopilot ON" : "Autopilot OFF"}</button>
                   <PerformanceLiveStats server_fps={serverFps} simulation_fps={simulationFps} />
                   <KinematicsLiveStats speed={speed} xAcceleration={xAcceleration} yAcceleration={yAcceleration} xLocation={xLocation} yLocation={yLocation} latGnss={latGnss} lonGnss={lonGnss} altitude={altitude} />

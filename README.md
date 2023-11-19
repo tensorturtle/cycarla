@@ -4,75 +4,75 @@
 
 Pronounced: *"sai-karla"*
 
-## Free as in Freedom
+**Freedom is why we ride.** CYCARLA is about:
 
-Freedom is why we ride. CYCARLA is about:
++ **Freedom** to explore the world, just like riding outside. 
++ **Freedom** to modify the game: The entire codebase is open source.
++ **Free** as in free beer! This project is backed by donations and community support.
 
-+ Freedom to explore the world, just like riding outside. 
-+ Freedom to modify the game: The entire codebase is open source.
+Bring your Bluetooth-compatible indoor cycling accessories and liberate your indoor riding!
 
-## Free as in Free Beer
+# Getting Started
 
-Also, Cycarla is free for everyone.
+You'll need the following equipment to ride in CYCARLA:
 
-Currently we support Linux machines with a GPU. See below for recommended specs.
-
-
-# CyCARLA 0.2.0
-
-Open World Cycling Simulator based on Unreal Engine and CARLA
-
-
-`cycarla-controller` is a `create-next-app` project.
-
-`cycarla-server` is a `poetry` project inside a `docker`.
-
-## Project Structure
-
-![project-structure-diagram](graphics/CyCARLA-figmadiagram-1.png)
+1. A bike
+2. Elite Sterzo
+3. Smart Trainer
+4. A GPU-equipped computer running Linux
 
 ## Installation
 
+Clone this repository:
 ```
 git clone https://github.com/tensorturtle/cycarla
 ```
 
-**CARLA 0.9.14**
-
-**Docker**
-
+Install docker:
 ```
 curl -fsSL https://get.docker.com -o get-docker.sh
 sh get-docker.sh
 ```
 
+Install npm:
 ```
-docker pull carlasim/carla:0.9.14
 ```
-
-**nodejs and npm**
 
 ## Super-Quickstart
 
-Shell 1:
+Run each command in a new shell:
 ```
 ./run_carla.sh
 ```
-
-Shell 2:
 ```
-./run_dev_server.sh
+./run_server.sh
 ```
-```
-cd /workspaces/cycarla/cycarla-server
-./entrypoint.sh
-```
-
-You can run `./run_server.sh` but it doesn't cache the python package installs, so it's not recommended for development.
-
-Shell 3:
 ```
 ./run_controller.sh
 ```
 
-Go to `localhost:3000` with web browser.
+Go to `localhost:3000` on your web browser.
+
+## Project Structure
+
+![project-structure-diagram](graphics/CyCARLA-figmadiagram-1.png)
+
+## Open Source
+
+CYCARLA follows in the footsteps of some wonderful open source projects:
++ [Unreal Engine](https://github.com/EpicGames) (Sign up with Epic Games to access Unreal Engine repo)
++ [CARLA](https://github.com/carla-simulator/carla)
++ [Pycycling](https://github.com/zacharyedwardbull/pycycling)
+
+CYCARLA accepts Pull Requests. If you have an improvement idea, submit an Issue and let's discuss!
+
+## Community & Funding
+
+CYCARLA started as a passion project by [@tensorturtle](https://github.com/tensorturtle)
+
+Most discussions happen on Discord, [so join us there!]()
+
+If you find CYCARLA valuable, please [donate!]() Funds go towards purchasing equipment to work on compatibility, feature development, and my self-preservation fund.
+
+
+
