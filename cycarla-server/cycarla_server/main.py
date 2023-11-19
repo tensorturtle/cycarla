@@ -4,7 +4,7 @@ from argparse import Namespace
 
 import cv2
 from flask import Flask
-# from flask_cors import CORS
+from flask_cors import CORS
 from flask_socketio import SocketIO
 from bleak.backends.device import BLEDevice
 
@@ -14,6 +14,8 @@ from pycycling_input import PycyclingInput, LiveControlState
 
 app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins="*")
+
+CORS(app, resources={r"/*": {"origins": "*"}})
 
 class GameState():
     def __init__(self):

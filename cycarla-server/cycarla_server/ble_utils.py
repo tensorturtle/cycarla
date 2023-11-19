@@ -30,20 +30,22 @@ def filter_cycling_accessories(devices):
 
     for k,v in devices.items():
         bledevice, advertisement_data = v
-        print("type of bledevice: ", type(bledevice))
-        print("type of advertisement_data: ", type(advertisement_data))
         services = advertisement_data.service_uuids
+
         if BLECyclingService.STERZO.value in services: 
             relevant_devices['sterzos'].append(bledevice)
         if BLECyclingService.FITNESS.value in services and BLECyclingService.POWERMETER.value in services:
             relevant_devices['smart_trainers'].append(bledevice)
-
+    print(f"Found {len(relevant_devices['sterzos'])} sterzos and {len(relevant_devices['smart_trainers'])} smart trainers")
     return relevant_devices
 
 async def scan_bt():
+    print("Restarting system bluetooth")
     restart_system_bluetooth()
     scanner = BleakScanner()
+    print("Scanning for BLE devices")
     devices = await scanner.discover(timeout=2.0, return_adv=True)
+    print(f"Found {len(devices)} devices")
     return filter_cycling_accessories(devices)
 
 async def scan_bt_async_runner():
