@@ -68,13 +68,17 @@ CYCARLA accepts Pull Requests. If you have an improvement idea, submit an Issue 
 
 CYCARLA is MIT licensed.
 
+## [Donate](https://buy.stripe.com/aEUeVkaAuc8XgP69AB)
+
+If you find CYCARLA valuable (maybe you don't have to pay for Zwift anymore?), please [make a one-time pay-what-you-can donation!](https://buy.stripe.com/aEUeVkaAuc8XgP69AB) Funds go towards purchasing equipment to work on compatibility, feature development, and my self-preservation fund.
+
+
 ## Community & Funding
 
 CYCARLA started as a passion project by [@tensorturtle](https://github.com/tensorturtle)
 
 Most discussions happen on Discord, [so join us there!]()
 
-If you find CYCARLA valuable, please [donate!]() Funds go towards purchasing equipment to work on compatibility, feature development, and my self-preservation fund.
 
 
 
