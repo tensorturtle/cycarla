@@ -67,7 +67,7 @@ CYCARLA is MIT licensed.
 
 # [Donate](https://buy.stripe.com/aEUeVkaAuc8XgP69AB)
 
-If you find CYCARLA valuable (maybe you don't have to pay for Zwift anymore?), please [make a one-time pay-what-you-can donation!](https://buy.stripe.com/aEUeVkaAuc8XgP69AB) Funds go towards purchasing equipment to work on compatibility, feature development, and my self-preservation fund.
+If you find CYCARLA valuable, please [make a one-time pay-what-you-can donation!](https://buy.stripe.com/aEUeVkaAuc8XgP69AB) Funds go towards purchasing equipment to work on compatibility, feature development, and my self-preservation fund.
 
 # [Community on Discord]()
 
