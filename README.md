@@ -6,7 +6,7 @@ Pronounced: *"sai-karla"*
 
 ## Free as in Freedom
 
-Freedom is why we ride. Try CYCARLA now to experience:
+Freedom is why we ride. CYCARLA is about:
 
 + Freedom to explore the world, just like riding outside. 
 + Freedom to modify the game: The entire codebase is open source.
