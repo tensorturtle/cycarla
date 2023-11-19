@@ -9,13 +9,11 @@ os=$(uname -s | tr -d ' ')
 case "$os" in
     Linux*)
         echo "Linux"
-        cd cycarla-server
-        docker run -e CARLA_SIM_IP -e CARLA_SIM_PORT --rm -it --platform linux/amd64 --network=host --privileged -v /var/run/dbus:/var/run/dbus -v .:/workspaces/cycarla cycarla_server /workspaces/cycarla/cycarla-server/entrypoint.sh
+        docker run -e CARLA_SIM_IP -e CARLA_SIM_PORT --rm -it --platform linux/amd64 -p 9000:9000 --privileged -v /var/run/dbus:/var/run/dbus -v .:/workspaces/cycarla cycarla_server /workspaces/cycarla/cycarla-server/entrypoint.sh
         ;;
     Darwin*)
         echo "macOS"
-        cd cycarla-server
-        docker run -e CARLA_SIM_IP -e CARLA_SIM_PORT --rm -it --platform linux/amd64 --network=host --privileged -v $(pwd):/workspaces/cycarla cycarla_server /workspaces/cycarla/cycarla-server/entrypoint.sh
+        docker run -e CARLA_SIM_IP -e CARLA_SIM_PORT --rm -it --platform linux/amd64 -p 9000:9000 --privileged -v $(pwd):/workspaces/cycarla cycarla_server /workspaces/cycarla/cycarla-server/entrypoint.sh
         ;;
     *)
         echo "Unknown operating system"
