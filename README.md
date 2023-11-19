@@ -15,9 +15,23 @@ Bring your Bluetooth-compatible indoor cycling accessories and liberate your ind
 You'll need the following equipment to ride in CYCARLA:
 
 1. A bike
-2. Elite Sterzo
-3. Smart Trainer
-4. A GPU-equipped computer running Linux
+2. Steering plate, such as [Elite Sterzo](https://www.elite-it.com/en/products/home-trainers/ecosystem-accessories/sterzo-smart)
+3. Smart Trainer, such as [Elite Suito T](https://www.elite-it.com/en/products/home-trainers/interactive-trainers/suito-t)
+4. A GPU-equipped computer running Linux.
+
+## Computer Requirements
+
+Basically, you'll need a gaming computer.
+
++ CPU: Intel Core i5 or better
++ GPU: NVIDIA RTX 2070 or better (2080, 3060, 3070, 3080, etc.)
++ Hard drive: 10GB of free space.
++ Bluetooth Low Energy (BLE) support
++ Internet connection required for installation, not required to run the game.
+
+Currently, CYCARLA is developed on and for Debian-family Linux (Ubuntu, PopOS).
+
+Keep in mind CYCARLA is based on a serious 3D game engine with full customizability, so it'll be more demanding than typical indoor cycling games.
 
 ## Installation
 
@@ -67,16 +81,18 @@ CYCARLA is MIT licensed.
 
 # [Donate](https://buy.stripe.com/aEUeVkaAuc8XgP69AB)
 
-If you find CYCARLA valuable, please [make a one-time pay-what-you-can donation!](https://buy.stripe.com/aEUeVkaAuc8XgP69AB) Funds go towards purchasing equipment to work on compatibility, feature development, and my self-preservation fund.
+If you find CYCARLA valuable, please [make a donation!](https://buy.stripe.com/aEUeVkaAuc8XgP69AB) 
+
+Funds go towards purchasing equipment to work on compatibility, feature development, and to my self-preservation fund.
 
 # [Community on Discord]()
 
-CYCARLA started as a passion project by [@tensorturtle](https://github.com/tensorturtle)
+CYCARLA began two years ago as a fun 'future of cycling vision' demo at the [Bike2CAV](https://www.bike2cav.at/en/home-2/) consortium presentation at Salzburg Research. Since then it has been my passion project.
 
-Right now, we meet on Discord, [so join us there!]()
+Users, contributors, and anyone else interested in this project are invited to the Discord, [so join us there!]()
 
 # Errata
 
-CYCARLA, also written 'CyCARLA' or 'Cycarla'
+CYCARLA is also stylized 'CyCARLA' or 'Cycarla'
 
-is pronounced: *"sai-karla"*
+It is pronounced: *"sai-karla"*
