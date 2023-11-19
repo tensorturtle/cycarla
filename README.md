@@ -27,6 +27,9 @@ Open World Cycling Simulator based on Unreal Engine and CARLA
 
 `cycarla-server` is a `poetry` project inside a `docker`.
 
+## Project Structure
+
+![project-structure-diagram](graphics/CyCARLA-figmadiagram-1.png)
 
 ## Installation
 
