@@ -18,7 +18,7 @@ From this directory,
 docker build --platform linux/amd64 -t cycarla_server.
 ```
 
-+ The `platform` argument exists because `ubuntu:22.04` is a multi-architecture image but we need the x86_64 one specifically for compatibility with the carla wheel.
++ The `platform` argument exists because `ubuntu:22.04` is a multi-architecture image but we want the x86_64 one specifically for compatibility with the carla wheel.
 
 
 # Run Docker Image
@@ -27,13 +27,12 @@ See [run_server.sh](../run_server.sh).
 
 This server connects to a running CARLA simulation, so it requires the server's IP and port.
 
-If you're running the simulator in the same computer, use:
-```
-export CARLA_SIM_IP=127.0.0.1
-export CARLA_SIM_PORT=2000
-```
+The CARLA simulation [run_carla.sh](../run_carla.sh) and this cycarla server [run_server.sh](../run_server.sh) should be run on the same computer, communicating across localhost.
 
-If you're using a different computer on your local network, find its IP. As an example:
+While it is possible to run the CARLA simulation and server on different computers, it will be very slow ( < 5 fps). 
+
+If you're using a different computer on your local network, use its local network IP. As an example:
+
 ```
 export CARLA_SIM_IP=172.30.1.43
 export CARLA_SIM_PORT=2000
@@ -45,21 +44,12 @@ For debugging, run the image without the `entrypoint.sh` script:
 
 On Linux:
 ```
-docker run -e CARLA_SIM_IP -e CARLA_SIM_PORT --rm -it --network=host --privileged -v /var/run/dbus:/var/run/dbus -v $ .:/workspaces/cycarla/cycarla-server cycarla_server
+cd .. # go up to the root of this repository
+docker run -e CARLA_SIM_IP -e CARLA_SIM_PORT --rm -it --platform linux/amd64 -p 9000:9000 --privileged -v /var/run/dbus:/var/run/dbus -v .:/workspaces/cycarla cycarla_server
 ```
 
-On Mac:
-```
-docker run -e CARLA_SIM_IP -e CARLA_SIM_PORT --rm -it --network=host --privileged -v $(pwd):/workspaces/cycarla/cycarla-server cycarla_server
-```
-
-Then:
+Inside the container:
 ```
 cd /workspaces/cycarla/cycarla-server
 ./entrypoint.sh
-```
-
-For deployment combine the above:
-```
-docker run -e CARLA_SIM_IP -e CARLA_SIM_PORT --rm -it --network=host --privileged -v /var/run/dbus:/var/run/dbus -v .:/workspaces/cycarla/cycarla-server cycarla_server /workspaces/cycarla/cycarla-server/entrypoint.sh
 ```

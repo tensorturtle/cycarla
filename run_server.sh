@@ -1,12 +1,12 @@
 #!/bin/bash
 
 if [ -z "$CARLA_SIM_IP" ]; then
-    echo "CARLA_SIM_IP environment variable not set. Using default value."
+    echo "CARLA_SIM_IP environment variable not set. Using default localhost."
     export CARLA_SIM_IP=127.0.0.1
 fi
 
 if [ -z "$CARLA_SIM_PORT" ]; then
-    echo "CARLA_SIM_PORT environment variable not set. Using default value."
+    echo "CARLA_SIM_PORT environment variable not set. Using default port 2000."
     export CARLA_SIM_PORT=2000
 fi
 
