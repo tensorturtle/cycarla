@@ -1,19 +1,26 @@
 #!/bin/bash
-export CARLA_SIM_IP=172.30.1.43
-export CARLA_SIM_PORT=2000
 
-# Get the kernel name, trimming any potential whitespace
+if [ -z "$CARLA_SIM_IP" ]; then
+    echo "CARLA_SIM_IP environment variable not set. Using default value."
+    export CARLA_SIM_IP=127.0.0.1
+fi
+
+if [ -z "$CARLA_SIM_PORT" ]; then
+    echo "CARLA_SIM_PORT environment variable not set. Using default value."
+    export CARLA_SIM_PORT=2000
+fi
+
 os=$(uname -s | tr -d ' ')
 
-# Check the kernel name
 case "$os" in
     Linux*)
-        echo "Linux"
+        echo "Detected OS: Linux"
         docker run -e CARLA_SIM_IP -e CARLA_SIM_PORT --rm -it --platform linux/amd64 -p 9000:9000 --privileged -v /var/run/dbus:/var/run/dbus -v .:/workspaces/cycarla cycarla_server /workspaces/cycarla/cycarla-server/entrypoint.sh
         ;;
     Darwin*)
-        echo "macOS"
-        docker run -e CARLA_SIM_IP -e CARLA_SIM_PORT --rm -it --platform linux/amd64 -p 9000:9000 --privileged -v $(pwd):/workspaces/cycarla cycarla_server /workspaces/cycarla/cycarla-server/entrypoint.sh
+        echo "Detected OS: macOS. macOS is not supported because CARLA simulator cannot run on macOS, and this server requires a high-bandwidth, low-latency localhost connection to the CARLA simulator."
+        echo "Exiting."
+        #docker run -e CARLA_SIM_IP -e CARLA_SIM_PORT --rm -it --platform linux/amd64 -p 9000:9000 --privileged -v $(pwd):/workspaces/cycarla cycarla_server /workspaces/cycarla/cycarla-server/entrypoint.sh
         ;;
     *)
         echo "Unknown operating system"
