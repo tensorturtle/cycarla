@@ -15,19 +15,14 @@ RUN apt-get update && apt-get install -y \
     bluez \
     && rm -rf /var/lib/apt/lists/*
 
-# Python 3.8 (last version 'carla' package supports)
-RUN add-apt-repository ppa:deadsnakes/ppa \
-    && apt-get update \
-    && apt-get install -y python3.8 \
-    && apt-get install -y python3.8-distutils \
-    && rm -rf /var/lib/apt/lists/*
-
-# Poetry itself and install deps using it
+# Install poetry
 COPY pyproject.toml /
+COPY carla-0.9.14-cp310-cp310-linux_x86_64.whl /
 RUN apt-get update \
     && apt-get install -y curl python3-pip  \
     && curl -sSL https://install.python-poetry.org | python3 - \
-    && export PATH="/root/.local/bin:$PATH"
+    && export PATH="/root/.local/bin:$PATH" \
+    && poetry install
 
 # Install fonts for pygame
 RUN apt-get update \ 
@@ -39,7 +34,7 @@ RUN apt-get update \
     && apt-get install -y libgl1 \
     && rm -rf /var/lib/apt/lists/*
 
-ENV PATH="/root/.local/bin:$PATH"
+RUN PATH="/root/.local/bin:$PATH"
 
 # Run any additional commands here if necessary
 

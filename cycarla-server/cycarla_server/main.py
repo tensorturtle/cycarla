@@ -1,5 +1,6 @@
 import asyncio 
 import base64
+import os
 from argparse import Namespace
 
 import cv2
@@ -14,8 +15,6 @@ from pycycling_input import PycyclingInput, LiveControlState
 
 app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins="*")
-
-CORS(app, resources={r"/*": {"origins": "*"}})
 
 class GameState():
     def __init__(self):
@@ -158,6 +157,8 @@ def game_loop(args, game_state: GameState):
 
         pygame.quit()
 
+        print("Exited Carla simulation")
+
 
 
 @socketio.on('bt_scan')
@@ -204,10 +205,11 @@ def handle_autopilot():
     game_state.set_autopilot(not game_state.autopilot)
 
 def start_game_loop():
+
     args = Namespace(
     debug=False,
-    host='127.0.0.1',
-    port=2000,
+    host=str(os.environ['CARLA_SIM_IP']),
+    port=int(os.environ['CARLA_SIM_PORT']),
     autopilot=True,
     res='1280x720', # defines the maximum size of image shown in frontend
     filter='vehicle.diamondback.century',
@@ -218,7 +220,7 @@ def start_game_loop():
     )
     args.width, args.height = [int(x) for x in args.res.split('x')]
 
-    print("Starting game loop")
+    print(f"Connecting to Carla simulation at {args.host}:{args.port}")
     game_loop(args, game_state)
 
 

@@ -7,14 +7,13 @@ readme = "README.md"
 packages = [{include = "cycarla_server"}]
 
 [tool.poetry.dependencies]
-python = "~3.8.18"
-carla = "0.9.14"
+python = "~3.10.0"
+carla = { file = "/carla-0.9.14-cp310-cp310-linux_x86_64.whl" }
 pygame = "^2.1.2"
 flask = "^3.0.0"
 flask-socketio = "^5.3.6"
 bleak = "^0.21.1"
-#pycycling = "^0.3.1"
-pycycling = {path = "/workspaces/cycarla/cycarla-server/pycycling", develop=true}
+pycycling = "^0.3.1"
 numpy = "1.22.0"
 opencv-python = "^4.8.1.78"
 flask-cors = "^4.0.0"
