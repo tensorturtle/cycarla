@@ -51,11 +51,10 @@ Run each command in a new shell:
 
 Go to `localhost:3000` on your web browser.
 
-## Project Structure
+# Open Source
 
 ![project-structure-diagram](graphics/CyCARLA-figmadiagram-1.png)
-
-## Open Source
+High level project structure of CYCARLA
 
 CYCARLA follows in the footsteps of some wonderful open source projects:
 + [Unreal Engine](https://github.com/EpicGames) (Sign up with Epic Games to access Unreal Engine repo)
