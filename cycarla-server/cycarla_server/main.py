@@ -112,12 +112,8 @@ def game_loop(args, game_state: GameState):
             if game_state.autopilot != prior_autopilot:
                 # switching between manual and autopilot
                 if game_state.autopilot:
-                    # world.player.set_autopilot(False)
-                    # world.restart()
                     world.player.set_autopilot(True)
                 else:
-                    # world.player.set_autopilot(False)
-                    # world.restart()
                     world.player.set_autopilot(False)
                 prior_autopilot = game_state.autopilot
 
