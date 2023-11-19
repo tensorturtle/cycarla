@@ -66,6 +66,8 @@ CYCARLA follows in the footsteps of some wonderful open source projects:
 
 CYCARLA accepts Pull Requests. If you have an improvement idea, submit an Issue and let's discuss!
 
+CYCARLA is MIT licensed.
+
 ## Community & Funding
 
 CYCARLA started as a passion project by [@tensorturtle](https://github.com/tensorturtle)
