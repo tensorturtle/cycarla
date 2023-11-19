@@ -38,7 +38,7 @@ Install npm:
 ```
 ```
 
-## Super-Quickstart
+## Quickstart
 
 Run each command in a new shell:
 ```
