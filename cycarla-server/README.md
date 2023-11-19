@@ -15,10 +15,15 @@ The relevant wheel file has been downloaded as `carla-0.9.14-cp310-cp310-linux_x
 From this directory,
 
 ```
-docker build -t cycarla_server .
+docker build --platform linux/amd64 -t cycarla_server.
 ```
 
++ The `platform` argument exists because `ubuntu:22.04` is a multi-architecture image but we need the x86_64 one specifically for compatibility with the carla wheel.
+
+
 # Run Docker Image
+
+See [run_server.sh](../run_server.sh).
 
 This server connects to a running CARLA simulation, so it requires the server's IP and port.
 
@@ -37,9 +42,17 @@ export CARLA_SIM_PORT=2000
 The port is by default 2000 unless you set them otherwise.
 
 For debugging, run the image without the `entrypoint.sh` script:
+
+On Linux:
 ```
-docker run -e CARLA_SIM_IP -e CARLA_SIM_PORT --rm -it --network=host --privileged -v /var/run/dbus:/var/run/dbus -v .:/workspaces/cycarla/cycarla-server cycarla_server
+docker run -e CARLA_SIM_IP -e CARLA_SIM_PORT --rm -it --network=host --privileged -v /var/run/dbus:/var/run/dbus -v $ .:/workspaces/cycarla/cycarla-server cycarla_server
 ```
+
+On Mac:
+```
+docker run -e CARLA_SIM_IP -e CARLA_SIM_PORT --rm -it --network=host --privileged -v $(pwd):/workspaces/cycarla/cycarla-server cycarla_server
+```
+
 Then:
 ```
 cd /workspaces/cycarla/cycarla-server

@@ -7,7 +7,6 @@ import cv2
 from flask import Flask
 from flask_cors import CORS
 from flask_socketio import SocketIO
-from bleak.backends.device import BLEDevice
 
 from ble_utils import scan_bt_async_runner
 from carla_control import *
@@ -225,4 +224,4 @@ def start_game_loop():
 
 
 if __name__ == '__main__':
-    socketio.run(app, debug=True, host='0.0.0.0', port=5000)
+    socketio.run(app, debug=True, host='127.0.0.1', port=5000)
