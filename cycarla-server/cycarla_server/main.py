@@ -122,6 +122,7 @@ def game_loop(args, game_state: GameState):
                     live_control_state.steer,
                     live_control_state.throttle,
                     live_control_state.brake,
+                    reporter.simulation_live_data.speed # pass in current speed from simulator to modulate steering sensitivity
                 )
             world.tick(clock)
             world.render(display)

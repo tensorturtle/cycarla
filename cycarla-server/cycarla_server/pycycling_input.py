@@ -18,7 +18,7 @@ class LiveControlState:
 
         STERZO has a range of ~60 degrees, so we divide by 30 to get a normalized value.
         '''
-        self.steer = steer / 30 / 5 # empirically determined. Divide by 2 for less sensitivity
+        self.steer = steer / 150 # empirically determined.
 
     def update_throttle(self, throttle):
         '''
