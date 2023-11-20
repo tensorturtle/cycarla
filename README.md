@@ -1,6 +1,6 @@
 ![banner](logo/cycarla-github-banner.png)
 
-# Liberty for indoor cycling!
+# Librate indoor cycling!
 
 **Freedom is why we ride.** CYCARLA is about:
 
