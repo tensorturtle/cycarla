@@ -11,6 +11,7 @@ from flask_socketio import SocketIO
 from ble_utils import scan_bt_async_runner
 from carla_control import *
 from pycycling_input import PycyclingInput, LiveControlState
+from filters import RoadGradientEstimator
 
 app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins="*")
@@ -99,6 +100,9 @@ def game_loop(args, game_state: GameState):
             tl.set_state(carla.TrafficLightState.Green)
 
         prior_autopilot = game_state.autopilot
+
+        road_gradient_estimator = RoadGradientEstimator(window_size=5, ignore_first_n=30)
+        
         while True:
             if not game_state.game_launched:
                 socketio.emit('game_finished', 'true')
@@ -124,14 +128,22 @@ def game_loop(args, game_state: GameState):
                     live_control_state.brake,
                     reporter.simulation_live_data.speed # pass in current speed from simulator to modulate steering sensitivity
                 )
+
+            # Update road gradient estimate as a percentage
+            current_road_gradient = road_gradient_estimator.update(
+                reporter.simulation_live_data.altitude,
+                reporter.simulation_live_data.speed / 3.6 # convert from km/h to m/s
+            )
+            print(f"Current road gradient: {current_road_gradient}%")
             world.tick(clock)
             world.render(display)
             pygame.display.flip()
 
+
+            # Send game screen as image over socketio to frontend
             screen_surface = pygame.display.get_surface()
             screen_buffer = pygame.surfarray.array3d(screen_surface)
             screen_buffer = np.transpose(screen_buffer, (1, 0, 2))
-
             screen_buffer = cv2.cvtColor(screen_buffer, cv2.COLOR_RGB2BGR)
             _, buffer = cv2.imencode('.jpg', screen_buffer)
             jpg_as_text = base64.b64encode(buffer).decode()
