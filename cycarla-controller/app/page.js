@@ -15,9 +15,13 @@ const noto_sans_mono = Noto_Sans_Mono({
 })
 
 function roundOrPad(num, digits) {
-  // Round to the given number of digits, or pad with zeros to be the given number of digits and return as string
+  // Round to the given number of digits, or pad with zeros to be the given number of digits and return as string.
+  // Also add + if positive or zero
   const rounded = num.toFixed(digits);
   const padded = rounded.padStart(digits, "0");
+  if (num >= 0) {
+    return "+" + padded;
+  }
   return padded;
 }
 
@@ -36,7 +40,7 @@ function PerformanceLiveStats({ server_fps, simulation_fps }) {
   )
 }
 
-function KinematicsLiveStats({ speed, xLocation, yLocation, latGnss, lonGnss, altitude }) {
+function KinematicsLiveStats({ speed, xLocation, yLocation, latGnss, lonGnss, altitude, roadGradient }) {
   return (
     <div className="flex gap-1">
       <div className="flex gap-1">
@@ -62,6 +66,10 @@ function KinematicsLiveStats({ speed, xLocation, yLocation, latGnss, lonGnss, al
       <div className="flex gap-1">
         <div className="text-sm opacity-50">Altitude:</div>
         <div className="text-sm">{roundOrPad(altitude, 2)}</div>
+      </div>
+      <div className="flex gap-1">
+        <div className="text-sm opacity-50">Road Gradient:</div>
+        <div className="text-sm">{roundOrPad(roadGradient, 2)}</div>
       </div>
     </div>
   )
@@ -156,6 +164,7 @@ export default function Home() {
   const [handBrake, setHandBrake] = useState(0.0);
   const [manual, setManual] = useState(0.0);
   const [gear, setGear] = useState(0.0);
+  const [roadGradient, setRoadGradient] = useState(0.0);
 
   function parseSimulationLiveData(message) {
     // Parse the received JSON data
@@ -179,6 +188,7 @@ export default function Home() {
       hand_brake,
       manual,
       gear,
+      road_gradient
     } = message;
 
     // Update the state variables
@@ -204,6 +214,7 @@ export default function Home() {
     setHandBrake(hand_brake);
     setManual(manual);
     setGear(gear);
+    setRoadGradient(road_gradient);
   }
 
 
@@ -384,7 +395,7 @@ export default function Home() {
                 <div className={noto_sans_mono.className}>
                   <button className="text-white font-bold text-2xl" onClick={sendAutopilotToggle}>{autopilotActual ? "Autopilot ON" : "Autopilot OFF"}</button>
                   <PerformanceLiveStats server_fps={serverFps} simulation_fps={simulationFps} />
-                  <KinematicsLiveStats speed={speed} xAcceleration={xAcceleration} yAcceleration={yAcceleration} xLocation={xLocation} yLocation={yLocation} latGnss={latGnss} lonGnss={lonGnss} altitude={altitude} />
+                  <KinematicsLiveStats speed={speed} xAcceleration={xAcceleration} yAcceleration={yAcceleration} xLocation={xLocation} yLocation={yLocation} latGnss={latGnss} lonGnss={lonGnss} altitude={altitude} roadGradient={roadGradient} />
                   <ControlLiveStats throttle={throttle} steer={steer} brake={brake} reverse={reverse} hand_brake={handBrake} manual={manual} gear={gear} />
                 </div>
               </div>

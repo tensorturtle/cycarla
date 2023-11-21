@@ -61,6 +61,8 @@ try:
 except ImportError:
     raise RuntimeError('cannot import numpy, make sure numpy package is installed')
 
+from filters import RoadGradientEstimator
+
 # ==============================================================================
 # -- CyCARLA replacement for KeyboardControl  ----------------------------------
 # ==============================================================================
@@ -345,6 +347,7 @@ class SimulationLiveData():
     hand_brake: bool = False
     manual: bool = False
     gear: int = 0
+    road_gradient: float = 0.0
 
 
 class Reporter():
@@ -359,6 +362,7 @@ class Reporter():
         self.frame = 0
         self._server_clock = pygame.time.Clock()
         self.simulation_live_data = SimulationLiveData()
+        self.road_gradient_estimator = RoadGradientEstimator(window_size=5, ignore_first_n=30)
     
     def on_world_tick(self, timestamp):
         self._server_clock.tick()
@@ -367,6 +371,9 @@ class Reporter():
         self.simulation_time = timestamp.elapsed_seconds
     
     def tick(self, world, clock):
+        '''
+        When World ticks, this Reporter also ticks
+        '''
         t = world.player.get_transform()
         v = world.player.get_velocity()
         c = world.player.get_control()
@@ -375,6 +382,12 @@ class Reporter():
         heading += 'S' if 90.5 < compass < 269.5 else ''
         heading += 'E' if 0.5 < compass < 179.5 else ''
         heading += 'W' if 180.5 < compass < 359.5 else ''
+
+        road_gradient = self.road_gradient_estimator.update(
+                t.location.z, # elevation in meters
+                math.sqrt(v.x**2 + v.y**2), # keep m/s 
+            )
+        road_gradient = road_gradient if road_gradient is not None else 0.0
 
         sim_live_data = SimulationLiveData(
             server_fps = self.server_fps,
@@ -395,7 +408,8 @@ class Reporter():
             reverse = c.reverse,
             hand_brake = c.hand_brake,
             manual = c.manual_gear_shift,
-            gear = c.gear
+            gear = c.gear,
+            road_gradient=road_gradient
         )
 
         self.simulation_live_data = sim_live_data

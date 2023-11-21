@@ -377,17 +377,21 @@ numpy = [
 
 [[package]]
 name = "pycycling"
-version = "0.3.1"
+version = "0.3.2"
 description = "A Python package for interacting with Bluetooth Low Energy (BLE) compatible bike trainers and power meters"
 optional = false
 python-versions = ">=3.7"
-files = [
-    {file = "pycycling-0.3.1-py3-none-any.whl", hash = "sha256:c29bfaf80ac14bc3dea9963dcb8135e403a00d8815b61712a5251b678162defd"},
-    {file = "pycycling-0.3.1.tar.gz", hash = "sha256:d7a2fcd19c3545275d35610de9a29eb4817eb343f9d6da8528055653d3c9f0d2"},
-]
+files = []
+develop = false
 
 [package.dependencies]
 bleak = "*"
+
+[package.source]
+type = "git"
+url = "https://github.com/tensorturtle/pycycling.git"
+reference = "HEAD"
+resolved_reference = "85fd6bc931ded1f9ef00f44a376b3f3c07882e93"
 
 [[package]]
 name = "pygame"
@@ -630,4 +634,4 @@ h11 = ">=0.9.0,<1"
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.10.0"
-content-hash = "ef6ccc533406531671d8699a3f33856dba17a77b53b105be299ac07dd907c005"
+content-hash = "29cd8ff3948b6e9e2ddccbc3aaf8bec7fc32241d1d58b2dffed37e62e91e8435"

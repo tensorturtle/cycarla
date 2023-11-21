@@ -11,7 +11,7 @@ from flask_socketio import SocketIO
 from ble_utils import scan_bt_async_runner
 from carla_control import *
 from pycycling_input import PycyclingInput, LiveControlState
-from filters import RoadGradientEstimator
+
 
 app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins="*")
@@ -33,6 +33,8 @@ game_state = GameState()
 FIRST_GAME_LOOP = True
 
 live_control_state = LiveControlState()
+
+pycycling_input = None
 
 def game_loop(args, game_state: GameState):
     global FIRST_GAME_LOOP
@@ -101,7 +103,7 @@ def game_loop(args, game_state: GameState):
 
         prior_autopilot = game_state.autopilot
 
-        road_gradient_estimator = RoadGradientEstimator(window_size=5, ignore_first_n=30)
+        
         
         while True:
             if not game_state.game_launched:
@@ -129,18 +131,13 @@ def game_loop(args, game_state: GameState):
                     reporter.simulation_live_data.speed # pass in current speed from simulator to modulate steering sensitivity
                 )
 
-            # Update road gradient estimate as a percentage
-            current_road_gradient = road_gradient_estimator.update(
-                reporter.simulation_live_data.altitude,
-                reporter.simulation_live_data.speed / 3.6 # convert from km/h to m/s
-            )
-            print(f"Current road gradient: {current_road_gradient}%")
             world.tick(clock)
             world.render(display)
             pygame.display.flip()
 
 
             # Send game screen as image over socketio to frontend
+            # 1280x720 is typically around 10MB/s
             screen_surface = pygame.display.get_surface()
             screen_buffer = pygame.surfarray.array3d(screen_surface)
             screen_buffer = np.transpose(screen_buffer, (1, 0, 2))
@@ -151,6 +148,21 @@ def game_loop(args, game_state: GameState):
 
             frame_counter += 1
 
+            if pycycling_input is not None:
+                # resistance is 0-200
+                # max resistance is reached at 15 percent road gradient
+                # resistance is linearly interpolated between 0 and 15 percent road gradient
+                # cutoff at 15 percent road gradient
+                # if negative road gradient, resistance is 0
+
+                gradient = reporter.simulation_live_data.road_gradient
+
+                if gradient < 0:
+                    gradient = 0
+                elif gradient > 15:
+                    gradient = 15
+
+                pycycling_input.ftms_desired_resistance = gradient * 200 / 15
 
     finally:
 
@@ -171,6 +183,7 @@ def game_loop(args, game_state: GameState):
 
 @socketio.on('bt_scan')
 def handle_bt_scan():
+    global pycycling_input
     cycling_ble_devices = asyncio.run(scan_bt_async_runner())
 
     if len(cycling_ble_devices['sterzos']) > 0 and len(cycling_ble_devices['smart_trainers']) > 0:
