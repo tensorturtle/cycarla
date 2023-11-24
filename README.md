@@ -19,8 +19,6 @@ You'll need the following equipment to ride in CYCARLA:
 3. Smart Trainer, such as [Elite Suito T](https://www.elite-it.com/en/products/home-trainers/interactive-trainers/suito-t)
 4. A GPU-equipped computer running Linux
 
-(no affiliations)
-
 ## Computer Requirements
 
 Basically, you'll need a gaming computer.
