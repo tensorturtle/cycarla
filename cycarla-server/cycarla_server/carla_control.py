@@ -81,7 +81,7 @@ class ControlCarlaWithCyclingBLE():
         world.player.set_autopilot(False)
         world.player.set_light_state(self._lights)
     
-    def update_player_control(self, steer, throttle, brake, current_speed):
+    def update_player_control(self, steer, throttle, brake, current_speed, wheel_speed, road_gradient):
         magic_number = 40
         sensitivity = math.exp(-current_speed/magic_number)
         # Steering sensitivity decreases with: y=e^(-x)
@@ -93,10 +93,52 @@ class ControlCarlaWithCyclingBLE():
         steer *= sensitivity
         
         self._control.steer = steer
-        self._control.throttle = throttle
-        self._control.brake = brake
+
+        #print(f"Current speed: {current_speed} km/h, Wheel speed: {wheel_speed} km/h")
+
+        # Apply road gradient to wheel_speed
+        # Simulate downhill speed gain by increasing wheel speed
+        # Uphill speed decrease does not need to be simulated because the
+        # physics engine already does this and the smart trainer increases resistance.
+        # for each 1% gradient steeper than -3%, add 5km/h to wheel speed (up to 50km/h additional)
+        if road_gradient < -3.0:
+            added_speed = (((-1 * road_gradient) - 3.0) * 5)
+            if added_speed > 50:
+                added_speed = 50
+            wheel_speed += added_speed
+        
+
+        # use throttle and brake to adjust speed
+        # using set_target_velocity() doesn't work because it doesn't interact with the vehicle dynamics
+        # despite its inelegance, this works pretty well.
+        # There are three zones of speed discrepancy:
+        # 1. wheel_speed > current_speed: throttle hard
+        # 2. wheel_speed >~= current_speed: throttle soft
+        # 3. wheel_speed <~= current_speed: coast
+        # 4. wheel_speed < current_speed: brake
+
+        
+        if wheel_speed > current_speed + 5:
+            print("Throttle hard")
+            self._control.throttle = 1
+            self._control.brake = 0
+        elif wheel_speed > current_speed:
+            print("Throttle soft")
+            self._control.throttle = 0.5
+            self._control.brake = 0
+        elif wheel_speed < current_speed - 5:
+            print("Coast")
+            self._control.throttle = 0
+            self._control.brake = 0
+        else:
+            print("Brake")
+            self._control.throttle = 0
+            self._control.brake = 0.5
 
         self.world.player.apply_control(self._control)
+
+
+        
 
 # ==============================================================================
 # -- Global functions ----------------------------------------------------------

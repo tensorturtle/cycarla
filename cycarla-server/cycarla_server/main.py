@@ -129,7 +129,9 @@ def game_loop(args, game_state: GameState):
                     live_control_state.steer,
                     live_control_state.throttle,
                     live_control_state.brake,
-                    reporter.simulation_live_data.speed # pass in current speed from simulator to modulate steering sensitivity
+                    reporter.simulation_live_data.speed, # pass in current speed from simulator to modulate steering sensitivity
+                    live_control_state.wheel_speed,
+                    reporter.simulation_live_data.road_gradient # pass in gradient to simulate downhill speed
                 )
             
             if game_state.change_camera:
@@ -201,6 +203,7 @@ def handle_bt_scan():
             socketio=socketio,
             on_steering_update=live_control_state.update_steer,
             on_power_update=live_control_state.update_throttle,
+            on_speed_update=live_control_state.update_speed
         )
 
         asyncio.run(pycycling_input.run_all())

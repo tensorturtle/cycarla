@@ -26,6 +26,7 @@ export default function Home() {
   // live updated data from sensors
   const [steeringAngle, setSteeringAngle] = useState(0.0);
   const [power, setPower] = useState(0.0);
+  const [wheelSpeed, setWheelSpeed] = useState(0.0);
 
   // JPEG image as text from carla
 
@@ -143,6 +144,10 @@ export default function Home() {
       checkBtGreen();
     }
 
+    function onWheelSpeed(message) {
+      setWheelSpeed(message);
+    }
+
     function checkBtGreen() {
       if (lastSteeringAngleCall.current && lastPowerCall.current) {
         const now = Date.now();
@@ -202,6 +207,7 @@ export default function Home() {
     socket.on('heartbeat', onHeartbeat);
     socket.on('steering_angle', onSteeringAngle);
     socket.on('power', onPower)
+    socket.on('wheel_speed', onWheelSpeed)
     socket.on('carla_frame', onCarlaFrame)
     socket.on('game_launched', onGameLaunched)
     socket.on('game_finished', onGameFinished)
@@ -221,6 +227,7 @@ export default function Home() {
       socket.off('heartbeat', onHeartbeat)
       socket.off('steering_angle', onSteeringAngle)
       socket.off('power', onPower)
+      socket.off('wheel_speed', onWheelSpeed)
       socket.off('carla_frame', onCarlaFrame)
       socket.off('game_launched', onGameLaunched)
       socket.off('game_finished', onGameFinished)
