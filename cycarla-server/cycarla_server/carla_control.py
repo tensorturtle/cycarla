@@ -246,7 +246,7 @@ class World(object):
         self.camera_manager = CameraManager(self.player, self.reporter, self._gamma)
 
 
-        self.camera_manager.transform_index = 0
+        #self.camera_manager.transform_index = 1 # TODO control from UI
         
         
         
@@ -647,22 +647,13 @@ class CameraManager(object):
         bound_z = 0.5 + self._parent.bounding_box.extent.z
         Attachment = carla.AttachmentType
 
-        if not self._parent.type_id.startswith("walker.pedestrian"):
-            self._camera_transforms = [
-                (carla.Transform(carla.Location(x=-7*bound_x, y=+0.0*bound_y, z=4*bound_z), carla.Rotation(pitch=20.0)), Attachment.SpringArmGhost),
-                (carla.Transform(carla.Location(x=+0.8*bound_x, y=+0.0*bound_y, z=1.3*bound_z)), Attachment.Rigid),
-                (carla.Transform(carla.Location(x=+1.9*bound_x, y=+1.0*bound_y, z=1.2*bound_z)), Attachment.SpringArmGhost),
-                (carla.Transform(carla.Location(x=-2.8*bound_x, y=+0.0*bound_y, z=4.6*bound_z), carla.Rotation(pitch=6.0)), Attachment.SpringArmGhost),
-                (carla.Transform(carla.Location(x=-1.0, y=-1.0*bound_y, z=0.4*bound_z)), Attachment.Rigid)]
-        else:
-            self._camera_transforms = [
-                (carla.Transform(carla.Location(x=-2.5, z=1.0), carla.Rotation(pitch=-0.0)), Attachment.SpringArmGhost),
-                (carla.Transform(carla.Location(x=1.6, z=1.7)), Attachment.Rigid),
-                (carla.Transform(carla.Location(x=2.5, y=0.5, z=0.0), carla.Rotation(pitch=-8.0)), Attachment.SpringArmGhost),
-                (carla.Transform(carla.Location(x=-4.0, z=2.0), carla.Rotation(pitch=6.0)), Attachment.SpringArmGhost),
-                (carla.Transform(carla.Location(x=0, y=-2.5, z=-0.0), carla.Rotation(yaw=90.0)), Attachment.Rigid)]
+        self._camera_transforms = [
+            (carla.Transform(carla.Location(x=-3.5, z=2.5), carla.Rotation(pitch=20.0)), Attachment.SpringArmGhost),
+            (carla.Transform(carla.Location(x=0.2, z=1.3), carla.Rotation(pitch=-100.0, yaw=180.0)), Attachment.SpringArmGhost),
 
-        self.transform_index = 1
+        ]
+
+        self.transform_index = 0 # the 'World' overrides this
         self.sensors = [
             ['sensor.camera.rgb', cc.Raw, 'Camera RGB', {}],
             ['sensor.camera.depth', cc.Raw, 'Camera Depth (Raw)', {}],
@@ -689,6 +680,7 @@ class CameraManager(object):
             if item[0].startswith('sensor.camera'):
                 bp.set_attribute('image_size_x', str(reporter.dim[0]))
                 bp.set_attribute('image_size_y', str(reporter.dim[1]))
+                bp.set_attribute('fov', '130')
                 if bp.has_attribute('gamma'):
                     bp.set_attribute('gamma', str(gamma_correction))
                 for attr_name, attr_value in item[3].items():
@@ -785,7 +777,7 @@ class CameraManager(object):
             image.save_to_disk('_out/%08d' % image.frame)
 
 # ==============================================================================
-# -- main() --------------------------------------------------------------------
+# -- main() -------------------------pitch-------------------------------------------
 # ==============================================================================
 
 

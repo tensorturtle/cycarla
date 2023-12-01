@@ -20,6 +20,7 @@ class GameState():
     def __init__(self):
         self.game_launched = False
         self.autopilot = False
+        self.change_camera = False
     
     def set_game_launched(self, game_launched):
         self.game_launched = game_launched
@@ -130,6 +131,11 @@ def game_loop(args, game_state: GameState):
                     live_control_state.brake,
                     reporter.simulation_live_data.speed # pass in current speed from simulator to modulate steering sensitivity
                 )
+            
+            if game_state.change_camera:
+                world.camera_manager.toggle_camera()
+                game_state.change_camera = False
+                
 
             world.tick(clock)
             world.render(display)
@@ -224,6 +230,11 @@ def handle_finish_game():
 @socketio.on('autopilot')
 def handle_autopilot():
     game_state.set_autopilot(not game_state.autopilot)
+
+@socketio.on('change_camera')
+def handle_change_camera():
+    game_state.change_camera = True
+
 
 def start_game_loop():
 

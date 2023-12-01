@@ -1,117 +1,12 @@
 'use client'
-import { Noto_Sans_Mono } from 'next/font/google'
- 
 
 import { socket } from './socket';
 import Image from 'next/image'
 import { useState, useEffect, useRef } from 'react';
 import BTModal from './components/BTModal';
 import { SteeringVisualizer } from './components/SteeringVisualizer';
-
-// If loading a variable font, you don't need to specify the font weight
-const noto_sans_mono = Noto_Sans_Mono({
-  subsets: ['latin'],
-  display: 'swap',
-})
-
-function roundOrPad(num, digits) {
-  // Round to the given number of digits, or pad with zeros to be the given number of digits and return as string.
-  // Also add + if positive or zero
-  const rounded = num.toFixed(digits);
-  const padded = rounded.padStart(digits, "0");
-  if (num >= 0) {
-    return "+" + padded;
-  }
-  return padded;
-}
-
-function PerformanceLiveStats({ server_fps, simulation_fps }) {
-  return (    
-    <div className="flex gap-1">
-      <div className="flex gap-1">
-        <div className="text-sm opacity-50">Server FPS:</div>
-        <div className="text-sm">{server_fps}</div>
-      </div>
-      <div className="flex gap-1">
-        <div className="text-sm opacity-50">Simulation FPS:</div>
-        <div className="text-sm">{simulation_fps}</div>
-      </div>
-    </div>
-  )
-}
-
-function KinematicsLiveStats({ speed, xLocation, yLocation, latGnss, lonGnss, altitude, roadGradient }) {
-  return (
-    <div className="flex gap-1">
-      <div className="flex gap-1">
-        <div className="text-sm opacity-50">Speed:</div>
-        <div className="text-sm">{roundOrPad(speed, 1)}</div>
-      </div>
-      <div className="flex gap-1">
-        <div className="text-sm opacity-50">Location X:</div>
-        <div className="text-sm">{roundOrPad(xLocation,2)}</div>
-      </div>
-      <div className="flex gap-1">
-        <div className="text-sm opacity-50">Location Y:</div>
-        <div className="text-sm">{roundOrPad(yLocation,2)}</div>
-      </div>
-      <div className="flex gap-1">
-        <div className="text-sm opacity-50">GNSS Lat:</div>
-        <div className="text-sm">{roundOrPad(latGnss, 6)}</div>
-      </div>
-      <div className="flex gap-1">
-        <div className="text-sm opacity-50">GNSS Lon:</div>
-        <div className="text-sm">{roundOrPad(lonGnss, 6)}</div>
-      </div>
-      <div className="flex gap-1">
-        <div className="text-sm opacity-50">Altitude:</div>
-        <div className="text-sm">{roundOrPad(altitude, 2)}</div>
-      </div>
-      <div className="flex gap-1">
-        <div className="text-sm opacity-50">Road Gradient:</div>
-        <div className="text-sm">{roundOrPad(roadGradient, 2)}</div>
-      </div>
-    </div>
-  )
-}
-
-function ControlLiveStats({ throttle, steer, brake, reverse, hand_brake, manual, gear }) {
-  return (
-    <div className="flex gap-1">
-      <div className="flex gap-1">
-        <div className="text-sm opacity-50">Throttle:</div>
-        <div className="text-sm">{roundOrPad(throttle,2)}</div>
-      </div>
-      <div className="flex gap-1">
-        <div className="text-sm opacity-50">Steer:</div>
-        <div className="text-sm">{roundOrPad(steer, 3)}</div>
-      </div>
-      <div className="flex gap-1">
-        <div className="text-sm opacity-50">Brake:</div>
-        <div className="text-sm">{brake}</div>
-      </div>
-      <div className="flex gap-1">
-        <div className="text-sm opacity-50">Reverse:</div>
-        <div className="text-sm">{reverse}</div>
-      </div>
-      <div className="flex gap-1">
-        <div className="text-sm opacity-50">Hand Brake:</div>
-        <div className="text-sm">{hand_brake}</div>
-      </div>
-      <div className="flex gap-1">
-        <div className="text-sm opacity-50">Manual:</div>
-        <div className="text-sm">{manual}</div>
-      </div>
-      <div className="flex gap-1">
-        <div className="text-sm opacity-50">Gear:</div>
-        <div className="text-sm">{gear}</div>
-      </div>
-    </div>
-  )
-}
-
-
-
+import { PerformanceLiveStats, KinematicsLiveStats, ControlLiveStats, noto_sans_mono, roundOrPad } from './components/LiveStats';
+import { BlackJPEGBase64 } from './components/BlackJPEG';
 export default function Home() {
   const [isWebsocketConnected, setWebsocketConnected] = useState(socket.connected);
 
@@ -133,7 +28,8 @@ export default function Home() {
   const [power, setPower] = useState(0.0);
 
   // JPEG image as text from carla
-  const [carlaFrame, setCarlaFrame] = useState(null);
+
+  const [carlaFrame, setCarlaFrame] = useState(BlackJPEGBase64);
 
   const [isBTModalOpen, setBTModelOpen] = useState(false);
   const openBTModal = () => setBTModelOpen(true);
@@ -216,9 +112,6 @@ export default function Home() {
     setGear(gear);
     setRoadGradient(road_gradient);
   }
-
-
-
 
   // On startup, finish any potentially running game
   useEffect(() => {
@@ -355,6 +248,10 @@ export default function Home() {
     socket.emit('autopilot')
   }
 
+  const changeCamera = () => {
+    socket.emit('change_camera')
+  }
+
   return (
     <main className="flex min-h-screen flex-col items-center justify-between ">
       <BTModal isOpen={isBTModalOpen} onClose={() => setBTModelOpen(false)} socket={socket} btGreen={btGreen}  setBtGreen={setBtGreen} />
@@ -393,7 +290,8 @@ export default function Home() {
             <div className="m-2 relative flex px-10 justify-center backdrop-blur-md w-max rounded-xl bg-black/50">
               <div className="flex flex-col gap-1 items-left justify-center font-size-xl">
                 <div className={noto_sans_mono.className}>
-                  <button className="text-white font-bold text-2xl" onClick={sendAutopilotToggle}>{autopilotActual ? "Autopilot ON" : "Autopilot OFF"}</button>
+                  <button className="text-white font-bold text-xl" onClick={sendAutopilotToggle}>{autopilotActual ? "Autopilot ON" : "Autopilot OFF"}</button>
+                  <button className="text-white font-bold text-xl" onClick={changeCamera}>Change Camera</button>
                   <PerformanceLiveStats server_fps={serverFps} simulation_fps={simulationFps} />
                   <KinematicsLiveStats speed={speed} xAcceleration={xAcceleration} yAcceleration={yAcceleration} xLocation={xLocation} yLocation={yLocation} latGnss={latGnss} lonGnss={lonGnss} altitude={altitude} roadGradient={roadGradient} />
                   <ControlLiveStats throttle={throttle} steer={steer} brake={brake} reverse={reverse} hand_brake={handBrake} manual={manual} gear={gear} />

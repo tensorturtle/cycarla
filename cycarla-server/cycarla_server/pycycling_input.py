@@ -50,7 +50,7 @@ class PycyclingInput:
 
     async def run_all(self):
         loop = asyncio.get_running_loop()
-        #loop.create_task(self.connect_to_powermeter())
+        # loop.create_task(self.connect_to_powermeter())
         loop.create_task(self.connect_to_sterzo())
         loop.create_task(self.connect_to_fitness_machine())
         await asyncio.sleep(1e10) # run forever
@@ -70,19 +70,19 @@ class PycyclingInput:
             await sterzo.enable_steering_measurement_notifications()
             await asyncio.sleep(1e10) # run forever
     
-    async def connect_to_powermeter(self):
-        async with BleakClient(self.powermeter_device) as client:
-            def power_handler(power):
-                #print(f"Power: {power.instantaneous_power}")
-                self.on_power_update(power.instantaneous_power)
-                self.socketio.emit('power', power.instantaneous_power)
-                self.socketio.emit('power_device', self.powermeter_device.name)
+    # async def connect_to_powermeter(self):
+    #     async with BleakClient(self.powermeter_device) as client:
+    #         def power_handler(power):
+    #             #print(f"Power: {power.instantaneous_power}")
+    #             self.on_power_update(power.instantaneous_power)
+    #             self.socketio.emit('power', power.instantaneous_power)
+    #             self.socketio.emit('power_device', self.powermeter_device.name)
             
-            await client.is_connected()
-            powermeter = CyclingPowerService(client)
-            powermeter.set_cycling_power_measurement_handler(power_handler)
-            await powermeter.enable_cycling_power_measurement_notifications()
-            await asyncio.sleep(1e10) # run forever
+    #         await client.is_connected()
+    #         powermeter = CyclingPowerService(client)
+    #         powermeter.set_cycling_power_measurement_handler(power_handler)
+    #         await powermeter.enable_cycling_power_measurement_notifications()
+    #         await asyncio.sleep(1e10) # run forever
     
     async def connect_to_fitness_machine(self):
         async with BleakClient(self.powermeter_device, timeout=20) as client: # long timeout is required. Somehow FTMS takes longer to setup.
