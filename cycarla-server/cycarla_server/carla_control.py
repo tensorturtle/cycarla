@@ -94,7 +94,7 @@ class ControlCarlaWithCyclingBLE():
         
         self._control.steer = steer
 
-        #print(f"Current speed: {current_speed} km/h, Wheel speed: {wheel_speed} km/h")
+        print(f"Current speed: {current_speed} km/h, Wheel speed: {wheel_speed} km/h")
 
         # Apply road gradient to wheel_speed
         # Simulate downhill speed gain by increasing wheel speed
@@ -111,29 +111,23 @@ class ControlCarlaWithCyclingBLE():
         # use throttle and brake to adjust speed
         # using set_target_velocity() doesn't work because it doesn't interact with the vehicle dynamics
         # despite its inelegance, this works pretty well.
-        # There are three zones of speed discrepancy:
-        # 1. wheel_speed > current_speed: throttle hard
-        # 2. wheel_speed >~= current_speed: throttle soft
-        # 3. wheel_speed <~= current_speed: coast
-        # 4. wheel_speed < current_speed: brake
-
-        
-        if wheel_speed > current_speed + 5:
+        if wheel_speed > current_speed + 3:
             print("Throttle hard")
             self._control.throttle = 1
             self._control.brake = 0
-        elif wheel_speed > current_speed:
+        elif wheel_speed > current_speed + 0.5:
             print("Throttle soft")
             self._control.throttle = 0.5
             self._control.brake = 0
-        elif wheel_speed < current_speed - 5:
+        elif wheel_speed < current_speed + 0.5:
             print("Coast")
             self._control.throttle = 0
             self._control.brake = 0
         else:
+            # actually same as coast because friction is pretty high
             print("Brake")
             self._control.throttle = 0
-            self._control.brake = 0.5
+            self._control.brake = 0.0
 
         self.world.player.apply_control(self._control)
 
@@ -286,11 +280,6 @@ class World(object):
         self.gnss_sensor = GnssSensor(self.player)
         self.imu_sensor = IMUSensor(self.player)
         self.camera_manager = CameraManager(self.player, self.reporter, self._gamma)
-
-
-        #self.camera_manager.transform_index = 1 # TODO control from UI
-        
-        
         
         self.camera_manager.set_sensor(cam_index, notify=False)
         actor_type = get_actor_display_name(self.player)
