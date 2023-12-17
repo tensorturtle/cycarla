@@ -70,6 +70,12 @@ Clone from github:
 git clone https://github.com/tensorturtle/cycarla
 ```
 
+If the Docker image for `cycarla_server` is not public (which is the case right now), build it:
+```
+cd cycarla_server
+docker build -t cycarla_server .
+```
+
 Make sure that Docker Desktop is running and WSL2 support enabled henceforth.
 
 
