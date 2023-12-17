@@ -35,7 +35,19 @@ Currently, CYCARLA is developed on and for Debian-family Linux (Ubuntu, PopOS).
 
 Keep in mind CYCARLA is based on a serious 3D game engine with full customizability, so it'll be more demanding than typical indoor cycling games.
 
-## Installation
+## Installation on Windows
+
+Download [CARLA 0.9.15 pre-compiled ZIP](https://carla-releases.s3.eu-west-3.amazonaws.com/Windows/CARLA_0.9.15.zip) from https://github.com/carla-simulator/carla/releases
+
+Unzip it and find `CarlaUE4.exe` and run it.
+
+Install WSL 2. In powershell:
+```
+wsl --install
+```
+Restart computer.
+
+## Installation on Ubuntu
 
 Clone this repository:
 ```
