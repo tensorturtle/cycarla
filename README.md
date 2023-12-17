@@ -47,6 +47,10 @@ wsl --install
 ```
 Restart computer.
 
+Install Docker Desktop for Windows from https://docs.docker.com/desktop/install/windows-install/
+Click on `Docker Desktop for Windows` to download. Click on downloaded `.exe` file to install.
+You will be prompted to log out and back in again.
+
 ## Installation on Ubuntu
 
 Clone this repository:
