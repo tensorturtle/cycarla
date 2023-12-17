@@ -51,7 +51,7 @@ Install Docker Desktop for Windows from https://docs.docker.com/desktop/install/
 Click on `Docker Desktop for Windows` to download. Click on downloaded `.exe` file to install.
 You will be prompted to log out and back in again.
 
-To confirm docker installatoin, in WSL shell, run:
+To confirm docker installation, in WSL shell, run:
 ```
 docker --version
 ```
@@ -60,6 +60,15 @@ You should see something like:
 Docker version 24.0.7, build afdd53b
 ```
 
+Clone this repository. 
+First, go to your home directory from within WSL2. Your Windows 'C' drive is mounted at `/mnt/c`, so typically you should do:
+```
+cd /mnt/c/Users/MY_USERNAME
+```
+Clone from github:
+```
+git clone https://github.com/tensorturtle/cycarla
+```
 
 ## Installation on Ubuntu
 
