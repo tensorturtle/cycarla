@@ -61,7 +61,7 @@ Docker version 24.0.7, build afdd53b
 ```
 
 Clone this repository. 
-First, go to your home directory from within WSL2. Your Windows 'C' drive is mounted at `/mnt/c`, so typically you should do:
+First, go to your home directory from within WSL2. Your Windows 'C' drive is mounted at `/mnt/c`, so your Windows home directory is found at:
 ```
 cd /mnt/c/Users/MY_USERNAME
 ```
@@ -83,11 +83,18 @@ curl -fsSL https://get.docker.com -o get-docker.sh
 sh get-docker.sh
 ```
 
-Install npm:
+Install NVM in order to install NPM:
 ```
-sudo apt update
-sudo apt install nodejs npm
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
 ```
+```
+nvm install 20
+nvm use 20
+```
+```
+./run_controller.sh
+```
+
 
 ## Quickstart
 
