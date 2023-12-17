@@ -70,6 +70,9 @@ Clone from github:
 git clone https://github.com/tensorturtle/cycarla
 ```
 
+Make sure that Docker Desktop is running and WSL2 support enabled henceforth.
+
+
 ## Installation on Ubuntu
 
 Clone this repository:
