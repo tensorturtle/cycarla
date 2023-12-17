@@ -94,7 +94,7 @@ nvm use 20
 ```
 ./run_controller.sh
 ```
-
+Go to `localhost:3000` on your browser.
 
 ## Quickstart
 
