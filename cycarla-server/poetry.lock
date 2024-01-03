@@ -90,7 +90,7 @@ files = [
 
 [package.source]
 type = "file"
-url = "../../../carla-0.9.14-cp310-cp310-linux_x86_64.whl"
+url = "../../carla-0.9.14-cp310-cp310-linux_x86_64.whl"
 
 [[package]]
 name = "click"

@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gpx creator="StravaGPX" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.topografix.com/GPX/1/1 http://www.topografix.com/GPX/1/1/gpx.xsd http://www.garmin.com/xmlschemas/GpxExtensions/v3 http://www.garmin.com/xmlschemas/GpxExtensionsv3.xsd http://www.garmin.com/xmlschemas/TrackPointExtension/v1 http://www.garmin.com/xmlschemas/TrackPointExtensionv1.xsd" version="1.1" xmlns="http://www.topografix.com/GPX/1/1" xmlns:gpxtpx="http://www.garmin.com/xmlschemas/TrackPointExtension/v1" xmlns:gpxx="http://www.garmin.com/xmlschemas/GpxExtensions/v3">
+  <metadata>
+    <time>2023-12-25T10:05:08Z</time>
+  </metadata>
+  <trk>
+    <name>Test GPS Activity</name>
+    <type>VirtualRide</type>
+    <trkseg>
+      <trkpt lat="45.8588220" lon="10.8724850">
+        <ele>1234.0</ele>
+        <time>2023-12-25T10:05:08Z</time>
+        <extensions>
+          <power>70</power>
+          <gpxtpx:TrackPointExtension>
+            <gpxtpx:cad>43</gpxtpx:cad>
+          </gpxtpx:TrackPointExtension>
+        </extensions>
+      </trkpt>
+      <trkpt lat="45.8588110" lon="10.8724690">
+        <ele>1235.0</ele>
+        <time>2023-12-25T10:05:09Z</time>
+        <extensions>
+          <power>81</power>
+          <gpxtpx:TrackPointExtension>
+            <gpxtpx:cad>43</gpxtpx:cad>
+          </gpxtpx:TrackPointExtension>
+        </extensions>
+      </trkpt>
+      <trkpt lat="45.8587960" lon="10.8724490">
+        <ele>1236.0</ele>
+        <time>2023-12-25T10:05:10Z</time>
+        <extensions>
+          <power>100</power>
+          <gpxtpx:TrackPointExtension>
+            <gpxtpx:cad>43</gpxtpx:cad>
+          </gpxtpx:TrackPointExtension>
+        </extensions>
+      </trkpt>
+      <trkpt lat="45.8587960" lon="10.8724490">
+        <ele>1236.0</ele>
+        <time>2023-12-25T10:05:10Z</time>
+        <extensions>
+          <power>100</power>
+          <gpxtpx:TrackPointExtension>
+            <gpxtpx:cad>43</gpxtpx:cad>
+          </gpxtpx:TrackPointExtension>
+        </extensions>
+      </trkpt>
+      <trkpt lat="45.8588220" lon="10.8724850">
+        <ele>1234.0</ele>
+        <time>2023-12-25T10:05:08Z</time>
+        <extensions>
+          <power>70</power>
+          <gpxtpx:TrackPointExtension>
+            <gpxtpx:cad>43</gpxtpx:cad>
+          </gpxtpx:TrackPointExtension>
+        </extensions>
+      </trkpt>
+    </trkseg>
+  </trk>
+</gpx>
