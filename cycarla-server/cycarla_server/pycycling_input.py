@@ -11,6 +11,7 @@ class LiveControlState:
     def __init__(self):
         self.steer = 0
         self.watts = 0
+        self.cadence = 0
         self.throttle = 0
         self.brake = 0
         self.wheel_speed = 0
@@ -35,11 +36,17 @@ class LiveControlState:
         No conversion; speed is km/h throughout.
         '''
         self.wheel_speed = speed
+    
+    def update_cadence(self, cadence):
+        '''
+        No conversion; cadence is RPM throughout.
+        '''
+        self.cadence = cadence
 
     # Brake is not implemented
 
 class PycyclingInput:
-    def __init__(self, sterzo_device, powermeter_device, socketio, on_steering_update, on_power_update, on_speed_update):
+    def __init__(self, sterzo_device, powermeter_device, socketio, on_steering_update, on_power_update, on_speed_update, on_cadence_update):
         '''
         sterzo_device: BLEDevice
         powermeter_device: BLEDevice
@@ -53,6 +60,7 @@ class PycyclingInput:
         self.on_steering_update = on_steering_update
         self.on_power_update = on_power_update
         self.on_speed_update = on_speed_update
+        self.on_cadence_update = on_cadence_update
 
         self.ftms = None
         self.ftms_max_resistance = None
@@ -114,17 +122,19 @@ class PycyclingInput:
 
             
             def print_indoor_bike_data(data):
-                print("Received indoor bike data power:")
-                print(data.instant_power)
+                print("Received indoor bike data:")
+                print(data)
                 power = data.instant_power
                 self.on_power_update(power)
                 self.socketio.emit('power', power)
 
-                print("Received indoor bike data speed:")
-                print(data.instant_speed)
                 speed = data.instant_speed
                 self.on_speed_update(speed)
                 self.socketio.emit('wheel_speed', speed)
+
+                cadence = data.instant_cadence
+                self.on_cadence_update(cadence)
+                self.socketio.emit('cadence', cadence)
 
                 self.socketio.emit('power_device', self.powermeter_device.name)
             self.ftms.set_indoor_bike_data_handler(print_indoor_bike_data)

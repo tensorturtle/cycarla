@@ -187,7 +187,7 @@ def game_loop(args, game_state: GameState):
                 reporter.simulation_live_data.altitude,
                 f"{time.strftime('%Y-%m-%dT%H:%M:%S', time.gmtime())}.{int(time.time() * 1000 % 1000)}Z", # we need millisecond precision because there are multiple trackpoints per second. Using seconds causes speed calculation problems in Strava.
                 live_control_state.watts or None, # uses OR short-circuiting 
-                None # cadence not yet implemented
+                live_control_state.cadence or None,
             )
 
     finally:
@@ -221,7 +221,8 @@ def handle_bt_scan():
             socketio=socketio,
             on_steering_update=live_control_state.update_steer,
             on_power_update=live_control_state.update_throttle,
-            on_speed_update=live_control_state.update_speed
+            on_speed_update=live_control_state.update_speed,
+            on_cadence_update=live_control_state.update_cadence
         )
 
         asyncio.run(pycycling_input.run_all())

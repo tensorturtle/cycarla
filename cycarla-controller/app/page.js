@@ -26,6 +26,7 @@ export default function Home() {
   // live updated data from sensors
   const [steeringAngle, setSteeringAngle] = useState(0.0);
   const [power, setPower] = useState(0.0);
+  const [cadence, setCadence] = useState(0.0);
   const [wheelSpeed, setWheelSpeed] = useState(0.0);
 
   // JPEG image as text from carla
@@ -144,6 +145,10 @@ export default function Home() {
       checkBtGreen();
     }
 
+    function onCadence(message) {
+      setCadence(message);
+    }
+
     function onWheelSpeed(message) {
       setWheelSpeed(message);
     }
@@ -207,6 +212,7 @@ export default function Home() {
     socket.on('heartbeat', onHeartbeat);
     socket.on('steering_angle', onSteeringAngle);
     socket.on('power', onPower)
+    socket.on('cadence', onCadence)
     socket.on('wheel_speed', onWheelSpeed)
     socket.on('carla_frame', onCarlaFrame)
     socket.on('game_launched', onGameLaunched)
@@ -227,6 +233,7 @@ export default function Home() {
       socket.off('heartbeat', onHeartbeat)
       socket.off('steering_angle', onSteeringAngle)
       socket.off('power', onPower)
+      socket.on('cadence', onCadence)
       socket.off('wheel_speed', onWheelSpeed)
       socket.off('carla_frame', onCarlaFrame)
       socket.off('game_launched', onGameLaunched)
@@ -288,6 +295,9 @@ export default function Home() {
                   <div className="text-6xl font-bold">
                     {power} W
                   </div>
+                  <div className="text-2xl font-bold">
+                    {cadence} RPM
+                    </div>
                 </div>
               </div>
             </div>
