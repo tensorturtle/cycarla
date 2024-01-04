@@ -297,7 +297,7 @@ export default function Home() {
                   </div>
                   <div className="text-2xl font-bold">
                     {cadence} RPM
-                    </div>
+                  </div>
                 </div>
               </div>
             </div>

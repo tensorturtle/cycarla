@@ -61,7 +61,7 @@ def game_loop(args, game_state: GameState):
 
         if FIRST_GAME_LOOP:
             # set map
-            client.load_world('Town07')
+            client.load_world('Town01')
             FIRST_GAME_LOOP = False            
         if args.sync:
             original_settings = sim_world.get_settings()
@@ -112,7 +112,9 @@ def game_loop(args, game_state: GameState):
         prior_autopilot = game_state.autopilot
         
         # frame-by-frame simulation loop
+        i = 0
         while True:
+            i += 1
             if not game_state.game_launched:
                 socketio.emit('game_finished', 'true')
                 break
@@ -179,16 +181,18 @@ def game_loop(args, game_state: GameState):
                 pycycling_input.ftms_desired_resistance = gradient * 200 / 15
 
             
-            gnss_offset = (-37.300472, -12.678722) # "Inaccessible island" in the South Atlantic Ocean
-            
-            gpx_creator.add_trackpoint(
-                reporter.simulation_live_data.gnss[0] + gnss_offset[0],
-                reporter.simulation_live_data.gnss[1] + gnss_offset[1],
-                reporter.simulation_live_data.altitude,
-                f"{time.strftime('%Y-%m-%dT%H:%M:%S', time.gmtime())}.{int(time.time() * 1000 % 1000)}Z", # we need millisecond precision because there are multiple trackpoints per second. Using seconds causes speed calculation problems in Strava.
-                live_control_state.watts or None, # uses OR short-circuiting 
-                live_control_state.cadence or None,
-            )
+            if i % 15 == 0: # don't create a GPX point for every frame, it messes up strava
+                # North-south offsets change the distance travelled, so stick to places close to the equator.
+                gnss_offset = (-0.849541, -91.104870) # Galapagos islands
+                
+                gpx_creator.add_trackpoint(
+                    reporter.simulation_live_data.gnss[0] + gnss_offset[0],
+                    reporter.simulation_live_data.gnss[1] + gnss_offset[1],
+                    reporter.simulation_live_data.altitude,
+                    f"{time.strftime('%Y-%m-%dT%H:%M:%S', time.gmtime())}.{int(time.time() * 1000 % 1000)}Z", # we need millisecond precision because there are multiple trackpoints per second. Using seconds causes speed calculation problems in Strava.
+                    live_control_state.watts or None, # uses OR short-circuiting 
+                    live_control_state.cadence or None,
+                )
 
     finally:
         gpx_creator.save_to_file(f"simulated_gpx_{time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())}.gpx")
