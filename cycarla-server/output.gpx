@@ -32,10 +32,6 @@
       <trkpt lat="46.8588235" lon="10.8724865">
         <ele>1240.0</ele>
         <time>2023-12-26T10:05:11Z</time>
-        <extensions>
-          <power>85</power>
-          <cadence>103</cadence>
-        </extensions>
       </trkpt>
     </trkseg>
     <name>Test GPS Activity</name>

@@ -10,6 +10,7 @@ from pycycling.fitness_machine_service import FitnessMachineService
 class LiveControlState:
     def __init__(self):
         self.steer = 0
+        self.watts = 0
         self.throttle = 0
         self.brake = 0
         self.wheel_speed = 0
@@ -22,11 +23,12 @@ class LiveControlState:
         '''
         self.steer = steer / 150 # empirically determined.
 
-    def update_throttle(self, throttle):
+    def update_throttle(self, watts):
         '''
         Convert watts (from BLE) to normalized (0, 1) (for CARLA)
         '''
-        self.throttle = throttle / 100 # empirically determined
+        self.watts = watts
+        self.throttle = watts / 100 # empirically determined
     
     def update_speed(self, speed):
         '''

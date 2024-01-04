@@ -28,7 +28,7 @@ class GPXCreator:
         type_element = ET.SubElement(self.trk, "type")
         type_element.text = type
 
-    def add_trackpoint(self, lat, lon, ele, time, power, cadence):
+    def add_trackpoint(self, lat, lon, ele, time, power=None, cadence=None):
         trkpt = ET.SubElement(self.trkseg, "trkpt", {"lat": str(lat), "lon": str(lon)})
         
         ele_element = ET.SubElement(trkpt, "ele")
@@ -37,12 +37,18 @@ class GPXCreator:
         time_element = ET.SubElement(trkpt, "time")
         time_element.text = time
 
-        extensions = ET.SubElement(trkpt, "extensions")
-        power_element = ET.SubElement(extensions, "power")
-        power_element.text = str(power)
+        if power is not None or cadence is not None:
+            extensions = ET.SubElement(trkpt, "extensions")
 
-        cadence_element = ET.SubElement(extensions, "cadence")
-        cadence_element.text = str(cadence)
+        if power is not None:
+            power_element = ET.SubElement(extensions, "power")
+            power_element.text = str(power)
+
+        if cadence is not None:
+            cadence_element = ET.SubElement(extensions, "cadence")
+            cadence_element.text = str(cadence)
+        
+
 
     def to_string(self):
         rough_string = ET.tostring(self.gpx, 'utf-8')
@@ -60,7 +66,7 @@ gpx_creator.set_track_info("Test GPS Activity", "VirtualRide")
 gpx_creator.add_trackpoint(46.8588220, 10.8724850, 1234.0, "2023-12-26T10:05:08Z", 70, 100)
 gpx_creator.add_trackpoint(46.8588225, 10.8724855, 1236.0, "2023-12-26T10:05:09Z", 75, 101)
 gpx_creator.add_trackpoint(46.8588230, 10.8724860, 1238.0, "2023-12-26T10:05:10Z", 80, 102)
-gpx_creator.add_trackpoint(46.8588235, 10.8724865, 1240.0, "2023-12-26T10:05:11Z", 85, 103)
+gpx_creator.add_trackpoint(46.8588235, 10.8724865, 1240.0, "2023-12-26T10:05:11Z")
 
 # Add more trackpoints as needed
 gpx_creator.save_to_file("output.gpx")

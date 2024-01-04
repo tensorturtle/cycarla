@@ -1,6 +1,6 @@
+import time
 import asyncio 
 import base64
-import os
 from argparse import Namespace
 
 import cv2
@@ -12,9 +12,12 @@ from ble_utils import scan_bt_async_runner
 from carla_control import *
 from pycycling_input import PycyclingInput, LiveControlState
 
+from gpx import GPXCreator
 
 app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins="*")
+
+gpx_creator = GPXCreator()
 
 class GameState():
     def __init__(self):
@@ -45,6 +48,10 @@ def game_loop(args, game_state: GameState):
     original_settings = None
 
     frame_counter = 0
+
+    gpx_creator = GPXCreator()
+    gpx_creator.set_metadata_time(f"{time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())}")
+    gpx_creator.set_track_info("Test GPS Activity", "VirtualRide")
 
     try:
         client = carla.Client(args.host, args.port)
@@ -103,9 +110,8 @@ def game_loop(args, game_state: GameState):
             tl.set_state(carla.TrafficLightState.Green)
 
         prior_autopilot = game_state.autopilot
-
         
-        
+        # frame-by-frame simulation loop
         while True:
             if not game_state.game_launched:
                 socketio.emit('game_finished', 'true')
@@ -172,8 +178,20 @@ def game_loop(args, game_state: GameState):
 
                 pycycling_input.ftms_desired_resistance = gradient * 200 / 15
 
-    finally:
+            
+            gnss_offset = (-37.300472, -12.678722) # "Inaccessible island" in the South Atlantic Ocean
+            
+            gpx_creator.add_trackpoint(
+                reporter.simulation_live_data.gnss[0] + gnss_offset[0],
+                reporter.simulation_live_data.gnss[1] + gnss_offset[1],
+                reporter.simulation_live_data.altitude,
+                f"{time.strftime('%Y-%m-%dT%H:%M:%S', time.gmtime())}.{int(time.time() * 1000 % 1000)}Z", # we need millisecond precision because there are multiple trackpoints per second. Using seconds causes speed calculation problems in Strava.
+                live_control_state.watts or None, # uses OR short-circuiting 
+                None # cadence not yet implemented
+            )
 
+    finally:
+        gpx_creator.save_to_file(f"simulated_gpx_{time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())}.gpx")
         if original_settings:
             sim_world.apply_settings(original_settings)
 
@@ -225,6 +243,7 @@ def handle_message(message):
 def handle_start_game():
     socketio.start_background_task(start_game_loop)
     game_state.set_game_launched(True)
+
 
 @socketio.on('finish_game')
 def handle_finish_game():
