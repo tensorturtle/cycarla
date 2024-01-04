@@ -9,6 +9,7 @@ https://github.com/gezp/carla_ros/releases
 
 The relevant wheel file has been downloaded as `carla-0.9.14-cp310-cp310-linux_x86_64.whl`. It is copied to the Docker image when it is built.
 
+#TODO: It appears that carla pip package 0.9.15 has been built for python 3.10 for linux on the official pypi.
 
 # Build Docker Image
 
@@ -53,6 +54,25 @@ Inside the container:
 cd /workspaces/cycarla/cycarla-server
 ./entrypoint.sh
 ```
+
+## On WSL2
+
+On Windows, using WSL2, you need to use the `nameserver` address provided in `/etc/resolv.conf` instead of `localhost` in order to connect to CARLA (which is running natively on Windows).
+
+```
+cat /etc/resolv.conf
+```
+
+Find the line that goes something like:
+```
+nameserver 172.25.160.1
+```
+Then,
+```
+export CARLA_SIM_IP=172.25.160.1
+./run_server.sh
+```
+
 
 # Uploading to Strava
 
