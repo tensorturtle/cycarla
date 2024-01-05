@@ -55,29 +55,9 @@ cd /workspaces/cycarla/cycarla-server
 ./entrypoint.sh
 ```
 
-## On WSL2
+## Windows (Native)
 
-On Windows, using WSL2, you need to use the `nameserver` address provided in `/etc/resolv.conf` instead of `localhost` in order to connect to CARLA (which is running natively on Windows).
-
-```
-cat /etc/resolv.conf
-```
-
-Find the line that goes something like:
-```
-nameserver 172.25.160.1
-```
-Then,
-```
-export CARLA_SIM_IP=172.25.160.1
-./run_server.sh
-```
-
-## Windows Natively
-
-The big problem with WSL2 is that bluetooth devies can't be connected.
-
-Therefore, we need to run this poetry project natively.
+We run natively on Windows because WSL2 doesn't support Bluetooth.
 
 **Install Python 3.10**
 
