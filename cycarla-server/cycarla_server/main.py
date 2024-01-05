@@ -267,8 +267,10 @@ def start_game_loop():
 
     args = Namespace(
     debug=False,
-    host=str(os.environ['CARLA_SIM_IP']),
-    port=int(os.environ['CARLA_SIM_PORT']),
+    host="127.0.0.1",
+    port=2000,
+    #host=str(os.environ['CARLA_SIM_IP']),
+    #port=int(os.environ['CARLA_SIM_PORT']),
     autopilot=True,
     res='1280x720', # defines the maximum size of image shown in frontend
     filter='vehicle.diamondback.century',

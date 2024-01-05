@@ -73,6 +73,44 @@ export CARLA_SIM_IP=172.25.160.1
 ./run_server.sh
 ```
 
+## Windows Natively
+
+The big problem with WSL2 is that bluetooth devies can't be connected.
+
+Therefore, we need to run this poetry project natively.
+
+**Install Python 3.10**
+
+https://www.python.org/downloads/release/python-31011/
+
+Scroll to the bottom and download the 'Windows Installer (64-bit)'.
+
+Make sure to enable the bottom option "Add python.exe to PATH"
+
+**Install Poetry**
+
+Open Windows Powershell
+
+First, install Scoop and pipx, then install Poetry.
+```
+pip install pipx
+pipx install poetry
+```
+
+Navigate to this repository. For example, if you cloned this repo to your home directory:
+```
+cd ~
+cd cycarla
+cd cycarla-server
+```
+Then, use poetry to install and run the server:
+```
+poetry install
+poetry shell
+cd cycarla_server
+python main.py
+```
+Allow firewall when prompted.
 
 # Uploading to Strava
 

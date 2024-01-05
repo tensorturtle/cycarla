@@ -80,17 +80,21 @@ files = [
 
 [[package]]
 name = "carla"
-version = "0.9.14"
+version = "0.9.15"
 description = "Python API for communicating with the CARLA server."
 optional = false
 python-versions = "*"
 files = [
-    {file = "carla-0.9.14-cp310-cp310-linux_x86_64.whl", hash = "sha256:b12945ea0d9411692b3669e9319532ad71081f43485baaf805b36babb63b6218"},
+    {file = "carla-0.9.15-cp27-cp27mu-manylinux_2_27_x86_64.whl", hash = "sha256:25034b4ae3a67108e362ae33e4e1e4ed4b5bc73059115c38a4471d64057b8c98"},
+    {file = "carla-0.9.15-cp310-cp310-manylinux_2_27_x86_64.whl", hash = "sha256:61449e33260f6a0cfd2f88d56f2463a5797a0b51bc46618beec07365422d4ad6"},
+    {file = "carla-0.9.15-cp310-cp310-win_amd64.whl", hash = "sha256:1ec9995169175f0d5e3e84762b7376214b72352ef006f22832d05c1380e62295"},
+    {file = "carla-0.9.15-cp37-cp37m-manylinux_2_27_x86_64.whl", hash = "sha256:8782039dfa9ee6796b20c9193940d9a089b972d161c19fe64d33ab8184a0cf20"},
+    {file = "carla-0.9.15-cp37-cp37m-win_amd64.whl", hash = "sha256:143c496d2b312862b4c14ee093038d1158027d3f56b59b9bfc4a77e26a3562cf"},
+    {file = "carla-0.9.15-cp38-cp38-manylinux_2_27_x86_64.whl", hash = "sha256:19a269511d31cd6ca47cc46297afbcc93be659ba0af852c244e3cadf55086d95"},
+    {file = "carla-0.9.15-cp38-cp38-win_amd64.whl", hash = "sha256:dc597b6a91b819b54afd5f1c32d401f066ce77676a0359b7470055d9bab95954"},
+    {file = "carla-0.9.15-cp39-cp39-manylinux_2_27_x86_64.whl", hash = "sha256:53e6cd757fb60eeb5aad05632fcd585a528804b61a1a42c2595ebab705194ad5"},
+    {file = "carla-0.9.15-cp39-cp39-win_amd64.whl", hash = "sha256:bffb8f7650dc0d1987f682f2fa4335298aa62e60814208564feefcf5b303cb81"},
 ]
-
-[package.source]
-type = "file"
-url = "../../carla-0.9.14-cp310-cp310-linux_x86_64.whl"
 
 [[package]]
 name = "click"
@@ -377,21 +381,17 @@ numpy = [
 
 [[package]]
 name = "pycycling"
-version = "0.3.2"
+version = "0.3.3"
 description = "A Python package for interacting with Bluetooth Low Energy (BLE) compatible bike trainers and power meters"
 optional = false
 python-versions = ">=3.7"
-files = []
-develop = false
+files = [
+    {file = "pycycling-0.3.3-py3-none-any.whl", hash = "sha256:b69542575d8180a7865858ec1d364e4586a1023c231d498f62e5ef4c2d2fcb6a"},
+    {file = "pycycling-0.3.3.tar.gz", hash = "sha256:a3613bc25c5792d3a02697448da4aaf6b79383a1a9b4aa63ce617a3eb7fe876e"},
+]
 
 [package.dependencies]
 bleak = "*"
-
-[package.source]
-type = "git"
-url = "https://github.com/tensorturtle/pycycling.git"
-reference = "HEAD"
-resolved_reference = "85fd6bc931ded1f9ef00f44a376b3f3c07882e93"
 
 [[package]]
 name = "pygame"
@@ -634,4 +634,4 @@ h11 = ">=0.9.0,<1"
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.10.0"
-content-hash = "29cd8ff3948b6e9e2ddccbc3aaf8bec7fc32241d1d58b2dffed37e62e91e8435"
+content-hash = "4602cef9d30cb93194a06a4584fbfef28e40dae769cf1ee0a9ada37c508cdb69"

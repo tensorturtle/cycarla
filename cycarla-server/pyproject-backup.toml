@@ -7,7 +7,8 @@ readme = "README.md"
 packages = [{include = "cycarla_server"}]
 
 [tool.poetry.dependencies]
-python = "~3.10.0"
+python = "^3.10.0"
+carla = { file = "/carla-0.9.14-cp310-cp310-linux_x86_64.whl" }
 pygame = "^2.1.2"
 flask = "^3.0.0"
 flask-socketio = "^5.3.6"
@@ -15,8 +16,7 @@ bleak = "^0.21.1"
 numpy = "1.22.0"
 opencv-python = "^4.8.1.78"
 flask-cors = "^4.0.0"
-pycycling = "^0.3.3"
-carla = "^0.9.15"
+pycycling = {git = "https://github.com/tensorturtle/pycycling.git"} # "~0.3.2"
 
 [build-system]
 requires = ["poetry-core"]
