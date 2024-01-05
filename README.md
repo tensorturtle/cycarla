@@ -41,43 +41,7 @@ Download [CARLA 0.9.15 pre-compiled ZIP](https://carla-releases.s3.eu-west-3.ama
 
 Unzip it and find `CarlaUE4.exe` and run it.
 
-Install WSL 2. In powershell:
-```
-wsl --install
-```
-Restart computer.
-
-Install Docker Desktop for Windows from https://docs.docker.com/desktop/install/windows-install/
-Click on `Docker Desktop for Windows` to download. Click on downloaded `.exe` file to install.
-You will be prompted to log out and back in again.
-
-To confirm docker installation, in WSL shell, run:
-```
-docker --version
-```
-You should see something like: 
-```
-Docker version 24.0.7, build afdd53b
-```
-
-Clone this repository. 
-First, go to your home directory from within WSL2. Your Windows 'C' drive is mounted at `/mnt/c`, so your Windows home directory is found at:
-```
-cd /mnt/c/Users/MY_USERNAME
-```
-Clone from github:
-```
-git clone https://github.com/tensorturtle/cycarla
-```
-
-If the Docker image for `cycarla_server` is not public (which is the case right now), build it:
-```
-cd cycarla_server
-docker build -t cycarla_server .
-```
-
-Make sure that Docker Desktop is running and WSL2 support enabled henceforth.
-
+Clone this repository. See [server](cycarla-server/README.md) and [controller](cycarla-controller/README.md) READMEs for their Windows native installation instructions.
 
 ## Installation on Ubuntu
 
