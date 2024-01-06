@@ -10,7 +10,7 @@
 
 Bring your Bluetooth-compatible indoor cycling accessories and liberate your indoor riding!
 
-# What you'll need to get started
+# What you'll need
 
 1. A bike, such as [this absolute beauty](https://www.bastioncycles.com/)
 2. [Elite Sterzo](https://www.elite-it.com/en/products/home-trainers/ecosystem-accessories/sterzo-smart) front wheel steering plate.
