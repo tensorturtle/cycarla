@@ -91,13 +91,9 @@ If you find CYCARLA valuable, please [make a donation!](https://buy.stripe.com/a
 
 Funds go towards purchasing equipment to work on compatibility, feature development, and to my self-preservation fund.
 
-# [Community on Discord]()
+# Fun Facts
 
 CYCARLA began two years ago as a fun 'future of cycling vision' demo at the [Bike2CAV](https://www.bike2cav.at/en/home-2/) consortium presentation at Salzburg Research. Since then it has been my passion project.
-
-Users, contributors, and anyone else interested in this project are invited to the Discord, [so join us there!]()
-
-# Fun Facts
 
 CYCARLA is also stylized 'CyCARLA' or 'Cycarla'
 
