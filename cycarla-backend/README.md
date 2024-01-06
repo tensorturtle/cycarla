@@ -19,9 +19,11 @@ At the installer, make sure to enable the bottom option "Add python.exe to PATH"
 
 [**2. Install Scoop**](https://scoop.sh/)
 
-## Install & Run `cycarla-backend`
+## Install using `pipx`
 
-Once Python 3.10 (and Scoop on Windows) is installed, continue:
+`cycarla-backend` is a CLI package that is developed with [poetry](https://python-poetry.org/) and published on [pypi](https://pypi.org/project/cycarla-backend/).
+
+We'll use `pipx` to run it in an isolated python environment.
 
 [**Install `pipx`**](https://github.com/pypa/pipx#install-pipx) (follow instructions for your platform)
 
