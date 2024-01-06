@@ -17,17 +17,8 @@ You'll need the following equipment to ride in CYCARLA:
 1. A bike, such as [this absolute beauty](https://www.bastioncycles.com/)
 2. [Elite Sterzo](https://www.elite-it.com/en/products/home-trainers/ecosystem-accessories/sterzo-smart) front wheel steering plate.
 3. Smart Trainer, such as [Elite Suito T](https://www.elite-it.com/en/products/home-trainers/interactive-trainers/suito-t)
-4. A gaming computer running Windows 10 or Ubuntu 22.04
+4. A gaming computer running Windows 10 or Ubuntu 22.04. See [more detailed requirements](#computer-requirements)
 
-## Computer Requirements
-
-CYCARLA is based on a serious 3D game engine with full customizability, so it'll be more demanding than typical indoor cycling games.
-
-+ CPU: Intel Core i5 6th-gen or better
-+ GPU: NVIDIA RTX 2070 or better (2080, 3060, 3070, 3080, etc.)
-+ Hard drive: 30GB of free space.
-+ Bluetooth Low Energy (BLE) support
-+ Internet connection required for installation, not required to run the game.
 
 # Installation
 
@@ -111,3 +102,13 @@ Users, contributors, and anyone else interested in this project are invited to t
 CYCARLA is also stylized 'CyCARLA' or 'Cycarla'
 
 It is pronounced: *"sai-karla"*
+
+## Computer Requirements
+
+CYCARLA is based on a serious 3D game engine with full customizability, so it'll be more demanding than typical indoor cycling games.
+
++ CPU: Intel Core i5 6th-gen or better
++ GPU: NVIDIA RTX 2070 or better (2080, 3060, 3070, 3080, etc.)
++ Hard drive: 30GB of free space.
++ Bluetooth Low Energy (BLE) support
++ Internet connection required for installation, not required to run the game.
