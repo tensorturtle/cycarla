@@ -5,7 +5,9 @@ The three components of Cycarla are:
 2. [cycarla_backend](https://github.com/tensorturtle/cycarla/tree/main/cycarla-backend)
 3. [cycarla_frontend](https://github.com/tensorturtle/cycarla/tree/main/cycarla-frontend)
 
-# Platform-specific prerequisites.
+# Install Platform-specific Prerequisites
+
+Currently, Windows 10 and Ubuntu 22.04 are the officially supported OSes. Mac is not supported because CARLA can't run on it.
 
 ## Windows 10
 
@@ -22,7 +24,9 @@ Ubuntu 22.04 comes with Python 3.10, so continue on to Installation.
 
 # Install & Run `cycarla-backend`
 
-[**Install `pipx`**](https://github.com/pypa/pipx#install-pipx)
+Once Python 3.10 (and Scoop on Windows) is installed, continue:
+
+[**Install `pipx`**](https://github.com/pypa/pipx#install-pipx) (follow instructions for your platform)
 
 **Install cycarla-backend** using `pipx`
 ```
