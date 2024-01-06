@@ -7,7 +7,7 @@ The three components of Cycarla are:
 
 # Installation
 
-Supported platforms: Windows 10, Ubuntu 22.04
+Supported platforms: Windows 10, Ubuntu 22.04. Other versions can work if you install Python 3.10 and pipx.
 
 ## Windows 10-specific Prerequisites
 
