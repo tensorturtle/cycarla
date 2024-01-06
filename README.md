@@ -72,6 +72,16 @@ Please carefully follow [Backend Installation instructions](https://github.com/t
 
 Please carefully follow [Frontend installation instructions](https://github.com/tensorturtle/cycarla/blob/main/cycarla-frontend/README.md)
 
+# Run CYCARLA
+
+If you've finished the above installation steps, the full app can now be launched:
+
+1. Launch CARLA simulator
+  + Windows: Double click `CarlaUE4.exe`
+  + Ubuntu: `docker run --privileged --gpus all --network=host -e DISPLAY=$DISPLAY carlasim/carla:0.9.15 /bin/bash ./CarlaUE4.sh`
+2. Launch Backend: `cycarla_backend` from your terminal or powershell.
+3. Launch Frontend: `cd cycarla-frontend` and then `npm run dev` from your terminal or powershell.
+
 # Open Source
 
 ![project-structure-diagram](graphics/CyCARLA-figmadiagram-1.png)
