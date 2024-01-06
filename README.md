@@ -69,6 +69,8 @@ If you've finished the above installation steps, the full app can now be launche
 2. Launch Backend: `cycarla_backend` from your terminal or powershell.
 3. Launch Frontend: `cd cycarla-frontend` and then `npm run dev` from a second terminal or powershell.
 
+Finally, using your web browser (Google Chrome, Firefox), go to `localhost:3000`.
+
 # Open Source
 
 ![project-structure-diagram](graphics/CyCARLA-figmadiagram-1.png)
