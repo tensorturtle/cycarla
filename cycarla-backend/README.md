@@ -3,7 +3,7 @@
 The three components of Cycarla are:
 1. [CARLA](https://github.com/carla/carla) - An open-source simulator for autonomous driving research.
 2. [cycarla_backend](https://github.com/tensorturtle/cycarla/cycarla-backend) - This Python Flask server which links the frontend to CARLA.
-3. [cycarla_frontend](https://github.com/tensorturtle/cycarla/cycarla-frontend) - The front-end component of CYCARLA which presents a web-based interface from your browser.
+3. [cycarla_frontend](https://github.com/tensorturtle/cycarla/cycarla-frontend) - A Javascript (Next.js) front-end which presents a web-based interface from your browser.
 
 # Installation
 
