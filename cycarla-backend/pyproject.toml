@@ -1,0 +1,26 @@
+[tool.poetry]
+name = "cycarla-backend"
+version = "0.1.0"
+description = "Backend for Cycarla"
+authors = ["tensorturtle <tensorturtle@gmail.com>"]
+readme = "README.md"
+packages = [{include = "cycarla_backend"}]
+
+[tool.poetry.scripts]
+cycarla_backend = 'cycarla_backend.main:main'
+
+[tool.poetry.dependencies]
+python = "~3.10.0"
+pygame = "^2.1.2"
+flask = "^3.0.0"
+flask-socketio = "^5.3.6"
+bleak = "^0.21.1"
+numpy = "1.22.0"
+opencv-python = "^4.8.1.78"
+flask-cors = "^4.0.0"
+pycycling = "^0.3.3"
+carla = "^0.9.15"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"

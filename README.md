@@ -75,9 +75,13 @@ Run each command in a new shell:
 ```
 ./run_carla.sh
 ```
+
+[Install pipx](https://github.com/pypa/pipx#install-pipx)
 ```
-./run_server.sh
+pipx install cycarla-backend
+cycarla_backend
 ```
+
 ```
 ./run_controller.sh
 ```
