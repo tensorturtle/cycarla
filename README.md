@@ -132,7 +132,7 @@ CYCARLA began two years ago as a fun 'future of cycling vision' demo at the [Bik
 
 Users, contributors, and anyone else interested in this project are invited to the Discord, [so join us there!]()
 
-# Errata
+# Fun Facts
 
 CYCARLA is also stylized 'CyCARLA' or 'Cycarla'
 

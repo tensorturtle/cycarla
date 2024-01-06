@@ -61,7 +61,7 @@ You should start the CARLA and frontend applications next, if they haven't been 
 See [CYCARLA top-level project README](https://github.com/tensorturtle/cycarla) for more information
 
 
-# Errata
+# Compatibility
 
 + Currently, Windows 10 and Ubuntu 22.04 are the officially supported OSes for the CYCARLA project. Mac is not supported because CARLA can't run on it.
 + It is possible to run CARLA and this backend on two different computers, but it is very slow (~5 FPS).
