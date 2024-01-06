@@ -7,6 +7,8 @@ The three components of Cycarla are:
 
 # Installation
 
+Supported platforms: Windows 10, Ubuntu 22.04
+
 ## Windows 10-specific Prerequisites
 
 If you are on Ubuntu 22.04, skip ahead to the next section. Windows needs a couple of things to be set up beforehand.
