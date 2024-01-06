@@ -53,7 +53,7 @@ When run for the first time, it will download the large CARLA image (~20GB).
 
 ## Backend Installation
 
-Please follow [Backend Installation instructions](https://github.com/tensorturtle/cycarla/blob/main/cycarla-backend/README.md).
+Please follow [Backend Installation instructions](https://github.com/tensorturtle/cycarla/blob/main/cycarla-backend/README.md)
 
 ## Frontend Installation
 
@@ -79,7 +79,7 @@ Finally, using your web browser (Google Chrome, Firefox), go to `localhost:3000`
 CYCARLA follows in the footsteps of some wonderful open source projects:
 + [Unreal Engine](https://github.com/EpicGames) (Sign up with Epic Games to access Unreal Engine repo)
 + [CARLA](https://github.com/carla-simulator/carla)
-+ [Pycycling](https://github.com/zacharyedwardbull/pycycling)
++ [Pycycling](https://github.com/zacharyedwardbull/pycycling) - I also contributed to this!
 
 CYCARLA accepts Pull Requests. If you have an improvement idea, submit an Issue and let's discuss!
 
