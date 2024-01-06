@@ -1,15 +1,27 @@
+import sys
 import subprocess
 from enum import Enum
 
 from bleak import BleakScanner
+
+is_windows = sys.platform =="win32"
+is_linux = sys.platform.startswith("linux")
 
 def restart_system_bluetooth():
     '''
     We found that bluetooth needs to be restarted 
     in order to be able to scan for devices again.
     '''
-    subprocess.call(["bluetoothctl", "power", "off"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
-    subprocess.call(["bluetoothctl", "power", "on"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    if is_linux:
+        print("Restarting system bluetooth")
+        subprocess.call(["bluetoothctl", "power", "off"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+        subprocess.call(["bluetoothctl", "power", "on"], stdout=subprocess.DEVNULL, stderr=subprocess.DEVNULL)
+    
+    elif is_windows:
+        print("Skipping restart of system bluetooth because it is not required on Windows")
+
+    else:
+        print("Unknown OS")
 
 class BLECyclingService(Enum):
     '''
@@ -40,7 +52,6 @@ def filter_cycling_accessories(devices):
     return relevant_devices
 
 async def scan_bt():
-    print("Restarting system bluetooth")
     restart_system_bluetooth()
     scanner = BleakScanner()
     print("Scanning for BLE devices")

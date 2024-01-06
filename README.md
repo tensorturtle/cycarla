@@ -69,7 +69,7 @@ nvm use 20
 ```
 Go to `localhost:3000` on your browser.
 
-## Quickstart
+## Quickstart (Ubuntu)
 
 Run each command in a new shell:
 ```
@@ -80,6 +80,24 @@ Run each command in a new shell:
 ```
 ```
 ./run_controller.sh
+```
+
+Go to `localhost:3000` on your web browser.
+
+## Quickstart (Windows)
+
+Run CARLA.exe
+
+In powershell,
+```
+cd cycarla-server
+poetry run python cycarla_server\main.py
+```
+
+In another powershell,
+```
+cd cycarla-controller
+npm run dev
 ```
 
 Go to `localhost:3000` on your web browser.
