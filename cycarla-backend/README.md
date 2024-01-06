@@ -5,7 +5,9 @@ The three components of CYCARLA are:
 2. [cycarla_backend](https://github.com/tensorturtle/cycarla/tree/main/cycarla-backend)
 3. [cycarla_frontend](https://github.com/tensorturtle/cycarla/tree/main/cycarla-frontend)
 
-# Windows 10-specific Prerequisites
+# Installation
+
+## Windows 10-specific Prerequisites
 
 If you are on Ubuntu 22.04, skip ahead to the next section. Windows needs a couple of things to be set up beforehand.
 
@@ -17,7 +19,7 @@ At the installer, make sure to enable the bottom option "Add python.exe to PATH"
 
 [**2. Install Scoop**](https://scoop.sh/)
 
-# Install & Run `cycarla-backend`
+## Install & Run `cycarla-backend`
 
 Once Python 3.10 (and Scoop on Windows) is installed, continue:
 
@@ -28,8 +30,9 @@ Once Python 3.10 (and Scoop on Windows) is installed, continue:
 pipx install cycarla-backend
 ```
 
-Now run 
+# Run App
 
+In your terminal (Ubuntu) or Powershell (Windows):
 ```
 cycarla-backend
 ```
