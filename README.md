@@ -31,54 +31,46 @@ Basically, you'll need a gaming computer.
 
 [System76 make good Linux-first computers](https://system76.com/laptops/oryx) (no affiliation)
 
-Currently, CYCARLA is developed on and for Debian-family Linux (Ubuntu, PopOS).
-
 Keep in mind CYCARLA is based on a serious 3D game engine with full customizability, so it'll be more demanding than typical indoor cycling games.
 
-## Installation on Windows
+# Installation
+
+To run CYCARLA, three components need to be installed:
+1. CARLA simulator
+2. Backend
+3. Frontend
+
+## CARLA Simulator Installation
+
+### Windows
 
 Download [CARLA 0.9.15 pre-compiled ZIP](https://carla-releases.s3.eu-west-3.amazonaws.com/Windows/CARLA_0.9.15.zip) from https://github.com/carla-simulator/carla/releases
 
 Unzip it and find `CarlaUE4.exe` and run it.
 
-## Quickstart (Ubuntu)
+### Ubuntu
 
-Install Docker
+While it is possible to [install CARLA natively](https://carla.readthedocs.io/en/latest/start_quickstart/#carla-installation), I recommend using Docker. On Pop OS, only the Docker method works.
+
+Install Docker:
+```
+curl -fsSL https://get.docker.com -o get-docker.sh
+sh get-docker.sh
+```
 
 Run CARLA inside docker:
 ```
 docker run --privileged --gpus all --network=host -e DISPLAY=$DISPLAY carlasim/carla:0.9.15 /bin/bash ./CarlaUE4.sh
 ```
+When run for the first time, it will download the large CARLA image (~20GB).
 
-[Install pipx](https://github.com/pypa/pipx#install-pipx)
-```
-pipx install cycarla-backend
-cycarla_backend
-```
+## Backend Installation
 
-```
-./run_controller.sh
-```
+Please carefully follow [Backend Installation instructions](https://github.com/tensorturtle/cycarla/blob/main/cycarla-backend/README.md).
 
-Go to `localhost:3000` on your web browser.
+## Frontend Installation
 
-## Quickstart (Windows)
-
-Run CARLA.exe
-
-In powershell,
-```
-cd cycarla-server
-poetry run python cycarla_server\main.py
-```
-
-In another powershell,
-```
-cd cycarla-controller
-npm run dev
-```
-
-Go to `localhost:3000` on your web browser.
+Please carefully follow [Frontend installation instructions](https://github.com/tensorturtle/cycarla/blob/main/cycarla-frontend/README.md)
 
 # Open Source
 
