@@ -25,7 +25,7 @@ To run CYCARLA, three components need to be installed:
 2. Backend
 3. Frontend
 
-Please follow the directions below carefully for each component.
+Please carefully follow the directions below for each component.
 
 ## CARLA Simulator Installation
 
