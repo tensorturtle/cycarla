@@ -33,7 +33,7 @@ Please follow the directions below carefully for each component.
 
 Download [CARLA 0.9.15 pre-compiled ZIP](https://carla-releases.s3.eu-west-3.amazonaws.com/Windows/CARLA_0.9.15.zip). Other versions can be found [here](https://github.com/carla-simulator/carla/releases)
 
-Unzip it and find `CarlaUE4.exe`. Run it, right click on the icon to launch it, then right-click to click on: 'Pin to taskbar'.
+Unzip it and find `CarlaUE4.exe`. Double click to launch it, then right-click on the icon and pin it to the taskbar.
 
 ### Ubuntu
 
