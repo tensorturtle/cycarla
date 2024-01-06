@@ -29,8 +29,6 @@ CYCARLA is based on a serious 3D game engine with full customizability, so it'll
 + Bluetooth Low Energy (BLE) support
 + Internet connection required for installation, not required to run the game.
 
-[System76 make good Linux-first computers](https://system76.com/laptops/oryx) (no affiliation)
-
 # Installation
 
 To run CYCARLA, three components need to be installed:
