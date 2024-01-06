@@ -80,7 +80,7 @@ If you've finished the above installation steps, the full app can now be launche
   + Windows: Double click `CarlaUE4.exe`
   + Ubuntu: `docker run --privileged --gpus all --network=host -e DISPLAY=$DISPLAY carlasim/carla:0.9.15 /bin/bash ./CarlaUE4.sh`
 2. Launch Backend: `cycarla_backend` from your terminal or powershell.
-3. Launch Frontend: `cd cycarla-frontend` and then `npm run dev` from your terminal or powershell.
+3. Launch Frontend: `cd cycarla-frontend` and then `npm run dev` from a second terminal or powershell.
 
 # Open Source
 
