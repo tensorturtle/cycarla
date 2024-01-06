@@ -25,7 +25,7 @@ Basically, you'll need a gaming computer.
 
 + CPU: Intel Core i5 or better
 + GPU: NVIDIA RTX 2070 or better (2080, 3060, 3070, 3080, etc.)
-+ Hard drive: 10GB of free space.
++ Hard drive: 30GB of free space.
 + Bluetooth Low Energy (BLE) support
 + Internet connection required for installation, not required to run the game.
 
@@ -41,39 +41,13 @@ Download [CARLA 0.9.15 pre-compiled ZIP](https://carla-releases.s3.eu-west-3.ama
 
 Unzip it and find `CarlaUE4.exe` and run it.
 
-Clone this repository. See [server](cycarla-server/README.md) and [controller](cycarla-controller/README.md) READMEs for their Windows native installation instructions.
-
-## Installation on Ubuntu
-
-Clone this repository:
-```
-git clone https://github.com/tensorturtle/cycarla
-```
-
-Install docker:
-```
-curl -fsSL https://get.docker.com -o get-docker.sh
-sh get-docker.sh
-```
-
-Install NVM in order to install NPM:
-```
-curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
-```
-```
-nvm install 20
-nvm use 20
-```
-```
-./run_controller.sh
-```
-Go to `localhost:3000` on your browser.
-
 ## Quickstart (Ubuntu)
 
-Run each command in a new shell:
+Install Docker
+
+Run CARLA inside docker:
 ```
-./run_carla.sh
+docker run --privileged --gpus all --network=host -e DISPLAY=$DISPLAY carlasim/carla:0.9.15 /bin/bash ./CarlaUE4.sh
 ```
 
 [Install pipx](https://github.com/pypa/pipx#install-pipx)
