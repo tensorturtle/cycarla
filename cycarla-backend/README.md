@@ -5,40 +5,61 @@ The three components of Cycarla are:
 2. [cycarla_backend](https://github.com/tensorturtle/cycarla/cycarla-backend) - This Python Flask server which links the frontend to CARLA.
 3. [cycarla_frontend](https://github.com/tensorturtle/cycarla/cycarla-frontend) - The front-end component of CYCARLA which presents a web-based interface from your browser.
 
-# Platform-specific prerequisites.
+# Installation
 
-## Windows 10
+## Windows 10-specific Prerequisites
 
-[**Install Python 3.10**](https://www.python.org/downloads/release/python-31011)
+If you are on Ubuntu 22.04, skip ahead to the next section. Windows needs a couple of things to be set up beforehand.
+
+### [**1. Install Python 3.10**](https://www.python.org/downloads/release/python-31011)
 
 Scroll to the bottom and download the 'Windows Installer (64-bit)'.
 
-Make sure to enable the bottom option "Add python.exe to PATH"
+At the installer, make sure to enable the bottom option "Add python.exe to PATH"
 
-[**Install Scoop**](https://scoop.sh/)
+### [**2. Install Scoop**](https://scoop.sh/)
 
-## Ubuntu 22.04
+## Install using `pipx`
 
-Ubuntu 22.04 comes with Python 3.10, so continue on to Installation.
+`cycarla-backend` is a CLI package that is developed with [poetry](https://python-poetry.org/) and published on [pypi](https://pypi.org/project/cycarla-backend/).
 
-# Install & Run `cycarla-backend`
+We'll use `pipx` to run it in an isolated python environment.
 
-[**Install `pipx`**](https://github.com/pypa/pipx#install-pipx)
+### [**Install `pipx`**](https://github.com/pypa/pipx#install-pipx)
 
-**Install cycarla-backend** using `pipx`
+Follow relevant instructions for your platform
+
+### **Install cycarla-backend** using `pipx`
 ```
 pipx install cycarla-backend
 ```
+Note the dash (minus) sign.
 
-Now run 
+# Run App
 
+In your terminal (Ubuntu) or Powershell (Windows):
 ```
-cycarla-backend
+cycarla_backend
 ```
+Note the underscore.
 
 On Windows, Allow firewall permissions when prompted.
+
+## Next Steps
+
+When the app starts, you should see a command line output including:
+```
+ * Running on http://127.0.0.1:9000
+```
+
+This app will receive web requests from the CYCARLA Frontend which should run at localhost port 3000, and communicate with the Python API of a local CARLA simulator whose default port is 2000.
+
+You should start the CARLA and frontend applications next, if they haven't been started already.
+
+See [CYCARLA top-level project README](https://github.com/tensorturtle/cycarla) for more information
 
 
 # Errata
 
++ Currently, Windows 10 and Ubuntu 22.04 are the officially supported OSes for the CYCARLA project. Mac is not supported because CARLA can't run on it.
 + It is possible to run CARLA and this backend on two different computers, but it is very slow (~5 FPS).
