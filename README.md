@@ -38,6 +38,8 @@ To run CYCARLA, three components need to be installed:
 2. Backend
 3. Frontend
 
+Please follow the directions below carefully for each component.
+
 ## CARLA Simulator Installation
 
 ### Windows
@@ -64,11 +66,11 @@ When run for the first time, it will download the large CARLA image (~20GB).
 
 ## Backend Installation
 
-Please carefully follow [Backend Installation instructions](https://github.com/tensorturtle/cycarla/blob/main/cycarla-backend/README.md).
+Please follow [Backend Installation instructions](https://github.com/tensorturtle/cycarla/blob/main/cycarla-backend/README.md).
 
 ## Frontend Installation
 
-Please carefully follow [Frontend installation instructions](https://github.com/tensorturtle/cycarla/blob/main/cycarla-frontend/README.md)
+Please follow [Frontend installation instructions](https://github.com/tensorturtle/cycarla/blob/main/cycarla-frontend/README.md)
 
 # Run CYCARLA
 
