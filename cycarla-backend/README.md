@@ -29,15 +29,21 @@ Once Python 3.10 (and Scoop on Windows) is installed, continue:
 ```
 pipx install cycarla-backend
 ```
+Note the dash (minus) sign.
 
 # Run App
 
 In your terminal (Ubuntu) or Powershell (Windows):
 ```
-cycarla-backend
+cycarla_backend
 ```
+Note the underscore.
 
 On Windows, Allow firewall permissions when prompted.
+
+## Next Steps
+
+
 
 
 # Errata
