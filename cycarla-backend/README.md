@@ -45,7 +45,16 @@ On Windows, Allow firewall permissions when prompted.
 
 ## Next Steps
 
+When the app starts, you should see a command line output including:
+```
+ * Running on http://127.0.0.1:9000
+```
 
+This app will receive web requests from the CYCARLA Frontend which should run at localhost port 3000, and communicate with the Python API of a local CARLA simulator whose default port is 2000.
+
+You should start the CARLA and frontend applications next, if they haven't been started already.
+
+See [CYCARLA top-level project README](https://github.com/tensorturtle/cycarla) for more information
 
 
 # Errata
