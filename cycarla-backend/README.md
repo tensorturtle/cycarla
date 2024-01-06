@@ -11,13 +11,13 @@ The three components of CYCARLA are:
 
 If you are on Ubuntu 22.04, skip ahead to the next section. Windows needs a couple of things to be set up beforehand.
 
-[**1. Install Python 3.10**](https://www.python.org/downloads/release/python-31011)
+### [**1. Install Python 3.10**](https://www.python.org/downloads/release/python-31011)
 
 Scroll to the bottom and download the 'Windows Installer (64-bit)'.
 
 At the installer, make sure to enable the bottom option "Add python.exe to PATH"
 
-[**2. Install Scoop**](https://scoop.sh/)
+### [**2. Install Scoop**](https://scoop.sh/)
 
 ## Install using `pipx`
 
@@ -25,9 +25,9 @@ At the installer, make sure to enable the bottom option "Add python.exe to PATH"
 
 We'll use `pipx` to run it in an isolated python environment.
 
-[**Install `pipx`**](https://github.com/pypa/pipx#install-pipx) (follow instructions for your platform)
+### [**Install `pipx`**](https://github.com/pypa/pipx#install-pipx) (follow instructions for your platform)
 
-**Install cycarla-backend** using `pipx`
+### **Install cycarla-backend** using `pipx`
 ```
 pipx install cycarla-backend
 ```
