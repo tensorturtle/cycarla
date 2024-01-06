@@ -5,7 +5,7 @@ The three components of CYCARLA are:
 2. [cycarla_backend](https://github.com/tensorturtle/cycarla/tree/main/cycarla-backend)
 3. [cycarla_frontend](https://github.com/tensorturtle/cycarla/tree/main/cycarla-frontend)
 
-## Windows 10-specific Prerequisites
+# Windows 10-specific Prerequisites
 
 If you are on Ubuntu 22.04, skip ahead to the next section. Windows needs a couple of things to be set up beforehand.
 
