@@ -9,7 +9,17 @@ The three components of Cycarla are:
 
 [Download and install Node.js](https://nodejs.org/)
 
-Using `npm`, install the Next.js framework:
+Alternatively on Ubuntu, we can use `nvm` instead to specify the version of `npm` to install:
+```
+curl -o- https://raw.githubusercontent.com/nvm-sh/nvm/v0.39.7/install.sh | bash
+```
+```
+nvm install 20
+nvm use 20
+```
+
+
+Once `npm` is installed, install the Next.js framework:
 ```
 npm install next
 ```
@@ -22,4 +32,4 @@ Run the development server:
 npm run dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Open [http://localhost:3000](http://localhost:3000) with your browser.

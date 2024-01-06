@@ -1,5 +1,5 @@
 {
-  "name": "cycarla-controller",
+  "name": "cycarla-frontend",
   "version": "0.1.0",
   "private": true,
   "scripts": {
@@ -9,7 +9,7 @@
     "lint": "next lint"
   },
   "dependencies": {
-    "next": "^14.0.2",
+    "next": "^14.0.4",
     "react": "^18",
     "react-dom": "^18",
     "socket.io-client": "^4.7.2"

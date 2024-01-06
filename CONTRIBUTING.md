@@ -1,6 +1,11 @@
+Please see `CONTRIBUTING.md` of sub-projects for more detail:
+
++ [cycarla-backend/CONTRIBUTING.md](https://github.com/tensorturtle/cycarla/blob/main/cycarla-backend/CONTRIBUTING.md)
++ [cycarla-frontend/CONTRIBUTING.md](https://github.com/tensorturtle/cycarla/blob/main/cycarla-frontend/CONTRIBUTING.md)
+
 # Platforms
 
-CyCARLA targets Ubuntu 20.04 and Windows 10, same as CARLA.
+CyCARLA targets Ubuntu 22.04 and Windows 10.
 
 # Development Environment
 
@@ -11,7 +16,7 @@ At the bare minimum, the following are required:
 + Elite Sterzo Smart steering sensor
 + BLE-compatible Cycling Wheel Speed sensor (such as Garmin Bike Speed Sensor 2, Magene S3+, Wahoo RPM Cycling Speed Sensor)
 + Bluetooth Dongle with version 5.0 or greater, supporting Bluetooth Low Energy (BLE). Premium motherboards / laptops often have them built-in.
-+ Ubuntu 20.04 computer with NVIDIA GPU RTX[2070, 2080, 3070, 3080 or similar].
++ Ubuntu 22.04 computer with NVIDIA GPU RTX[2070, 2080, 3070, 3080 or similar].
 
 ## Software Environment:
 

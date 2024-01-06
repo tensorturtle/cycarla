@@ -45,11 +45,7 @@ cycarla_backend
 ```
 Note the underscore.
 
-On Windows, Allow firewall permissions when prompted.
-
-## Next Steps
-
-When the app starts, you should see a command line output including:
+On Windows, Allow firewall permissions when prompted.r Cycoutput including:
 ```
  * Running on http://127.0.0.1:9000
 ```
