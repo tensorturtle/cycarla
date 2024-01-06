@@ -7,7 +7,7 @@ The three components of CYCARLA are:
 
 # Install Platform-specific Prerequisites
 
-Currently, Windows 10 and Ubuntu 22.04 are the officially supported OSes for the CYCARLA project.. Mac is not supported because CARLA can't run on it.
+Currently, Windows 10 and Ubuntu 22.04 are the officially supported OSes for the CYCARLA project. Mac is not supported because CARLA can't run on it.
 
 ## Windows 10
 
