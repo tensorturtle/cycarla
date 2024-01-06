@@ -1,13 +1,13 @@
 `cycarla-backend` is a Python Flask server that serves as the backend to [CYCARLA](https://github.com/tensorturtle/cycarla)
 
-The three components of Cycarla are:
+The three components of CYCARLA are:
 1. [CARLA](https://github.com/carla-simulator/carla)
 2. [cycarla_backend](https://github.com/tensorturtle/cycarla/tree/main/cycarla-backend)
 3. [cycarla_frontend](https://github.com/tensorturtle/cycarla/tree/main/cycarla-frontend)
 
 # Install Platform-specific Prerequisites
 
-Currently, Windows 10 and Ubuntu 22.04 are the officially supported OSes. Mac is not supported because CARLA can't run on it.
+Currently, Windows 10 and Ubuntu 22.04 are the officially supported OSes for the CYCARLA project.. Mac is not supported because CARLA can't run on it.
 
 ## Windows 10
 
