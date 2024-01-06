@@ -25,7 +25,9 @@ At the installer, make sure to enable the bottom option "Add python.exe to PATH"
 
 We'll use `pipx` to run it in an isolated python environment.
 
-### [**Install `pipx`**](https://github.com/pypa/pipx#install-pipx) (follow instructions for your platform)
+### [**Install `pipx`**](https://github.com/pypa/pipx#install-pipx)
+
+Follow relevant instructions for your platform
 
 ### **Install cycarla-backend** using `pipx`
 ```
