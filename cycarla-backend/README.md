@@ -2,8 +2,8 @@
 
 The three components of Cycarla are:
 1. [CARLA](https://github.com/carla-simulator/carla)
-2. [cycarla_backend](https://github.com/tensorturtle/cycarla/cycarla-backend)
-3. [cycarla_frontend](https://github.com/tensorturtle/cycarla/cycarla-frontend)
+2. [cycarla_backend](https://github.com/tensorturtle/cycarla/tree/main/cycarla-backend)
+3. [cycarla_frontend](https://github.com/tensorturtle/cycarla/tree/main/cycarla-frontend)
 
 # Platform-specific prerequisites.
 
