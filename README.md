@@ -12,8 +12,6 @@ Bring your Bluetooth-compatible indoor cycling accessories and liberate your ind
 
 # What you'll need to get started
 
-You'll need the following equipment to ride in CYCARLA:
-
 1. A bike, such as [this absolute beauty](https://www.bastioncycles.com/)
 2. [Elite Sterzo](https://www.elite-it.com/en/products/home-trainers/ecosystem-accessories/sterzo-smart) front wheel steering plate.
 3. Smart Trainer, such as [Elite Suito T](https://www.elite-it.com/en/products/home-trainers/interactive-trainers/suito-t)
