@@ -14,7 +14,8 @@ Currently, Windows 10 and Ubuntu 22.04 are the officially supported OSes for the
 [**1. Install Python 3.10**](https://www.python.org/downloads/release/python-31011)
 
 Scroll to the bottom and download the 'Windows Installer (64-bit)'.
-Make sure to enable the bottom option "Add python.exe to PATH"
+
+At the installer, make sure to enable the bottom option "Add python.exe to PATH"
 
 [**2. Install Scoop**](https://scoop.sh/)
 
