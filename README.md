@@ -10,7 +10,7 @@
 
 Bring your Bluetooth-compatible indoor cycling accessories and liberate your indoor riding!
 
-# Getting Started
+# What you'll need to get started
 
 You'll need the following equipment to ride in CYCARLA:
 
