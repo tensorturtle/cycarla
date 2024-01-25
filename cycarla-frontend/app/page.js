@@ -7,6 +7,8 @@ import BTModal from './components/BTModal';
 import { SteeringVisualizer } from './components/SteeringVisualizer';
 import { PerformanceLiveStats, KinematicsLiveStats, ControlLiveStats, noto_sans_mono, roundOrPad } from './components/LiveStats';
 import { BlackJPEGBase64 } from './components/BlackJPEG';
+import { SliderNumerical } from './components/SliderNumerical';
+
 export default function Home() {
   const [isWebsocketConnected, setWebsocketConnected] = useState(socket.connected);
 
@@ -258,6 +260,12 @@ export default function Home() {
     socket.emit('finish_game')
   }
 
+  const handleSliderChange = (value) => {
+    console.log("Slider value: ", value);
+    socket.emit('added_gradient_percent', value)
+    // Additional actions based on the slider value
+  };
+
   const sendAutopilotToggle = () => {
     socket.emit('autopilot')
   }
@@ -392,6 +400,9 @@ export default function Home() {
               Finish
             </button>
           </div>
+        </div>
+        <div className="">
+            <SliderNumerical onSliderChange={handleSliderChange} label="Road Gradient Offset" units="%" />
         </div>
       </div>
     </main>

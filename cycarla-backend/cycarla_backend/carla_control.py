@@ -394,7 +394,6 @@ class Reporter():
         self._server_clock = pygame.time.Clock()
         self.simulation_live_data = SimulationLiveData()
         self.road_gradient_estimator = RoadGradientEstimator(window_size=5, ignore_first_n=30)
-    
     def on_world_tick(self, timestamp):
         self._server_clock.tick()
         self.server_fps = self._server_clock.get_fps()

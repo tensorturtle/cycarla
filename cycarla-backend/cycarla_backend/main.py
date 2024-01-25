@@ -43,6 +43,8 @@ live_control_state = LiveControlState()
 
 pycycling_input = None
 
+road_gradient_offset = 0.0 # user-selected +/-10 percent gradient offset for choosing default difficulty
+
 def game_loop(args, game_state: GameState):
     global FIRST_GAME_LOOP
     pygame.init()
@@ -174,7 +176,7 @@ def game_loop(args, game_state: GameState):
                 # cutoff at 15 percent road gradient
                 # if negative road gradient, resistance is 0
 
-                gradient = reporter.simulation_live_data.road_gradient
+                gradient = reporter.simulation_live_data.road_gradient + road_gradient_offset
 
                 if gradient < 0:
                     gradient = 0
@@ -264,6 +266,14 @@ def handle_autopilot():
 @socketio.on('change_camera')
 def handle_change_camera():
     game_state.change_camera = True
+
+@socketio.on('added_gradient_percent')
+def handle_added_gradient_percent(gradient_percent):
+    global road_gradient_offset
+    # user has requested through the frontend to add/subtract difficulty
+    # by changing the default gradient percent
+    print(f"Added gradient percent: {gradient_percent}")
+    road_gradient_offset = gradient_percent
 
 
 def start_game_loop():
