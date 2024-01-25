@@ -51,11 +51,20 @@ docker run --privileged --gpus all --network=host -e DISPLAY=$DISPLAY carlasim/c
 ```
 When run for the first time, it will download the large CARLA image (~20GB).
 
-## Backend Installation
+## Install Backend
+
+```
+pipx install cycarla-backend
+```
 
 Please follow [Backend Installation instructions](https://github.com/tensorturtle/cycarla/blob/main/cycarla-backend/README.md)
 
-## Frontend Installation
+
+## Install Frontend
+
+```
+npm i cycarla-frontend
+```
 
 Please follow [Frontend installation instructions](https://github.com/tensorturtle/cycarla/blob/main/cycarla-frontend/README.md)
 
@@ -66,10 +75,9 @@ If you've finished the above installation steps, the full app can now be launche
 1. Launch CARLA simulator
   + Windows: Double click `CarlaUE4.exe`
   + Ubuntu: `docker run --privileged --gpus all --network=host -e DISPLAY=$DISPLAY carlasim/carla:0.9.15 /bin/bash ./CarlaUE4.sh`
-2. Launch Backend: `cycarla_backend` from your terminal or powershell.
-3. Launch Frontend: `cd cycarla-frontend` and then `npm run dev` from a second terminal or powershell.
-
-Finally, using your web browser (Google Chrome, Firefox), go to `localhost:3000`.
+2. Launch Backend: `cycarla_backend`
+3. Launch Frontend: `npx cycarla-frontend`
+4. On your web browser, go to `localhost:3000`
 
 # Open Source
 

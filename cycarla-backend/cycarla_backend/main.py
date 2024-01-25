@@ -13,6 +13,10 @@ from cycarla_backend.carla_control import *
 from cycarla_backend.pycycling_input import PycyclingInput, LiveControlState
 from cycarla_backend.gpx import GPXCreator
 
+# hide pygame window
+import os
+os.environ["SDL_VIDEODRIVER"] = "dummy"
+
 app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins="*")
 
