@@ -18,3 +18,10 @@ This is made possible through defining an executable script in `package.json`
   }
 ```
 where `run.sh` is just the same `next dev ...` command as called by `npm run dev`.
+
+## Publishing
+
+```
+npm login
+npm publish
+```
