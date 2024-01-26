@@ -1,6 +1,6 @@
 {
   "name": "cycarla-frontend",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "private": false,
   "scripts": {
     "dev": "next dev -H 127.0.0.1 -p 3000",
@@ -13,7 +13,7 @@
     "@emotion/styled": "^11.11.0",
     "@mui/material": "^5.15.6",
     "cycarla-frontend": "^0.1.2",
-    "next": "^14.0.4",
+    "next": "^14.1.0",
     "react": "^18",
     "react-dom": "^18",
     "socket.io-client": "^4.7.2"
