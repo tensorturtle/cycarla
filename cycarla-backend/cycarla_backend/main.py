@@ -14,8 +14,8 @@ from cycarla_backend.pycycling_input import PycyclingInput, LiveControlState
 from cycarla_backend.gpx import GPXCreator
 
 # hide pygame window
-import os
-os.environ["SDL_VIDEODRIVER"] = "dummy"
+# import os
+# os.environ["SDL_VIDEODRIVER"] = "dummy"
 
 app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins="*")
@@ -73,7 +73,7 @@ def game_loop(args, game_state: GameState):
             settings = sim_world.get_settings()
             if not settings.synchronous_mode:
                 settings.synchronous_mode = True
-                settings.fixed_delta_seconds = -1.05
+                settings.fixed_delta_seconds = 0.05
             sim_world.apply_settings(settings)
 
             traffic_manager = client.get_trafficmanager()
@@ -83,9 +83,10 @@ def game_loop(args, game_state: GameState):
             print("WARNING: You are currently in asynchronous mode and could "
                   "experience some issues with the traffic simulation")
 
-        display = pygame.display.set_mode(
-            (args.width, args.height),
-            pygame.HWSURFACE | pygame.DOUBLEBUF)
+        # display = pygame.display.set_mode(
+        #     (args.width, args.height),
+        #     pygame.HWSURFACE | pygame.DOUBLEBUF)
+        display = pygame.display.set_mode((args.width, args.height), flags=pygame.HIDDEN)
         pygame.display.flip()
 
         reporter = Reporter(args.width, args.height, socketio)
