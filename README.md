@@ -65,6 +65,10 @@ Now, we can run the binary. Be patient when it doesn't respond at launch.
 ```
 pipx install cycarla-backend
 ```
+To update an existing installation to the latest version:
+```
+pipx upgrade cycarla-backend
+```
 
 Please follow [Backend Installation instructions](https://github.com/tensorturtle/cycarla/blob/main/cycarla-backend/README.md)
 
@@ -73,6 +77,11 @@ Please follow [Backend Installation instructions](https://github.com/tensorturtl
 
 ```
 npm i cycarla-frontend
+```
+
+To update an existing installation to the latest version:
+```
+npm update cycarla-frontend
 ```
 
 Please follow [Frontend installation instructions](https://github.com/tensorturtle/cycarla/blob/main/cycarla-frontend/README.md)
