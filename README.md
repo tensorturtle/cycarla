@@ -10,7 +10,7 @@
 
 Bring your Bluetooth-compatible indoor cycling accessories and liberate your indoor riding!
 
-![](readme_assets/cycarla-browser-screenshot.jpg)
+![](readme_assets/screenshot-cycarla.png)
 
 # What you'll need
 
