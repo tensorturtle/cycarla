@@ -10,6 +10,8 @@
 
 Bring your Bluetooth-compatible indoor cycling accessories and liberate your indoor riding!
 
+![](readme_assets/cycarla-browser-screenshot.jpg)
+
 # What you'll need
 
 1. A bike, such as [this absolute beauty](https://www.bastioncycles.com/)
