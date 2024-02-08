@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import Slider from '@mui/material/Slider';
-import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 
 export function SliderNumerical({ onSliderChange, label, units}) {
@@ -12,16 +11,14 @@ export function SliderNumerical({ onSliderChange, label, units}) {
     };
   
     return (
-      <Box width={300}>
-        <Typography id="input-slider" gutterBottom>
-          {label}: {value} {units}
-        </Typography>
+      <Box>
+      <div className="text-lg font-medium">{label}: {value} {units}</div>
         <Slider
           value={typeof value === 'number' ? value : 0}
           onChange={handleChange}
           aria-labelledby="input-slider"
           min={-10} // Minimum value of the slider
-          max={20} // Maximum value of the slider
+          max={10} // Maximum value of the slider
         />
       </Box>
     );

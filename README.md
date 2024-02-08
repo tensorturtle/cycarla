@@ -29,27 +29,36 @@ Please carefully follow the directions below for each component.
 
 ## CARLA Simulator Installation
 
+Please see [CARLA documentation](https://carla.readthedocs.io/en/latest/start_quickstart/#carla-installation) for full instructions. The following is a simplified version.
+
 ### Windows
 
-Download [CARLA 0.9.15 pre-compiled ZIP](https://carla-releases.s3.eu-west-3.amazonaws.com/Windows/CARLA_0.9.15.zip). Other versions can be found [here](https://github.com/carla-simulator/carla/releases)
+Download [CARLA 0.9.15 pre-compiled ZIP for Windows](https://carla-releases.s3.eu-west-3.amazonaws.com/Windows/CARLA_0.9.15.zip). Other versions can be found [here](https://github.com/carla-simulator/carla/releases)
 
-Unzip it and find `CarlaUE4.exe`. Double click to launch it, then right-click on the icon and pin it to the taskbar.
+Unzip it and find `CarlaUE4.exe`. Double click to launch it.
+
+Right-click on the icon and pin it to the taskbar.
 
 ### Ubuntu
 
-While it is possible to [install CARLA natively](https://carla.readthedocs.io/en/latest/start_quickstart/#carla-installation), I recommend using Docker. On Pop OS, only the Docker method works.
+Download [CARLA 0.9.15 pre-compiled ZIP for Ubuntu](https://carla-releases.s3.us-east-005.backblazeb2.com/Linux/CARLA_0.9.15.tar.gz). 
 
-Install Docker:
+We'll create a new `carla` directory in the home directory to place CARLA app content.
+
 ```
-curl -fsSL https://get.docker.com -o get-docker.sh
-sh get-docker.sh
+mkdir -p ~/carla
 ```
 
-Run CARLA inside docker:
+Go to where the ZIP was downloaded, probably `~/Downloads` and extract it to the new directory.
 ```
-docker run --privileged --gpus all --network=host -e DISPLAY=$DISPLAY carlasim/carla:0.9.15 /bin/bash ./CarlaUE4.sh
+cd ~/Downloads
+tar -xvf CARLA_0.9.15.tar.gz -C ~/carla
 ```
-When run for the first time, it will download the large CARLA image (~20GB).
+
+Now, we can run the binary. Be patient when it doesn't respond at launch.
+```
+~/carla/CarlaUE4.sh
+```
 
 ## Install Backend
 
@@ -74,7 +83,7 @@ If you've finished the above installation steps, the full app can now be launche
 
 1. Launch CARLA simulator
   + Windows: Double click `CarlaUE4.exe`
-  + Ubuntu: `docker run --privileged --gpus all --network=host -e DISPLAY=$DISPLAY carlasim/carla:0.9.15 /bin/bash ./CarlaUE4.sh`
+  + Ubuntu: Navigate to `CarlaUE4/Binaries/Linux` and execute: `./CarlaUE4-Linux-Shipping`
 2. Launch Backend: `cycarla_backend`
 3. Launch Frontend: `npx cycarla-frontend`
 4. On your web browser, go to `localhost:3000`

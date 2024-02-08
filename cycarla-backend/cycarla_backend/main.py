@@ -215,7 +215,15 @@ def game_loop(args, game_state: GameState):
 
         print("Exited Carla simulation")
 
+        # return finished GPX file path to frontend
+        # first, sort and find out which file starting with `simulated_gpx_` is the latest
+        latest_gpx = sorted(glob.glob("simulated_gpx_*.gpx"), key=os.path.getmtime)[-1]
 
+        #socketio.emit('finished_gpx_file_path', f"simulated_gpx_BANJO.gpx")
+        # read the file and send it as a string
+        with open(latest_gpx, 'r') as file:
+            gpx_string = file.read()
+            socketio.emit('finished_gpx_file', gpx_string)
 
 @socketio.on('bt_scan')
 def handle_bt_scan():
@@ -283,15 +291,13 @@ def start_game_loop():
     debug=False,
     host="127.0.0.1",
     port=2000,
-    #host=str(os.environ['CARLA_SIM_IP']),
-    #port=int(os.environ['CARLA_SIM_PORT']),
-    autopilot=True,
+    autopilot=False,
     res='1280x720', # defines the maximum size of image shown in frontend
     filter='vehicle.diamondback.century',
     generation='2',
     rolename='hero',
     gamma=2.2,
-    sync=True,
+    sync=False,
     )
     args.width, args.height = [int(x) for x in args.res.split('x')]
 
