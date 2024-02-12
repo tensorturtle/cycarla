@@ -367,11 +367,11 @@ export default function Home() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between ">
+    <main className="flex min-h-screen flex-col items-center justify-between bg-zinc-900">
       <BTModal isOpen={isBTModalOpen} onClose={() => setBTModelOpen(false)} />
 
       {/* Header with logo and setup buttons */}
-      <div class="flex justify-between w-full px-20">
+      <div class="flex justify-between w-full px-20 bg-zinc-900">
         <a href="https://github.com/tensorturtle/cycarla" target="_blank" className="">
           <Image
             src="/cycarla-simpler-banner-transbg-for-dark.png"
@@ -386,9 +386,9 @@ export default function Home() {
         <div class="flex">
           <button 
             onClick={() => window.location.reload()}
-            className="group rounded-lg border border-neutral-800 px-4 my-4 mx-2 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
+            className="group rounded-lg border border-neutral-800 px-4 my-4 mx-2 transition-colors hover:border-neutral-700 hover:bg-neutral-800/30"
             >
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between text-white">
               <svg height="20" width="20">
                 <circle cx="10" cy="10" r="10" fill={isWebsocketConnected ? "green" : "red"} />
               </svg>
@@ -405,9 +405,9 @@ export default function Home() {
 
           <button 
             onClick={requestBTScan}
-            className="group rounded-lg border border-neutral-800 px-4 my-4 mx-2 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
+            className="group rounded-lg border border-neutral-800 px-4 my-4 mx-2 transition-colors hover:border-neutral-700 hover:bg-neutral-800/30"
           >
-            <div className="flex items-center justify-between">
+            <div className="flex items-center justify-between text-white">
               <svg height="20" width="20">
                 <circle cx="10" cy="10" r="10" fill={btGreen ? "green" : "red"} />
               </svg>
@@ -449,7 +449,7 @@ export default function Home() {
           <img src={`data:image/jpeg;base64,${carlaFrame}`} />
 
           {/* Simplified HUD stats (power, pedaling RPM, speed, gradient, time elapsed) */}
-          <div className="absolute top-0 right-0">
+          <div className="absolute top-0 right-0 text-white">
             <div className="m-2 px-4 py-2 relative flex px-10 justify-center backdrop-blur-md w-auto rounded-xl bg-black/50">
               <div className="flex gap-4 items-center justify-center">
                 <SteeringVisualizer steeringAngle={steeringAngle} />
@@ -509,12 +509,12 @@ export default function Home() {
       <div className="pb-32 pt-2 gap-2 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-3 lg:text-left">
         <button 
             onClick={changeCamera}
-            className="group rounded-lg border border-neutral-800 px-4 py-2 my-4 mx-2 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
+            className="group rounded-lg border border-neutral-800 px-4 py-2 my-4 mx-2 transition-colors hover:border-neutral-700 hover:bg-neutral-800/30"
         >
-          <div className="text-lg font-medium">Change Camera</div>
+          <div className="text-lg font-medium text-white">Change Camera</div>
         </button>
 
-        <div className="group rounded-lg border border-neutral-800 px-4 py-2 my-4 mx-2 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30">
+        <div className="group rounded-lg border border-neutral-800 px-4 py-2 my-4 mx-2 transition-colors hover:border-neutral-700 hover:bg-neutral-800/30 text-white">
           <SliderNumerical onSliderChange={handleSliderChange} label="Road Gradient Offset" units="%" />
         </div>
 
@@ -522,9 +522,9 @@ export default function Home() {
           <div className="text-lg font-medium">Bluetooth Help</div>
         </button> */}
 
-        <button onClick={saveFrame} className="group rounded-lg border border-neutral-800 px-4 py-2 my-4 mx-2 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30">
-          <div className="text-lg font-medium">Take Screenshot for Strava</div>
-          {savedCarlaFrame == "" ? <div className="text-xs opacity-50">No screenshot - will use first frame for ride picture.</div>: <div className="text-xs opacity-50">Screenshot saved!</div>}
+        <button onClick={saveFrame} className="group rounded-lg border border-neutral-800 px-4 py-2 my-4 mx-2 transition-colors hover:border-neutral-700 hover:bg-neutral-800/30">
+          <div className="text-lg font-medium text-white">Take Screenshot for Strava</div>
+          {savedCarlaFrame == "" ? <div className="text-xs opacity-50 text-white">No screenshot - will use first frame for ride picture.</div>: <div className="text-xs opacity-50 text-white">Screenshot saved!</div>}
         </button>
       </div>
     </main>
