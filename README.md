@@ -10,6 +10,8 @@
 
 Bring your Bluetooth-compatible indoor cycling accessories and liberate your indoor riding!
 
+![](readme_assets/screenshot-cycarla.png)
+
 # What you'll need
 
 1. A bike, such as [this absolute beauty](https://www.bastioncycles.com/)
@@ -65,6 +67,10 @@ Now, we can run the binary. Be patient when it doesn't respond at launch.
 ```
 pipx install cycarla-backend
 ```
+To update an existing installation to the latest version:
+```
+pipx upgrade cycarla-backend
+```
 
 Please follow [Backend Installation instructions](https://github.com/tensorturtle/cycarla/blob/main/cycarla-backend/README.md)
 
@@ -73,6 +79,11 @@ Please follow [Backend Installation instructions](https://github.com/tensorturtl
 
 ```
 npm i cycarla-frontend
+```
+
+To update an existing installation to the latest version:
+```
+npm update cycarla-frontend
 ```
 
 Please follow [Frontend installation instructions](https://github.com/tensorturtle/cycarla/blob/main/cycarla-frontend/README.md)
