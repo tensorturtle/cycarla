@@ -1,6 +1,6 @@
 {
   "name": "cycarla-frontend",
-  "version": "0.1.12",
+  "version": "0.1.13",
   "private": false,
   "scripts": {
     "dev": "next dev -H 127.0.0.1 -p 3000",
@@ -14,7 +14,7 @@
     "@mui/material": "^5.15.6",
     "autoprefixer": "^10.4.17",
     "child_process": "^1.0.2",
-    "cycarla-frontend": "^0.1.12",
+    "cycarla-frontend": "^0.1.13",
     "next": "^14.1.0",
     "react": "^18",
     "react-dom": "^18",
