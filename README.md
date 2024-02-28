@@ -10,7 +10,7 @@
 
 Bring your Bluetooth-compatible indoor cycling accessories and liberate your indoor riding!
 
-![](readme_assets/screenshot-cycarla.png)
+![](readme_assets/cycarla-frontend-0.1.13-screenshot.png)
 
 # What you'll need
 
@@ -120,6 +120,10 @@ If you find CYCARLA valuable, please [make a donation!](https://buy.stripe.com/a
 Funds go towards purchasing equipment to work on compatibility, feature development, and to my self-preservation fund.
 
 # Fun Facts
+
+![](readme_assets/cycarla-frontend-0.1.13-screenshot.png)
+
+*Roaming about in CyCARLA - you can go anywhere!*
 
 CYCARLA began two years ago as a fun 'future of cycling vision' demo at the [Bike2CAV](https://www.bike2cav.at/en/home-2/) consortium presentation at Salzburg Research. Since then it has been my passion project.
 
