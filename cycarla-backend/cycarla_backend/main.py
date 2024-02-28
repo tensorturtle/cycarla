@@ -201,8 +201,8 @@ def game_loop(args, game_state: GameState, map):
                 elif gradient > 15:
                     gradient = 15
 
-                pycycling_input.ftms_desired_resistance = gradient * 200 / 15
-
+                pycycling_input.ftms_desired_resistance = (gradient * 200 / 15) # 200 is maximum resistance, 15 is maximum gradient
+                pycycling_input.ftms_desired_resistance += (reporter.simulation_live_data.speed * 1.3) # wind resistance estimate based on speed. Magic number empirically determined. Should be exposed to user as a preference.
 
             if i % 15 == 0: # don't create a GPX point for every frame, it messes up strava
                 # North-south offsets change the distance travelled, so stick to places close to the equator.

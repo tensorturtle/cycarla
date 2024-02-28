@@ -551,6 +551,11 @@ export default function Home() {
           <div className="text-lg font-medium text-white">Take Screenshot for Strava</div>
           {savedCarlaFrame == "" ? <div className="text-xs opacity-50 text-white">No screenshot - will use first frame for ride picture.</div>: <div className="text-xs opacity-50 text-white">Screenshot saved!</div>}
         </button>
+        
+        <div className="group rounded-lg border border-neutral-800 px-4 py-2 my-4 mx-2 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30">
+            <DropdownMenu availableMaps={availableMaps} onSelectMap={handleSelectMap} selectedMap={selectedMap} />
+            <div className="text-xs text-center opacity-50">Restart game to load map</div>
+        </div>
       </div>
     </main>
   )

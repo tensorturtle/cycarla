@@ -82,6 +82,8 @@ class ControlCarlaWithCyclingBLE():
         world.player.set_light_state(self._lights)
     
     def update_player_control(self, steer, throttle, brake, current_speed, wheel_speed, road_gradient):
+        # wheel_speed *= 0.85 # wheel speed as reported from smart trainer is too high
+        
         magic_number = 40
         sensitivity = math.exp(-current_speed/magic_number)
         # Steering sensitivity decreases with: y=e^(-x)

@@ -94,7 +94,7 @@ If you've finished the above installation steps, the full app can now be launche
 
 1. Launch CARLA simulator
   + Windows: Double click `CarlaUE4.exe`
-  + Ubuntu: Navigate to `CarlaUE4/Binaries/Linux` and execute: `./CarlaUE4-Linux-Shipping`
+  + Ubuntu: Navigate to where you installed carla (in the above example `~/carla`) and run `./CarlaUE4.sh`
 2. Launch Backend: `cycarla_backend`
 3. Launch Frontend: `npx cycarla-frontend`
 4. On your web browser, go to `localhost:3000`
