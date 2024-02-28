@@ -10,7 +10,7 @@
 
 Bring your Bluetooth-compatible indoor cycling accessories and liberate your indoor riding!
 
-![](readme_assets/cycarla-frontend-0.1.13-screenshot.png)
+![](readme_assets/town-15-riding.png)
 
 # What you'll need
 
@@ -121,7 +121,7 @@ Funds go towards purchasing equipment to work on compatibility, feature developm
 
 # Fun Facts
 
-![](readme_assets/cycarla-frontend-0.1.13-screenshot.png)
+![](readme_assets/riding-in-the-park.png)
 
 *Roaming about in CyCARLA - you can go anywhere!*
 
