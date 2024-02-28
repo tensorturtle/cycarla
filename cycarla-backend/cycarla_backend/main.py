@@ -1,4 +1,5 @@
 import time
+import os
 import asyncio
 import base64
 from argparse import Namespace
@@ -45,8 +46,20 @@ pycycling_input = None
 
 road_gradient_offset = 0.0 # user-selected +/-10 percent gradient offset for choosing default difficulty
 
-def game_loop(args, game_state: GameState):
-    global FIRST_GAME_LOOP
+def get_available_maps(args):
+    try:
+        client = carla.Client(args.host, args.port)
+        client.set_timeout(1000.0)
+        available_maps = client.get_available_maps()
+        # sort maps alphabetically
+        available_maps = sorted([m.split('/')[-1] for m in available_maps])
+        return available_maps
+    except Exception as e:
+        print(f"Error getting available maps: {e}")
+        return []
+
+def game_loop(args, game_state: GameState, map):
+    # global FIRST_GAME_LOOP
     pygame.init()
     pygame.font.init()
     world = None
@@ -56,7 +69,7 @@ def game_loop(args, game_state: GameState):
 
     gpx_creator = GPXCreator()
     gpx_creator.set_metadata_time(f"{time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())}")
-    gpx_creator.set_track_info("Test GPS Activity", "VirtualRide")
+    gpx_creator.set_track_info("Virtual Cycling Activity in CYCARLA", "VirtualRide")
 
     try:
         client = carla.Client(args.host, args.port)
@@ -64,10 +77,14 @@ def game_loop(args, game_state: GameState):
 
         sim_world = client.get_world()
 
-        if FIRST_GAME_LOOP:
-            # set map
-            client.load_world('Town01')
-            FIRST_GAME_LOOP = False
+        client.load_world(map) # calling load_world has the positive side effect of resetting the clock
+        # so that the elapsed time is conveninetly reset to 00:00:00 in the HUD
+        # if we comment out this line, the elapsed time will continue from the previous map
+
+        # if FIRST_GAME_LOOP:
+        #     # set map
+
+        #     FIRST_GAME_LOOP = False
         if args.sync:
             original_settings = sim_world.get_settings()
             settings = sim_world.get_settings()
@@ -224,6 +241,9 @@ def game_loop(args, game_state: GameState):
         with open(latest_gpx, 'r') as file:
             gpx_string = file.read()
             socketio.emit('finished_gpx_file', gpx_string)
+        
+        # delete the file
+        os.remove(latest_gpx)
 
 @socketio.on('bt_scan')
 def handle_bt_scan():
@@ -259,10 +279,13 @@ def handle_message(message):
     print('Received message: ' + message)
 
 @socketio.on('start_game')
-def handle_start_game():
-    socketio.start_background_task(start_game_loop)
+def handle_start_game(map):
+    socketio.start_background_task(start_game_loop, map=map)
     game_state.set_game_launched(True)
 
+@socketio.on('get_available_maps')
+def handle_get_available_maps():
+    socketio.emit('available_maps', get_available_maps(Namespace(host="127.0.0.1", port=2000)))
 
 @socketio.on('finish_game')
 def handle_finish_game():
@@ -285,7 +308,7 @@ def handle_added_gradient_percent(gradient_percent):
     road_gradient_offset = gradient_percent
 
 
-def start_game_loop():
+def start_game_loop(map="Town01"):
 
     args = Namespace(
     debug=False,
@@ -302,7 +325,7 @@ def start_game_loop():
     args.width, args.height = [int(x) for x in args.res.split('x')]
 
     print(f"Connecting to Carla simulation at {args.host}:{args.port}")
-    game_loop(args, game_state)
+    game_loop(args, game_state, map)
 
 def main():
     socketio.run(app, debug=True, host='0.0.0.0', port=9000)

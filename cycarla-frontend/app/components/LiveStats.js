@@ -11,10 +11,19 @@ export function roundOrPad(num, digits) {
     // Also add + if positive or zero
     const rounded = num.toFixed(digits);
     const padded = rounded.padStart(digits, "0");
+
+    let result = "";
+
     if (num >= 0) {
-      return "+" + padded;
+      result = "+" + padded;
+    } else {
+        result = padded;
     }
-    return padded;
+    if (result === "+0" || result === "-0") {
+        result = "0";
+    }
+    
+    return result;
   }
 
 export function PerformanceLiveStats({ server_fps, simulation_fps }) {

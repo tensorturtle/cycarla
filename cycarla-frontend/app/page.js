@@ -10,6 +10,7 @@ import { SteeringVisualizer } from './components/SteeringVisualizer';
 import { PerformanceLiveStats, KinematicsLiveStats, ControlLiveStats, noto_sans_mono, roundOrPad } from './components/LiveStats';
 import { BlackJPEGBase64 } from './components/BlackJPEG';
 import { SliderNumerical } from './components/SliderNumerical';
+import DropdownMenu from './components/DropDown';
 
 const requestBTScan = () => {
   console.log("Requesting BT Scan")
@@ -27,6 +28,13 @@ export default function Home() {
   const lastSteeringAngleCall = useRef(null);
   const lastPowerCall = useRef(null);
   const btGreenTimeout = useRef(null);
+
+  // available maps
+  const [availableMaps, setAvailableMaps] = useState([])
+  const [selectedMap, setSelectedMap] = useState('Town01');
+  const handleSelectMap = (map) => {
+    setSelectedMap(map);
+  };
 
   // bluetooth connection names
   const [ sterzoDevice, setSterzoDevice] = useState("")
@@ -87,8 +95,6 @@ export default function Home() {
   const [gear, setGear] = useState(0.0);
   const [roadGradient, setRoadGradient] = useState(0.0);
 
-  const [frontendElapsedTime, setFrontendElapsedTime] = useState(0.0); // frontend-only elapsed time that zeros out when game is finished, because the backend elapsed time is not reset.
-
   function parseSimulationLiveData(message) {
     // Parse the received JSON data
     const {
@@ -145,6 +151,11 @@ export default function Home() {
     socket.emit('finish_game')
   }, [])
 
+  // On startup, request the available maps
+  useEffect(() => {
+    socket.emit('get_available_maps')
+  }, [])
+
   // Websocket handlers
   useEffect(() => {
     function onConnect() {
@@ -199,9 +210,6 @@ export default function Home() {
     function onGameLaunched(message) {
       setIsGameOn(true);
       setAwaitingGameStart(false);
-
-      // Reset the frontend elapsed time
-      setFrontendElapsedTime(0.0);
 
       // Reset the saved frame
       setSavedCarlaFrame("");
@@ -299,6 +307,15 @@ export default function Home() {
       URL.revokeObjectURL(url);
     }
 
+    function onAvailablemaps(message) {
+      // maps is in the form of a list of strings
+      // that looks something like 
+      // [ "/Game/Carla/Maps/Town02", … ]
+      // we want to remove the "/Game/Carla/Maps/" part and just keep the map name
+      const maps = message.map((map) => map.replace("/Game/Carla/Maps/", ""))
+      setAvailableMaps(maps)
+    }
+
     socket.on('connect', onConnect);
     socket.on('disconnect', onDisconnect);
     socket.on('heartbeat', onHeartbeat);
@@ -316,6 +333,7 @@ export default function Home() {
     socket.on('reporter_error', onReporterError)
     socket.on('autopilot_actual', onAutopilotActual)
     socket.on('finished_gpx_file', onFinishedGpx)
+    socket.on('available_maps', onAvailablemaps)
     
 
     return () => {
@@ -338,13 +356,14 @@ export default function Home() {
       socket.off('reporter_error', onReporterError)
       socket.off('autopilot_actual', onAutopilotActual)
       socket.off('finished_gpx_file', onFinishedGpx)
+      socket.off('available_maps', onAvailablemaps)
     }
   }, [])
 
   const handleStartGame = () => {
     setAwaitingGameStart(false)
     console.log("Requesting starting Game")
-    socket.emit('start_game')
+    socket.emit('start_game', selectedMap)
   }
 
   const handleFinishGame = () => {
@@ -431,11 +450,17 @@ export default function Home() {
           </button>
 
         <div className="group rounded-lg border border-neutral-800 hover:border-neutral-800 bg-neutral-0 my-4 mx-2 hover:border-gray-300">
-          <button disabled={!awaitingGameStart} onClick={handleStartGame} className="rounded-lg border border-neutral-800 hover:border-green-500 hover:border-green-800 hover:bg-green-900/20 text-green-600 font-bold px-6 py-3 mx-2 my-2 rounded">
+          <button disabled={!awaitingGameStart} onClick={handleStartGame} className="w-48 rounded-lg border border-neutral-800 hover:border-green-500 hover:border-green-800 hover:bg-green-900/20 px-1 py-3 mx-2 my-2 rounded">
+            <div className="text-green-600 font-bold ">
               Start
+            </div>
+            <div className="text-xs text-white opacity-50">New game</div>
           </button>
-          <button onClick={handleFinishGame} className="rounded-lg border border-neutral-800 hover:border-red-500 hover:border-red-800 hover:bg-red-900/20 text-red-600 font-bold px-6 py-3 mx-2 my-2 rounded">
-            Finish
+          <button onClick={handleFinishGame} className="w-48 rounded-lg border border-neutral-800 hover:border-red-500 hover:border-red-800 hover:bg-red-900/20 px-1 py-3 mx-2 my-2 rounded">
+            <div className="text-red-600 font-bold">
+              Finish
+            </div>
+            <div className="text-xs text-white opacity-50">Download GPX and screenshot</div>
           </button>
         </div>
 
@@ -455,22 +480,22 @@ export default function Home() {
                 <SteeringVisualizer steeringAngle={steeringAngle} />
                 <div className="flex flex-col justify-center items-center">
                   {/* Adjusted for power display */}
-                  <div className="text-6xl font-bold w-32 text-right">
+                  <div className="text-5xl font-bold w-48 text-right">
                     {power} W
                   </div>
                   {/* Adjusted for cadence display */}
-                  <div className="text-2xl font-bold w-32 text-right">
+                  <div className="text-2xl font-bold w-48 text-right">
                     {cadence} RPM
                   </div>
                 </div>
                 <div className="flex flex-col justify-center items-center">
                   {/* Adjusted for speed display */}
                   <div className="text-2xl font-bold w-32 text-right">
-                    {roundOrPad(speed, 1)} km/h
+                    {roundOrPad(speed, 0)} km/h
                   </div>
                   {/* Adjusted for gradient display */}
                   <div className="text-2xl font-bold w-32 text-right">
-                    {roundOrPad(roadGradient, 1)} %
+                    {roundOrPad(roadGradient, 0)} %
                   </div>
                   {/* Adjusted for time elapsed display, assuming it's a string like "00:00:00" */}
                   <div className="text-2xl font-bold w-32 text-right">
@@ -506,12 +531,17 @@ export default function Home() {
         </div>
       </div>
 
-      <div className="pb-32 pt-2 gap-2 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-3 lg:text-left">
+      <div className="pb-32 pt-2 gap-2 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
         <button 
             onClick={changeCamera}
             className="group rounded-lg border border-neutral-800 px-4 py-2 my-4 mx-2 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30"
         >
-          <div className="text-lg font-medium">Change Camera</div>
+          <div className="text-lg font-bold">Change Camera</div>
+        </button>
+
+        <button onClick={saveFrame} className="group rounded-lg border border-neutral-800 px-4 py-2 my-4 mx-2 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30">
+          <div className="text-lg font-bold">Take Screenshot</div>
+          {/* {savedCarlaFrame == "" ? <div className="text-xs opacity-50">No screenshot - will use first frame for ride picture.</div>: <div className="text-xs opacity-50">Screenshot saved!</div>} */}
         </button>
 
         <div className="group rounded-lg border border-neutral-800 px-4 py-2 my-4 mx-2 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30">
@@ -522,10 +552,12 @@ export default function Home() {
           <div className="text-lg font-medium">Bluetooth Help</div>
         </button> */}
 
-        <button onClick={saveFrame} className="group rounded-lg border border-neutral-800 px-4 py-2 my-4 mx-2 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30">
-          <div className="text-lg font-medium">Take Screenshot for Strava</div>
-          {savedCarlaFrame == "" ? <div className="text-xs opacity-50">No screenshot - will use first frame for ride picture.</div>: <div className="text-xs opacity-50">Screenshot saved!</div>}
-        </button>
+
+
+        <div className="flex flex-col items-center group rounded-lg border border-neutral-800 px-4 py-2 my-4 mx-2">
+          <DropdownMenu availableMaps={availableMaps} onSelectMap={handleSelectMap} selectedMap={selectedMap} />
+          <div className="text-xs text-center opacity-50">Restart game to load map</div>
+        </div>
       </div>
     </main>
   )
