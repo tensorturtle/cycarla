@@ -12,7 +12,7 @@ const DropdownMenu = ({ availableMaps, onSelectMap, selectedMap }) => {
 
   return (
     <div className="relative inline-block text-left">
-      <button onClick={toggleDropdown} className="group rounded-lg border border-neutral-800 px-4 py-1 my-2 mx-2 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30">
+      <button onClick={toggleDropdown} className="group rounded-lg border border-neutral-800 px-4 py-1 my-2 mx-2 transition-colors hover:border-gray-300 hover:bg-gray-100/30 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30">
         <div className="text-lg font-medium flex items-center justify-between">
             <div className="flex flex-col items-center">
                 <p>Selected Map</p>
