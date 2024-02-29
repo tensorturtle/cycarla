@@ -5,7 +5,7 @@ import base64
 from argparse import Namespace
 
 import cv2
-from flask import Flask
+from flask import Flask, Response
 from flask_cors import CORS
 from flask_socketio import SocketIO
 
@@ -17,6 +17,8 @@ from cycarla_backend.gpx import GPXCreator
 # hide pygame window
 # import os
 # os.environ["SDL_VIDEODRIVER"] = "dummy"
+
+# frame = None # carla simulation frame. It is global because it is updated in the game loop which is started by websocket and sent through MJPEG stream from a flask route
 
 app = Flask(__name__)
 socketio = SocketIO(app, cors_allowed_origins="*")
@@ -59,6 +61,7 @@ def get_available_maps(args):
         return []
 
 def game_loop(args, game_state: GameState, map):
+    global frame
     # global FIRST_GAME_LOOP
     pygame.init()
     pygame.font.init()
@@ -142,10 +145,9 @@ def game_loop(args, game_state: GameState, map):
                 socketio.emit('game_finished', 'true')
                 break
 
-            if args.sync:
-                sim_world.tick()
 
-            clock.tick_busy_loop(59)
+
+            # clock.tick_busy_loop(59)
 
             if game_state.autopilot != prior_autopilot:
                 # switching between manual and autopilot
@@ -175,13 +177,29 @@ def game_loop(args, game_state: GameState, map):
             pygame.display.flip()
 
 
+            if args.sync:
+                sim_world.tick() # this is the synchronous tick, which tells carla to advance the simulation by one tick while we process the current tick
+
+
             # Send game screen as image over socketio to frontend
             # 1280x720 is typically around 10MB/s
+
             screen_surface = pygame.display.get_surface()
+            # width, height = screen_surface.get_size()
+            # small_size = (int(width * scale_factor), int(height * scale_factor))
+
+            # # Directly convert the surface to a BGR numpy array (if color conversion is needed)
             screen_buffer = pygame.surfarray.array3d(screen_surface)
-            screen_buffer = np.transpose(screen_buffer, (1, 0, 2))
             screen_buffer = cv2.cvtColor(screen_buffer, cv2.COLOR_RGB2BGR)
-            _, buffer = cv2.imencode('.jpg', screen_buffer)
+            screen_buffer = cv2.rotate(screen_buffer, cv2.ROTATE_90_CLOCKWISE)
+            # mirror horizontally
+            screen_buffer = cv2.flip(screen_buffer, 1)
+
+            # # Encode to JPEG with adjusted quality
+            jpeg_quality = 90
+            _, buffer = cv2.imencode('.jpg', screen_buffer, [int(cv2.IMWRITE_JPEG_QUALITY), jpeg_quality])
+
+            # Convert to base64
             jpg_as_text = base64.b64encode(buffer).decode()
             socketio.emit('carla_frame', jpg_as_text)
 
@@ -216,6 +234,7 @@ def game_loop(args, game_state: GameState, map):
                     live_control_state.watts or None, # uses OR short-circuiting
                     live_control_state.cadence or None,
                 )
+
 
     finally:
         gpx_creator.save_to_file(f"simulated_gpx_{time.strftime('%Y-%m-%dT%H:%M:%SZ', time.gmtime())}.gpx")
@@ -320,15 +339,27 @@ def start_game_loop(map="Town01"):
     generation='2',
     rolename='hero',
     gamma=2.2,
-    sync=False,
+    sync=True, # running in sync mode ensures low CPU usage. Without sync, Carla sim runs ahead of this client, and the this server also consumes 3x more CPU.
     )
     args.width, args.height = [int(x) for x in args.res.split('x')]
 
     print(f"Connecting to Carla simulation at {args.host}:{args.port}")
     game_loop(args, game_state, map)
 
+# def gather_img():
+#     while True:
+#         global frame
+#         if frame is None:
+#             time.sleep(0.1)
+#             continue
+#         yield (b'--frame\r\nContent-Type: image/jpeg\r\n\r\n' + frame.tobytes() + b'\r\n')
+
+# @app.route("/mjpeg")
+# def mjpeg():
+#     return Response(gather_img(), mimetype='multipart/x-mixed-replace; boundary=frame')
+
 def main():
-    socketio.run(app, debug=True, host='0.0.0.0', port=9000)
+    socketio.run(app, debug=False, host='0.0.0.0', port=9000)
 
 if __name__ == '__main__':
     main()

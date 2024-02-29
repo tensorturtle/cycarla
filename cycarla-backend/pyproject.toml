@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "cycarla-backend"
-version = "0.1.7"
+version = "0.1.8"
 description = "Backend for Cycarla"
 authors = ["tensorturtle <tensorturtle@gmail.com>"]
 readme = "README.md"
@@ -20,6 +20,9 @@ opencv-python = "^4.8.1.78"
 flask-cors = "^4.0.0"
 pycycling = "^0.3.3"
 carla = "^0.9.15"
+
+[tool.poetry.group.dev.dependencies]
+scalene = "^1.5.35"
 
 [build-system]
 requires = ["poetry-core"]

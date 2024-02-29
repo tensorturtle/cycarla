@@ -470,9 +470,8 @@ export default function Home() {
       
       {/* Main game screen: Carla frame with HUD stats */}
       <div className="relative pt-16 lg:pt-0">
-        <div className="relative">
-          <img src={`data:image/jpeg;base64,${carlaFrame}`} />
-
+        <div className="relative w-full">
+          <img src={`data:image/jpeg;base64,${carlaFrame}`} class="w-full h-auto" />
           {/* Simplified HUD stats (power, pedaling RPM, speed, gradient, time elapsed) */}
           <div className="absolute top-0 right-0 text-white">
             <div className="m-2 px-4 py-2 relative flex px-10 justify-center backdrop-blur-md w-auto rounded-xl bg-black/50">

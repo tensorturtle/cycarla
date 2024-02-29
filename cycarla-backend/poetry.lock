@@ -111,6 +111,17 @@ files = [
 colorama = {version = "*", markers = "platform_system == \"Windows\""}
 
 [[package]]
+name = "cloudpickle"
+version = "3.0.0"
+description = "Pickler class to extend the standard pickle.Pickler functionality"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "cloudpickle-3.0.0-py3-none-any.whl", hash = "sha256:246ee7d0c295602a036e86369c77fecda4ab17b506496730f2f576d9016fd9c7"},
+    {file = "cloudpickle-3.0.0.tar.gz", hash = "sha256:996d9a482c6fb4f33c1a35335cf8afd065d2a56e973270364840712d9131a882"},
+]
+
+[[package]]
 name = "colorama"
 version = "0.4.6"
 description = "Cross-platform colored terminal text."
@@ -258,6 +269,30 @@ MarkupSafe = ">=2.0"
 i18n = ["Babel (>=2.7)"]
 
 [[package]]
+name = "markdown-it-py"
+version = "3.0.0"
+description = "Python port of markdown-it. Markdown parsing, done right!"
+optional = false
+python-versions = ">=3.8"
+files = [
+    {file = "markdown-it-py-3.0.0.tar.gz", hash = "sha256:e3f60a94fa066dc52ec76661e37c851cb232d92f9886b15cb560aaada2df8feb"},
+    {file = "markdown_it_py-3.0.0-py3-none-any.whl", hash = "sha256:355216845c60bd96232cd8d8c40e8f9765cc86f46880e43a8fd22dc1a1a8cab1"},
+]
+
+[package.dependencies]
+mdurl = ">=0.1,<1.0"
+
+[package.extras]
+benchmarking = ["psutil", "pytest", "pytest-benchmark"]
+code-style = ["pre-commit (>=3.0,<4.0)"]
+compare = ["commonmark (>=0.9,<1.0)", "markdown (>=3.4,<4.0)", "mistletoe (>=1.0,<2.0)", "mistune (>=2.0,<3.0)", "panflute (>=2.3,<3.0)"]
+linkify = ["linkify-it-py (>=1,<3)"]
+plugins = ["mdit-py-plugins"]
+profiling = ["gprof2dot"]
+rtd = ["jupyter_sphinx", "mdit-py-plugins", "myst-parser", "pyyaml", "sphinx", "sphinx-copybutton", "sphinx-design", "sphinx_book_theme"]
+testing = ["coverage", "pytest", "pytest-cov", "pytest-regressions"]
+
+[[package]]
 name = "markupsafe"
 version = "2.1.3"
 description = "Safely add untrusted strings to HTML/XML markup."
@@ -327,6 +362,17 @@ files = [
 ]
 
 [[package]]
+name = "mdurl"
+version = "0.1.2"
+description = "Markdown URL utilities"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "mdurl-0.1.2-py3-none-any.whl", hash = "sha256:84008a41e51615a49fc9966191ff91509e3c40b939176e643fd50a5c2196b8f8"},
+    {file = "mdurl-0.1.2.tar.gz", hash = "sha256:bb413d29f5eea38f31dd4754dd7377d4465116fb207585f97bf925588687c1ba"},
+]
+
+[[package]]
 name = "numpy"
 version = "1.22.0"
 description = "NumPy is the fundamental package for array computing with Python."
@@ -381,6 +427,34 @@ numpy = [
     {version = ">=1.17.0", markers = "python_version >= \"3.7\""},
     {version = ">=1.17.3", markers = "python_version >= \"3.8\""},
 ]
+
+[[package]]
+name = "psutil"
+version = "5.9.8"
+description = "Cross-platform lib for process and system monitoring in Python."
+optional = false
+python-versions = ">=2.7, !=3.0.*, !=3.1.*, !=3.2.*, !=3.3.*, !=3.4.*, !=3.5.*"
+files = [
+    {file = "psutil-5.9.8-cp27-cp27m-macosx_10_9_x86_64.whl", hash = "sha256:26bd09967ae00920df88e0352a91cff1a78f8d69b3ecabbfe733610c0af486c8"},
+    {file = "psutil-5.9.8-cp27-cp27m-manylinux2010_i686.whl", hash = "sha256:05806de88103b25903dff19bb6692bd2e714ccf9e668d050d144012055cbca73"},
+    {file = "psutil-5.9.8-cp27-cp27m-manylinux2010_x86_64.whl", hash = "sha256:611052c4bc70432ec770d5d54f64206aa7203a101ec273a0cd82418c86503bb7"},
+    {file = "psutil-5.9.8-cp27-cp27mu-manylinux2010_i686.whl", hash = "sha256:50187900d73c1381ba1454cf40308c2bf6f34268518b3f36a9b663ca87e65e36"},
+    {file = "psutil-5.9.8-cp27-cp27mu-manylinux2010_x86_64.whl", hash = "sha256:02615ed8c5ea222323408ceba16c60e99c3f91639b07da6373fb7e6539abc56d"},
+    {file = "psutil-5.9.8-cp27-none-win32.whl", hash = "sha256:36f435891adb138ed3c9e58c6af3e2e6ca9ac2f365efe1f9cfef2794e6c93b4e"},
+    {file = "psutil-5.9.8-cp27-none-win_amd64.whl", hash = "sha256:bd1184ceb3f87651a67b2708d4c3338e9b10c5df903f2e3776b62303b26cb631"},
+    {file = "psutil-5.9.8-cp36-abi3-macosx_10_9_x86_64.whl", hash = "sha256:aee678c8720623dc456fa20659af736241f575d79429a0e5e9cf88ae0605cc81"},
+    {file = "psutil-5.9.8-cp36-abi3-manylinux_2_12_i686.manylinux2010_i686.manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:8cb6403ce6d8e047495a701dc7c5bd788add903f8986d523e3e20b98b733e421"},
+    {file = "psutil-5.9.8-cp36-abi3-manylinux_2_12_x86_64.manylinux2010_x86_64.manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:d06016f7f8625a1825ba3732081d77c94589dca78b7a3fc072194851e88461a4"},
+    {file = "psutil-5.9.8-cp36-cp36m-win32.whl", hash = "sha256:7d79560ad97af658a0f6adfef8b834b53f64746d45b403f225b85c5c2c140eee"},
+    {file = "psutil-5.9.8-cp36-cp36m-win_amd64.whl", hash = "sha256:27cc40c3493bb10de1be4b3f07cae4c010ce715290a5be22b98493509c6299e2"},
+    {file = "psutil-5.9.8-cp37-abi3-win32.whl", hash = "sha256:bc56c2a1b0d15aa3eaa5a60c9f3f8e3e565303b465dbf57a1b730e7a2b9844e0"},
+    {file = "psutil-5.9.8-cp37-abi3-win_amd64.whl", hash = "sha256:8db4c1b57507eef143a15a6884ca10f7c73876cdf5d51e713151c1236a0e68cf"},
+    {file = "psutil-5.9.8-cp38-abi3-macosx_11_0_arm64.whl", hash = "sha256:d16bbddf0693323b8c6123dd804100241da461e41d6e332fb0ba6058f630f8c8"},
+    {file = "psutil-5.9.8.tar.gz", hash = "sha256:6be126e3225486dff286a8fb9a06246a5253f4c7c53b475ea5f5ac934e64194c"},
+]
+
+[package.extras]
+test = ["enum34", "ipaddress", "mock", "pywin32", "wmi"]
 
 [[package]]
 name = "pycycling"
@@ -460,6 +534,32 @@ files = [
     {file = "pygame-2.5.2-pp39-pypy39_pp73-manylinux_2_17_i686.manylinux2014_i686.whl", hash = "sha256:68c4e8e60b725ffc7a6c6ecd9bb5fcc5ed2d6e0e2a2c4a29a8454856ef16ad63"},
     {file = "pygame-2.5.2-pp39-pypy39_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:1f3849f97372a3381c66955f99a0d58485ccd513c3d00c030b869094ce6997a6"},
     {file = "pygame-2.5.2.tar.gz", hash = "sha256:c1b89eb5d539e7ac5cf75513125fb5f2f0a2d918b1fd6e981f23bf0ac1b1c24a"},
+]
+
+[[package]]
+name = "pygments"
+version = "2.17.2"
+description = "Pygments is a syntax highlighting package written in Python."
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "pygments-2.17.2-py3-none-any.whl", hash = "sha256:b27c2826c47d0f3219f29554824c30c5e8945175d888647acd804ddd04af846c"},
+    {file = "pygments-2.17.2.tar.gz", hash = "sha256:da46cec9fd2de5be3a8a784f434e4c4ab670b4ff54d605c4c2717e9d49c4c367"},
+]
+
+[package.extras]
+plugins = ["importlib-metadata"]
+windows-terminal = ["colorama (>=0.4.6)"]
+
+[[package]]
+name = "pynvml"
+version = "11.4.1"
+description = "Python Bindings for the NVIDIA Management Library"
+optional = false
+python-versions = ">=3.6"
+files = [
+    {file = "pynvml-11.4.1-py3-none-any.whl", hash = "sha256:d27be542cd9d06558de18e2deffc8022ccd7355bc7382255d477038e7e424c6c"},
+    {file = "pynvml-11.4.1.tar.gz", hash = "sha256:b2e4a33b80569d093b513f5804db0c7f40cfc86f15a013ae7a8e99c5e175d5dd"},
 ]
 
 [[package]]
@@ -576,6 +676,57 @@ client = ["requests (>=2.21.0)", "websocket-client (>=0.54.0)"]
 docs = ["sphinx"]
 
 [[package]]
+name = "rich"
+version = "13.7.1"
+description = "Render rich text, tables, progress bars, syntax highlighting, markdown and more to the terminal"
+optional = false
+python-versions = ">=3.7.0"
+files = [
+    {file = "rich-13.7.1-py3-none-any.whl", hash = "sha256:4edbae314f59eb482f54e9e30bf00d33350aaa94f4bfcd4e9e3110e64d0d7222"},
+    {file = "rich-13.7.1.tar.gz", hash = "sha256:9be308cb1fe2f1f57d67ce99e95af38a1e2bc71ad9813b0e247cf7ffbcc3a432"},
+]
+
+[package.dependencies]
+markdown-it-py = ">=2.2.0"
+pygments = ">=2.13.0,<3.0.0"
+
+[package.extras]
+jupyter = ["ipywidgets (>=7.5.1,<9)"]
+
+[[package]]
+name = "scalene"
+version = "1.5.35"
+description = "Scalene: A high-resolution, low-overhead CPU, GPU, and memory profiler for Python with AI-powered optimization suggestions"
+optional = false
+python-versions = ">=3.8,!=3.11.0"
+files = [
+    {file = "scalene-1.5.35-cp310-cp310-macosx_12_0_universal2.whl", hash = "sha256:d8c1c6afb414f8472bc94be7e5bc5a5939269cbc4d07caa9ff2e5eb632c98d69"},
+    {file = "scalene-1.5.35-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:3ade88d639e8696da7e0cee56883f844c903cc31c4061aac3031940f0291c112"},
+    {file = "scalene-1.5.35-cp310-cp310-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:6e582ad064c2c5c56a907d53ad06520a1e2083e3111155fbc2d2b22d3c4d7cdd"},
+    {file = "scalene-1.5.35-cp310-cp310-win_amd64.whl", hash = "sha256:baecd589931b89c202c77470c9710572d2d581b18f957b9db2c3ef5c941a82b0"},
+    {file = "scalene-1.5.35-cp311-cp311-macosx_12_0_universal2.whl", hash = "sha256:73ce036ab170d9ad7cd70ff026dd44b5224a36527968cdeb30fabe47fe473da6"},
+    {file = "scalene-1.5.35-cp311-cp311-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:21c016e7d97ce329c0e78e56b008863d08ab6cc96dfdccc1f9bbe2924a0dcfb7"},
+    {file = "scalene-1.5.35-cp311-cp311-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:7c8c784fa3ad85043de6b445ace62a6dd779ba6374a717e427e0f78a4977afb5"},
+    {file = "scalene-1.5.35-cp38-cp38-macosx_12_0_universal2.whl", hash = "sha256:ea084e5b340cb86ecd9b77bb27985494fbcb1c660c91d1b3b8562baee4017e41"},
+    {file = "scalene-1.5.35-cp38-cp38-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:fa024c5855359256e15dac8912ec80243e38a37d2fa329381670442fb78052d2"},
+    {file = "scalene-1.5.35-cp38-cp38-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:74d64ab35a80e46895481148b7964dceb29229b3778bd017ec6548f5e8eb0071"},
+    {file = "scalene-1.5.35-cp38-cp38-win_amd64.whl", hash = "sha256:dd9a823dc17ca75aed70a891167056add24a3b89fa82f31b55ff8f69c10b116a"},
+    {file = "scalene-1.5.35-cp39-cp39-macosx_12_0_universal2.whl", hash = "sha256:522baa9bb4e2149799d60c9612c49c0286438c3cd70ebf84117a8283f03c0fc9"},
+    {file = "scalene-1.5.35-cp39-cp39-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:2a832460298f46673f61e509912053ccb23cdec8bfd345607baf3034041f5963"},
+    {file = "scalene-1.5.35-cp39-cp39-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl", hash = "sha256:36352ffba6e08d3271b166bfe52c1c91df299237c48bdfbc0c10308acb133af9"},
+    {file = "scalene-1.5.35-cp39-cp39-win_amd64.whl", hash = "sha256:c00f5bd697741e0c9e25a52831264ceed30795c848280f6968a1211a2510dfe0"},
+    {file = "scalene-1.5.35.tar.gz", hash = "sha256:decd0a374e918af08de06e7f2d97feafb1ad0252b0a91b99c14b6b6364f605ec"},
+]
+
+[package.dependencies]
+cloudpickle = ">=2.2.1"
+Jinja2 = ">=3.0.3"
+psutil = ">=5.9.2"
+pynvml = ">=11.0.0,<11.5"
+rich = ">=10.7.0"
+wheel = ">=0.36.1"
+
+[[package]]
 name = "simple-websocket"
 version = "1.0.0"
 description = "Simple WebSocket server and client for Python"
@@ -621,6 +772,20 @@ MarkupSafe = ">=2.1.1"
 watchdog = ["watchdog (>=2.3)"]
 
 [[package]]
+name = "wheel"
+version = "0.42.0"
+description = "A built-package format for Python"
+optional = false
+python-versions = ">=3.7"
+files = [
+    {file = "wheel-0.42.0-py3-none-any.whl", hash = "sha256:177f9c9b0d45c47873b619f5b650346d632cdc35fb5e4d25058e09c9e581433d"},
+    {file = "wheel-0.42.0.tar.gz", hash = "sha256:c45be39f7882c9d34243236f2d63cbd58039e360f85d0913425fbd7ceea617a8"},
+]
+
+[package.extras]
+test = ["pytest (>=6.0.0)", "setuptools (>=65)"]
+
+[[package]]
 name = "wsproto"
 version = "1.2.0"
 description = "WebSockets state-machine based protocol implementation"
@@ -637,4 +802,4 @@ h11 = ">=0.9.0,<1"
 [metadata]
 lock-version = "2.0"
 python-versions = "~3.10.0"
-content-hash = "4602cef9d30cb93194a06a4584fbfef28e40dae769cf1ee0a9ada37c508cdb69"
+content-hash = "0190632da5004a9f8cb406bdf87f2ead11b9e91c76aad9b640f84addf176cb85"
