@@ -1,6 +1,6 @@
 {
   "name": "cycarla-frontend",
-  "version": "0.1.13",
+  "version": "0.1.14",
   "private": false,
   "scripts": {
     "dev": "next dev -H 127.0.0.1 -p 3000",
