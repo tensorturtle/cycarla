@@ -22,10 +22,9 @@ Bring your Bluetooth-compatible indoor cycling accessories and liberate your ind
 
 # Installation
 
-To run CYCARLA, three components need to be installed:
-1. CARLA simulator
-2. Backend
-3. Frontend
+CyCARLA requires two separate programs to be installed:
+1. CARLA simulator (used without modification from official CARLA)
+2. CyCARLA App (this repository)
 
 Please carefully follow the directions below for each component.
 
@@ -62,32 +61,6 @@ Now, we can run the binary. Be patient when it doesn't respond at launch.
 ~/carla/CarlaUE4.sh
 ```
 
-## Install Backend
-
-```
-pipx install cycarla-backend
-```
-To update an existing installation to the latest version:
-```
-pipx upgrade cycarla-backend
-```
-
-Please follow [Backend Installation instructions](https://github.com/tensorturtle/cycarla/blob/main/cycarla-backend/README.md)
-
-
-## Install Frontend
-
-```
-npm i cycarla-frontend
-```
-
-To update an existing installation to the latest version:
-```
-npm update cycarla-frontend
-```
-
-Please follow [Frontend installation instructions](https://github.com/tensorturtle/cycarla/blob/main/cycarla-frontend/README.md)
-
 # Run CYCARLA
 
 If you've finished the above installation steps, the full app can now be launched:
@@ -95,9 +68,7 @@ If you've finished the above installation steps, the full app can now be launche
 1. Launch CARLA simulator
   + Windows: Double click `CarlaUE4.exe`
   + Ubuntu: Navigate to where you installed carla (in the above example `~/carla`) and run `./CarlaUE4.sh`
-2. Launch Backend: `cycarla_backend`
-3. Launch Frontend: `npx cycarla-frontend`
-4. On your web browser, go to `localhost:3000`
+2. Launch CyCARLA App
 
 # Open Source
 
