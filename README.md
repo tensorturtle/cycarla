@@ -70,6 +70,38 @@ If you've finished the above installation steps, the full app can now be launche
   + Ubuntu: Navigate to where you installed carla (in the above example `~/carla`) and run `./CarlaUE4.sh`
 2. Launch CyCARLA App
 
+# CyCARLA App Information
+
+We use [Tauri 2.0](https://v2.tauri.app/) with 
++ React
++ Typescript
++ Deno 2.0 as package manager and runtime.
++ Python as backend
+
+## Prerequisites
+
++ Install [Rust](https://www.rust-lang.org/tools/install)
++ Install [Deno](https://docs.deno.com/runtime/#install-deno)
+
+
+## Development
+
+Navigate to `cycarla-app` directory and run `deno install`:
+```
+cd cycarla-app
+```
+```
+deno install
+```
+Then, run app in development mode: 
+```
+deno task tauri dev
+```
+
+Navigate to http://localhost:1420 to see the app in a browser.
+
+
+This will compile the rust binary and show you an app.
 # Open Source
 
 ![project-structure-diagram](graphics/CyCARLA-figmadiagram-1.png)
