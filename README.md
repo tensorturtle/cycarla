@@ -80,6 +80,7 @@ We use [Tauri 2.0](https://v2.tauri.app/) with
 
 ## Prerequisites
 
++ (Only on Linux), install [some packages](https://v2.tauri.app/start/prerequisites/#linux)
 + Install [Rust](https://www.rust-lang.org/tools/install)
 + Install [Deno](https://docs.deno.com/runtime/#install-deno)
 
