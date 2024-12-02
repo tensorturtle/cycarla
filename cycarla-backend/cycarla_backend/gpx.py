@@ -1,5 +1,6 @@
 import xml.etree.ElementTree as ET
 from xml.dom import minidom
+import re
 
 class GPXCreator:
     def __init__(self, creator_name="CycarlaGPX"):
@@ -54,9 +55,13 @@ class GPXCreator:
         rough_string = ET.tostring(self.gpx, 'utf-8')
         reparsed = minidom.parseString(rough_string)
         return reparsed.toprettyxml(indent="  ")
+    
+    def sanitize_file_name(self, file_name):
+        # Replace invalid characters on windows with an underscore
+        return re.sub(r'[<>:"/\\|?*]', '_', file_name)
 
     def save_to_file(self, file_path):
-        with open(file_path, "w") as file:
+        with open(self.sanitize_file_name(file_path), "w") as file:
             file.write(self.to_string())
 if __name__ == "__main__":
     # Example of using the class

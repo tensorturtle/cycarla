@@ -91,9 +91,8 @@ def game_loop(args, game_state: GameState, map):
         if args.sync:
             original_settings = sim_world.get_settings()
             settings = sim_world.get_settings()
-            if not settings.synchronous_mode:
-                settings.synchronous_mode = True
-                # settings.fixed_delta_seconds = 0.05 # commenting it out fixes issue where the clocks are not 1:1
+
+            settings.synchronous_mode = True
             sim_world.apply_settings(settings)
 
             traffic_manager = client.get_trafficmanager()
