@@ -1,10 +1,10 @@
-import { Noto_Sans_Mono } from 'next/font/google'
+// import { Noto_Sans_Mono } from 'next/font/google'
 
 // If loading a variable font, you don't need to specify the font weight
-export const noto_sans_mono = Noto_Sans_Mono({
-    subsets: ['latin'],
-    display: 'swap',
-  })
+// export const noto_sans_mono = Noto_Sans_Mono({
+//     subsets: ['latin'],
+//     display: 'swap',
+//   })
 
 export function roundOrPad(num, digits) {
     // Round to the given number of digits, or pad with zeros to be the given number of digits and return as string.

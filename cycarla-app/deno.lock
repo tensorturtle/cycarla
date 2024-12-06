@@ -608,8 +608,13 @@
         "npm:@types/react-dom@^18.2.7",
         "npm:@types/react@^18.2.15",
         "npm:@vitejs/plugin-react@^4.2.1",
+        "npm:autoprefixer@^10.4.20",
+        "npm:axios@^1.7.9",
+        "npm:mui@^0.0.1",
+        "npm:postcss@^8.4.49",
         "npm:react-dom@^18.2.0",
         "npm:react@^18.2.0",
+        "npm:tailwindcss@^3.4.16",
         "npm:typescript@^5.2.2",
         "npm:vite@^5.3.1"
       ]

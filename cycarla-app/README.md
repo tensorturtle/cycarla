@@ -1,6 +1,18 @@
-# Tauri + React + Typescript
+# Develop
 
-This template should help get you started developing with Tauri, React and Typescript in Vite.
+```
+npm install
+```
+
+Launch in browser:
+```
+npm run dev
+```
+
+Launch in standalone app:
+```
+npm run tauri dev
+```
 
 ## Recommended IDE Setup
 
