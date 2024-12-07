@@ -12,9 +12,6 @@ In 2023, CyCARLA was officially adopted and re-written by [Velovision Labs](http
 
 This project is a free, open source fork maintained by [tensorturtle](https://github.com/tensorturtle), the original author of CyCARLA, with the goal of creating a superior, free, and modifiable alternative to indoor cycling games like Zwift.
 
-Since December 2023, hundreds of kilometers have been ridden in CyCARLA.
-
-
 ![](readme_assets/town-15-riding.png)
 
 # Requirements
