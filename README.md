@@ -1,37 +1,43 @@
 ![banner](logo/cycarla-github-banner.png)
 
-# Librate indoor cycling!
+# Introduction
 
-**Freedom is why we ride.** CYCARLA is about:
+CyCARLA is an open source cycling simulator. It pairs with smart indoor cycling accessories to offer the highest degree of in-game control and feedback, providing the ultimate interactive indoor cycling experience.
 
-+ **Freedom** to explore the world, just like riding outside. 
-+ **Freedom** to modify the game: The entire codebase is open source.
-+ **Free** as in free beer! This project is backed by donations and community support.
+# The Story
 
-Bring your Bluetooth-compatible indoor cycling accessories and liberate your indoor riding!
+CyCARLA was created in 2021 by [tensorturtle](https://github.com/tensorturtle) as a fun and imaginative 'future of cycling vision' demo by Boreal Bikes GmbH at the [Bike2CAV](https://www.bike2cav.at/en/home-2/) consortium presentation at Salzburg Research.
+
+In 2023, CyCARLA was officially adopted and re-written by [Velovision Labs](https://github.com/velovision) as an AI training and validation environment. It was crucial to the development of [Velovision Rearview](https://velovision.app) and its advanced computer vision algorithms. See Tesla's [simulation presentation (YouTube)](https://www.youtube.com/live/j0z4FweCy4M?si=XWvyaFaxmshTBO1n&t=5715) to get a sense of how CyCARLA is used at Velovision Labs.
+
+This project is a free, open source fork maintained by [tensorturtle](https://github.com/tensorturtle), the original author of CyCARLA, with the goal of creating a superior, free, and modifiable alternative to indoor cycling games like Zwift.
+
+Since December 2023, hundreds of kilometers have been ridden in CyCARLA.
+
 
 ![](readme_assets/town-15-riding.png)
 
-# What you'll need
+# Requirements
+
+Commercial indoor cycling games sacrifice graphics, control, and customizability in favor of compatibility with a wide range of devices. CyCARLA is different. CyCARLA requires a relatively high-performance computer, a smart trainer, and a smart steering plate. In return, CyCARLA offers unlimited freedom to roam the numerous maps and modify everything about the environment or the game itself.
+
+To reiterate, you need the following:
 
 1. A bike, such as [this absolute beauty](https://www.bastioncycles.com/)
 2. [Elite Sterzo](https://www.elite-it.com/en/products/home-trainers/ecosystem-accessories/sterzo-smart) front wheel steering plate.
 3. Smart Trainer, such as [Elite Suito T](https://www.elite-it.com/en/products/home-trainers/interactive-trainers/suito-t)
-4. A gaming computer running Windows 10 or Ubuntu 22.04. See [more detailed requirements](#computer-requirements)
+4. A gaming computer (with dedicated GPU) running Windows 10 or Ubuntu 22.04. See [more detailed requirements](#computer-requirements)
 
 
-# Installation
+# Download & Install
 
-To run CYCARLA, three components need to be installed:
-1. CARLA simulator
-2. Backend
-3. Frontend
+Three different programs need to be installed and run together.
 
-Please carefully follow the directions below for each component.
+1. CARLA simulator (without modifications): Please see [CARLA documentation](https://carla.readthedocs.io/en/latest/start_quickstart/#carla-installation) for full instructions. See below for simplified instructions.
+2. CyCARLA App: Please navigate to the "releases" page in this Github repository and download the installer (Windows) or AppImage (Linux).
+3. CyCARLA Agent: Same as above.
 
-## CARLA Simulator Installation
-
-Please see [CARLA documentation](https://carla.readthedocs.io/en/latest/start_quickstart/#carla-installation) for full instructions. The following is a simplified version.
+## CARLA Simulator Installation (Simplified)
 
 ### Windows
 
@@ -62,81 +68,47 @@ Now, we can run the binary. Be patient when it doesn't respond at launch.
 ~/carla/CarlaUE4.sh
 ```
 
-## Install Backend
-
-```
-pipx install cycarla-backend
-```
-To update an existing installation to the latest version:
-```
-pipx upgrade cycarla-backend
-```
-
-Please follow [Backend Installation instructions](https://github.com/tensorturtle/cycarla/blob/main/cycarla-backend/README.md)
-
-
-## Install Frontend
-
-```
-npm i cycarla-frontend
-```
-
-To update an existing installation to the latest version:
-```
-npm update cycarla-frontend
-```
-
-Please follow [Frontend installation instructions](https://github.com/tensorturtle/cycarla/blob/main/cycarla-frontend/README.md)
-
-# Run CYCARLA
+# Run CyCARLA
 
 If you've finished the above installation steps, the full app can now be launched:
 
 1. Launch CARLA simulator
   + Windows: Double click `CarlaUE4.exe`
   + Ubuntu: Navigate to where you installed carla (in the above example `~/carla`) and run `./CarlaUE4.sh`
-2. Launch Backend: `cycarla_backend`
-3. Launch Frontend: `npx cycarla-frontend`
-4. On your web browser, go to `localhost:3000`
+2. Launch CyCARLA App
+3. Launch CyCARLA Agent
 
-# Open Source
-
-![project-structure-diagram](graphics/CyCARLA-figmadiagram-1.png)
-*High level project structure of CYCARLA*
-
-CYCARLA follows in the footsteps of some wonderful open source projects:
-+ [Unreal Engine](https://github.com/EpicGames) (Sign up with Epic Games to access Unreal Engine repo)
-+ [CARLA](https://github.com/carla-simulator/carla)
-+ [Pycycling](https://github.com/zacharyedwardbull/pycycling) - I also contributed to this!
-
-CYCARLA accepts Pull Requests. If you have an improvement idea, submit an Issue and let's discuss!
-
-CYCARLA is MIT licensed.
-
-# [Donate](https://buy.stripe.com/aEUeVkaAuc8XgP69AB)
-
-If you find CYCARLA valuable, please [make a donation!](https://buy.stripe.com/aEUeVkaAuc8XgP69AB) 
-
-Funds go towards purchasing equipment to work on compatibility, feature development, and to my self-preservation fund.
-
-# Fun Facts
+**Enjoy your ride!**
 
 ![](readme_assets/riding-in-the-park.png)
 
 *Roaming about in CyCARLA - you can go anywhere!*
 
-CYCARLA began two years ago as a fun 'future of cycling vision' demo at the [Bike2CAV](https://www.bike2cav.at/en/home-2/) consortium presentation at Salzburg Research. Since then it has been my passion project.
+# Community & Support
 
-CYCARLA is also stylized 'CyCARLA' or 'Cycarla'
+## Pull Requests
 
-It is pronounced: *"sai-karla"*
+CYCARLA accepts Pull Requests. If you have an improvement idea and have experience in Python / Javascript, please go ahead and submit and Issue. Let's discuss!
+
+## Donations
+
+This is a personal free-time project. If CyCARLA helped you avoid expensive subscriptions and want to see it get better, please consider [making a donation!](https://buy.stripe.com/aEUeVkaAuc8XgP69AB) 
+
+## Open Source
+
+CYCARLA is MIT licensed.
+
+CyCARLA is made possible thanks to the following open source projects:
++ [Unreal Engine](https://github.com/EpicGames)
++ [CARLA](https://github.com/carla-simulator/carla)
++ [Pycycling](https://github.com/zacharyedwardbull/pycycling) - major contributions made to this project by [tensorturtle](https://github.com/tensorturtle)
 
 ## Computer Requirements
 
-CYCARLA is based on a serious 3D game engine with full customizability, so it'll be more demanding than typical indoor cycling games.
+CYCARLA is based Unreal Engine 4, a serious 3D game engine with full customizability, so it'll be more demanding than typical indoor cycling games.
 
-+ CPU: Intel Core i5 6th-gen or better
-+ GPU: NVIDIA RTX 2070 or better (2080, 3060, 3070, 3080, etc.)
++ CPU: Intel Core i5 6th-gen or better.
++ GPU: NVIDIA RTX 2070 or better (2080, 3060, 3070, 3080, 4060, 4070, 4080 etc.)
 + Hard drive: 30GB of free space.
-+ Bluetooth Low Energy (BLE) support
++ Bluetooth Low Energy (BLE) support.
 + Internet connection required for installation, not required to run the game.
