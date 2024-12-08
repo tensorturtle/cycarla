@@ -1,7 +1,7 @@
 [project]
 name = "cycarla-agent"
 version = "0.1.0"
-description = "Add your description here"
+description = "Intermediary server between Cycarla App and CARLA."
 readme = "README.md"
 authors = [
     { name = "tensorturtle", email = "tensorturtle@gmail.com" }
@@ -22,10 +22,6 @@ dependencies = [
 
 [project.scripts]
 cycarla-agent = "cycarla_agent:main"
-
-[build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
 
 [tool.uv]
 dev-dependencies = ["nuitka>=2.4.11"]
