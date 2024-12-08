@@ -52,7 +52,7 @@ tar -xvf CARLA_0.9.15.tar.gz -C ~/carla
 
 ### 2. Install Cycarla Agent
 
-Please navigate to [releases] page and download the `cycarla_agent` appropriate for your machine. 
+Please navigate to [releases](https://github.com/tensorturtle/cycarla/releases) page and download the `cycarla_agent` appropriate for your machine. 
 
 Assuming it was downloaded to `~/Downloads`, rename it to `cycarla-gent` and move it to `~/.local/bin`, or somewhere else on PATH.
 
@@ -65,7 +65,7 @@ mv ~/Downloads/cycarla_app-linux-x86_64 ~/.local/bin/cycarla-app
 
 Very similar to the previous step.
 
-Download `cycarla_app` from [releases], rename it and move it:
+Download `cycarla_app` from [releases](https://github.com/tensorturtle/cycarla/releases), rename it and move it:
 
 For example:
 ```
