@@ -6,7 +6,7 @@ CyCARLA is an open source cycling simulator. It pairs with smart indoor cycling 
 
 # The Story
 
-CyCARLA was created in 2021 by [tensorturtle](https://github.com/tensorturtle) as a fun and imaginative 'future of cycling vision' demo by Boreal Bikes GmbH at the [Bike2CAV](https://www.bike2cav.at/en/home-2/) consortium presentation at Salzburg Research.
+CyCARLA was created in 2021 by [tensorturtle](https://github.com/tensorturtle) for a fun and imaginative 'future of cycling vision' demo by Boreal Bikes GmbH at the [Bike2CAV](https://www.bike2cav.at/en/home-2/) consortium presentation at Salzburg Research.
 
 In 2023, CyCARLA was officially adopted and re-written by [Velovision Labs](https://github.com/velovision) as an AI training and validation environment. It was crucial to the development of [Velovision Rearview](https://velovision.app) and its advanced computer vision algorithms. See Tesla's [simulation presentation (YouTube)](https://www.youtube.com/live/j0z4FweCy4M?si=XWvyaFaxmshTBO1n&t=5715) to get a sense of how CyCARLA is used at Velovision Labs.
 
