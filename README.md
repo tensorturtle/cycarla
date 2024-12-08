@@ -26,17 +26,139 @@ To reiterate, you need the following:
 4. A gaming computer (with dedicated GPU) running Windows 10 or Ubuntu 22.04. See [more detailed requirements](#computer-requirements)
 
 
-# Download & Install
+# Installation
 
-Three different programs need to be installed and run together.
+Currently, you need to follow this installation guide to install three different programs. It will then show you how to launch them as a single Application.
 
-1. CARLA simulator (without modifications): Please see [CARLA documentation](https://carla.readthedocs.io/en/latest/start_quickstart/#carla-installation) for full instructions. See below for simplified instructions.
-2. CyCARLA App: Please navigate to the "releases" page in this Github repository and download the installer (Windows) or AppImage (Linux).
-3. CyCARLA Agent: Same as above.
+## Ubuntu
 
-## CARLA Simulator Installation (Simplified)
+### 1. Install CARLA Simulator
 
-### Windows
+Full instructions: [see CARLA documentation](https://carla.readthedocs.io/en/latest/start_quickstart/#carla-installation). The following is an abbreviated, recommended way.
+
+Download [CARLA 0.9.15 pre-compiled ZIP for Ubuntu](https://carla-releases.s3.us-east-005.backblazeb2.com/Linux/CARLA_0.9.15.tar.gz). 
+
+We'll create a new `carla` directory in the home directory to place CARLA content. This is used as the default in following steps so if you decide to change it, pay attention to when this path comes up later.
+
+```
+mkdir -p ~/carla
+```
+
+Go to where the ZIP was downloaded, assumed to be `~/Downloads` and extract it to the new directory.
+```
+cd ~/Downloads
+tar -xvf CARLA_0.9.15.tar.gz -C ~/carla
+```
+
+### 2. Install Cycarla Agent
+
+Please navigate to [releases] page and download the `cycarla_agent` appropriate for your machine. 
+
+Assuming it was downloaded to `~/Downloads`, rename it to `cycarla-gent` and move it to `~/.local/bin`, or somewhere else on PATH.
+
+For example:
+```
+mv ~/Downloads/cycarla_app-linux-x86_64 ~/.local/bin/cycarla-app
+```
+
+### 3. Install Cycarla App
+
+Very similar to the previous step.
+
+Download `cycarla_app` from [releases], rename it and move it:
+
+For example:
+```
+mv ~/Downloads/cycarla_app-linux-x86_64 ~/.local/bin/cycarla-app
+```
+
+### 4. Manual Installation as Single App in Ubuntu
+
+First, move all three binaries to a directory in PATH, such as: `~/.local/bin`:
+
+CyCARLA App:
+
+
+CyCARLA Agent:
+```
+mv ~/Downloads/cycarla_agent-linux-x86_64 ~/local/bin/cycarla-agent
+```
+
+Now, all three programs should be runnable just by typing in `carla`, `cycarla-app` or `cycarla-agent` on the command line from anywhere.
+
+Next, we create a single script that launches all three simulataneously, and also terminates them if the script is ended by the user.
+
+Create a convenient directory for this script:
+```
+mkdir -p ~/cycarla
+```
+
+Download [the logo icon](/logo/cycarla-logo-icon.png) and put it in that directory.
+
+Create a bash script:
+```
+vim ~/cycarla/launch-script.sh
+```
+
+With content:
+```
+#!/bin/bash
+
+CARLA_PATH="~/carla" # default. Feel free to change.
+
+cycarla-agent &
+PID_A=$!
+
+cycarla-app &
+PID_B=$!
+
+# Adopted from CarlaUE4.sh launch script
+UE4_PROJECT_ROOT=$(eval echo "$CARLA_PATH")
+chmod +x "$UE4_PROJECT_ROOT/CarlaUE4/Binaries/Linux/CarlaUE4-Linux-Shipping"
+"$UE4_PROJECT_ROOT/CarlaUE4/Binaries/Linux/CarlaUE4-Linux-Shipping" CarlaUE4 &
+PID_C=$!
+
+# Define a cleanup function to kill both applications
+cleanup() {
+    echo "Terminating applications..."
+    kill $PID_A $PID_B $PID_C
+    wait $PID_A $PID_B $PID_C 2>/dev/null
+}
+
+# Trap signals to ensure cleanup happens
+trap cleanup EXIT INT TERM
+
+# Wait for both processes (this keeps the script running)
+wait $PID_A $PID_B $PID_C
+```
+
+Create a `cycarla.desktop` file in `~/.local/share/applications`
+
+```
+vim ~/.local/share/applications/cycarla.desktop
+```
+With content:
+```
+[Desktop Entry]
+Version=1.0
+Type=Application
+Name=CyCARLA
+Exec=~/cycarla/launch-script.sh
+Icon=~/cycarla/cycarla-logo-icon.png
+Terminal=true
+Categories=Game;
+```
+
+Make sure it's permissioned correctly:
+```
+sudo chmod 664 ~/.local/share/applications/cycarla.desktop
+```
+
+That's it! Now you should be able to see the CyCARLA App icon in the app menu. Click it to launch everything.
+
+## Windows
+
+### 1. Install CARLA Simulator
 
 Download [CARLA 0.9.15 pre-compiled ZIP for Windows](https://carla-releases.s3.eu-west-3.amazonaws.com/Windows/CARLA_0.9.15.zip). Other versions can be found [here](https://github.com/carla-simulator/carla/releases)
 
@@ -44,36 +166,10 @@ Unzip it and find `CarlaUE4.exe`. Double click to launch it.
 
 Right-click on the icon and pin it to the taskbar.
 
-### Ubuntu
 
-Download [CARLA 0.9.15 pre-compiled ZIP for Ubuntu](https://carla-releases.s3.us-east-005.backblazeb2.com/Linux/CARLA_0.9.15.tar.gz). 
+### Next Steps
 
-We'll create a new `carla` directory in the home directory to place CARLA app content.
-
-```
-mkdir -p ~/carla
-```
-
-Go to where the ZIP was downloaded, probably `~/Downloads` and extract it to the new directory.
-```
-cd ~/Downloads
-tar -xvf CARLA_0.9.15.tar.gz -C ~/carla
-```
-
-Now, we can run the binary. Be patient when it doesn't respond at launch.
-```
-~/carla/CarlaUE4.sh
-```
-
-# Run CyCARLA
-
-If you've finished the above installation steps, the full app can now be launched:
-
-1. Launch CARLA simulator
-  + Windows: Double click `CarlaUE4.exe`
-  + Ubuntu: Navigate to where you installed carla (in the above example `~/carla`) and run `./CarlaUE4.sh`
-2. Launch CyCARLA App
-3. Launch CyCARLA Agent
+Coming Soon
 
 **Enjoy your ride!**
 
@@ -109,3 +205,11 @@ CYCARLA is based Unreal Engine 4, a serious 3D game engine with full customizabi
 + Hard drive: 30GB of free space.
 + Bluetooth Low Energy (BLE) support.
 + Internet connection required for installation, not required to run the game.
+
+## Versioning
+
+This project uses SemVer. 
+
+Since two binaries are distributed, they are related as follows:
++ The two binaries must be compatible within the same major and minor versions (x.y._), where x and y match.
++ Patch versions (0.0.z) don't need to match - they are used for bug fixes that don't affect the interoperability of the two programs.

@@ -1,6 +1,6 @@
 [project]
 name = "cycarla-agent"
-version = "0.1.0"
+version = "0.1.1"
 description = "Intermediary server between Cycarla App and CARLA."
 readme = "README.md"
 authors = [
