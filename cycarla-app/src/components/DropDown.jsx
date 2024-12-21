@@ -11,15 +11,17 @@ const DropdownMenu = ({ availableMaps, onSelectMap, selectedMap }) => {
   };
 
   return (
-    <div className="relative inline-block text-left">
-      <button onClick={toggleDropdown} className="group rounded-lg border border-neutral-800 px-4 py-1 my-2 mx-2 transition-colors hover:border-gray-300 hover:bg-gray-100/30 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30">
-        <div className="text-lg font-medium flex items-center justify-between">
+    <div className="relative inline-block w-full">
+      <button onClick={toggleDropdown} className="w-full group rounded-lg border border-neutral-800 transition-colors hover:border-gray-300 hover:bg-gray-100/30 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30">
+      <div className="flex flex-col items-center">
+        <div className="text-md font-medium flex items-center justify-between p-2">
             <div className="flex flex-col items-center">
                 <p>Selected Map</p>
                 <tt>{selectedMap}</tt>
             </div>
-          <svg className="ml-2 w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
+          <svg className="ml-2 h-4" fill="none" stroke="currentColor"z viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 9l-7 7-7-7"></path></svg>
         </div>
+      </div>
       </button>
       {isOpen && (
         <div className="absolute right-0 z-10 mt-2 w-56 origin-top-right rounded-md bg-white shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none">

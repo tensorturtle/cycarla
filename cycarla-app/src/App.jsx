@@ -392,167 +392,168 @@ export default function Home() {
   }
 
   return (
-    <main className="flex min-h-screen flex-col items-center justify-between bg-zinc-900">
+    <main className="relative h-screen bg-black">
       <BTModal isOpen={isBTModalOpen} onClose={() => setBTModelOpen(false)} />
 
-      {/* Header with logo and setup buttons */}
-      <div className="flex justify-between w-full px-20 bg-zinc-900">
-        <a href="https://github.com/tensorturtle/cycarla" target="_blank" className="">
-          <img src="/cycarla-simpler-banner-transbg-for-dark.png" alt="Cycarla Logo" className="h-20 w-auto lg:h-24 lg:w-auto" />
-        </a>
-
-        <div className="flex">
-          <button 
-            onClick={() => window.location.reload()}
-            className="group rounded-lg border border-neutral-800 px-4 my-4 mx-2 transition-colors hover:border-neutral-700 hover:bg-neutral-800/30"
-            >
-            <div className="flex items-center justify-between text-white">
-              <svg height="20" width="20">
-                <circle cx="10" cy="10" r="10" fill={isWebsocketConnected ? "green" : "red"} />
-              </svg>
-              <div className="flex flex-col items-center mx-2">
-                <h2 className={`text-xl font-semibold`}>
-                  Backend{' '}
-                </h2>
-                <p className="text-xs opacity-50 text-center">
-                Click to reload
-                </p>
-              </div>
-            </div>
-          </button>
-
-          <button 
-            onClick={requestBTScan}
-            className="group rounded-lg border border-neutral-800 px-4 my-4 mx-2 transition-colors hover:border-neutral-700 hover:bg-neutral-800/30"
-          >
-            <div className="flex items-center justify-between text-white">
-              <svg height="20" width="20">
-                <circle cx="10" cy="10" r="10" fill={btGreen ? "green" : "red"} />
-              </svg>
-              <div className="flex flex-col items-center mx-2">
-                <h2 className={`text-xl font-semibold`}>
-                  Bluetooth{' '}
-                </h2>
-                {/* <div className="flex flex-col items-center">
-                  <div className='text-xs opacity-50'>Click to scan</div>
-                </div> */}
-                <div>
-                  {
-                    sterzoDevice != "" ? <div className="text-xs opacity-50 text-green-300">STEERING</div> : <div className="text-xs opacity-50 text-red-300">NO STEERING</div>
-                  }
-                  {
-                    powerDevice != "" ? <div className="text-xs opacity-50 text-green-300">TRAINER</div> : <div className="text-xs opacity-50 text-red-300">NO TRAINER</div>
-                  }
+      <div className="absolute top-0 left:0 h-screen">       
+        {/* Main game screen: Carla frame with HUD stats */}
+        <div className="relative w-screen">
+          <div className="relative w-screen">
+            <img src={`data:image/jpeg;base64,${carlaFrame}`} className="w-screen h-auto" />
+            {/* Simplified HUD stats (power, pedaling RPM, speed, gradient, time elapsed) */}
+            <div className="absolute top-0 right-0 text-white pt-[120px]">
+              <div className="m-2 px-4 py-2 relative flex px-10 justify-center backdrop-blur-md w-auto rounded-xl bg-black/50">
+                <div className="flex gap-4 items-center justify-center">
+                  <SteeringVisualizer steeringAngle={steeringAngle} />
+                  <div className="flex flex-col justify-center items-center">
+                    {/* Adjusted for power display */}
+                    <div className="text-5xl font-bold w-48 text-right">
+                      {power} W
+                    </div>
+                    {/* Adjusted for cadence display */}
+                    <div className="text-2xl font-bold w-48 text-right">
+                      {cadence} RPM
+                    </div>
+                  </div>
+                  <div className="flex flex-col justify-center items-center">
+                    {/* Adjusted for speed display */}
+                    <div className="text-2xl font-bold w-32 text-right">
+                      {roundOrPad(speed, 0)} km/h
+                    </div>
+                    {/* Adjusted for gradient display */}
+                    <div className="text-2xl font-bold w-32 text-right">
+                      {roundOrPad(roadGradient, 0)} %
+                    </div>
+                    {/* Adjusted for time elapsed display, assuming it's a string like "00:00:00" */}
+                    <div className="text-2xl font-bold w-32 text-right">
+                      {elapsedTime}
+                    </div>
+                  </div>
                 </div>
               </div>
             </div>
-          </button>
 
-        <div className="group rounded-lg border border-neutral-800 hover:border-neutral-800 bg-neutral-0 my-4 mx-2 hover:border-gray-300">
-          <button disabled={!awaitingGameStart} onClick={handleStartGame} className="w-48 rounded-lg border border-neutral-800 hover:border-green-500 hover:border-green-800 hover:bg-green-900/20 px-1 py-3 mx-2 my-2 rounded">
-            <div className="text-green-600 font-bold ">
-              Start
-            </div>
-            <div className="text-xs text-white opacity-50">New game</div>
-          </button>
-          <button onClick={handleFinishGame} className="w-48 rounded-lg border border-neutral-800 hover:border-red-500 hover:border-red-800 hover:bg-red-900/20 px-1 py-3 mx-2 my-2 rounded">
-            <div className="text-red-600 font-bold">
-              Finish
-            </div>
-            <div className="text-xs text-white opacity-50">Download GPX and screenshot</div>
-          </button>
-        </div>
-
-        </div>
-      </div>
-
-      
-      {/* Main game screen: Carla frame with HUD stats */}
-      <div className="relative pt-16 lg:pt-0">
-        <div className="relative w-full">
-          <img src={`data:image/jpeg;base64,${carlaFrame}`} className="w-full h-auto" />
-          {/* Simplified HUD stats (power, pedaling RPM, speed, gradient, time elapsed) */}
-          <div className="absolute top-0 right-0 text-white">
-            <div className="m-2 px-4 py-2 relative flex px-10 justify-center backdrop-blur-md w-auto rounded-xl bg-black/50">
-              <div className="flex gap-4 items-center justify-center">
-                <SteeringVisualizer steeringAngle={steeringAngle} />
-                <div className="flex flex-col justify-center items-center">
-                  {/* Adjusted for power display */}
-                  <div className="text-5xl font-bold w-48 text-right">
-                    {power} W
-                  </div>
-                  {/* Adjusted for cadence display */}
-                  <div className="text-2xl font-bold w-48 text-right">
-                    {cadence} RPM
+            {/* Debug full stats */}
+            { debug_full_stats ? (
+            <div className="absolute bottom-0 left-0">
+              <div className="m-2 relative flex px-10 justify-center backdrop-blur-md w-max rounded-xl bg-black/50">
+                <div className="flex flex-col gap-1 items-left justify-center font-size-xl">
+                  <div className={noto_sans_mono.className}>
+                    <button className="text-white font-bold text-xl" onClick={sendAutopilotToggle}>{autopilotActual ? "Autopilot ON" : "Autopilot OFF"}</button>
+                    <button className="text-white font-bold text-xl" onClick={changeCamera}>Change Camera</button>
+                    <PerformanceLiveStats server_fps={serverFps} simulation_fps={simulationFps} />
+                    <KinematicsLiveStats speed={speed} xAcceleration={xAcceleration} yAcceleration={yAcceleration} xLocation={xLocation} yLocation={yLocation} latGnss={latGnss} lonGnss={lonGnss} altitude={altitude} roadGradient={roadGradient} />
+                    <ControlLiveStats throttle={throttle} steer={steer} brake={brake} reverse={reverse} hand_brake={handBrake} manual={manual} gear={gear} />
                   </div>
                 </div>
-                <div className="flex flex-col justify-center items-center">
-                  {/* Adjusted for speed display */}
-                  <div className="text-2xl font-bold w-32 text-right">
-                    {roundOrPad(speed, 0)} km/h
+              </div>
+            </div>
+            ) : null }
+
+            {isGameOn === false && (
+              <div className="absolute top-0 left-0 right-0 bottom-0 bg-black/80 flex justify-center items-center">
+                <span className="text-white font-bold text-2xl">Press 'Start' for new game</span>
+              </div>
+              )}
+          </div>
+          <div className="absolute top-0 left-0 w-screen backdrop-blur-sm bg-black/20">
+            <div className="flex justify-between w-full px-20 bg-zinc-900/20">
+              <a href="https://github.com/tensorturtle/cycarla" target="_blank" className="">
+                <img src="/cycarla-simpler-banner-transbg-for-dark.png" alt="Cycarla Logo" className="h-20 w-auto lg:h-24 lg:w-auto mt-2" />
+              </a>
+
+              <div className="flex">
+                <button 
+                  onClick={() => window.location.reload()}
+                  className="group rounded-lg border border-neutral-800 px-4 my-4 mx-2 transition-colors hover:border-neutral-700 hover:bg-neutral-800/30"
+                  >
+                  <div className="flex items-center justify-between text-white">
+                    <svg height="20" width="20">
+                      <circle cx="10" cy="10" r="10" fill={isWebsocketConnected ? "green" : "red"} />
+                    </svg>
+                    <div className="flex flex-col items-center mx-2">
+                      <h2 className={`text-xl font-semibold`}>
+                        Backend{' '}
+                      </h2>
+                      <p className="text-xs opacity-50 text-center">
+                      Click to reload
+                      </p>
+                    </div>
                   </div>
-                  {/* Adjusted for gradient display */}
-                  <div className="text-2xl font-bold w-32 text-right">
-                    {roundOrPad(roadGradient, 0)} %
+                </button>
+
+                <button 
+                  onClick={requestBTScan}
+                  className="group rounded-lg border border-neutral-800 px-4 my-4 mx-2 transition-colors hover:border-neutral-700 hover:bg-neutral-800/30"
+                >
+                  <div className="flex items-center justify-between text-white">
+                    <svg height="20" width="20">
+                      <circle cx="10" cy="10" r="10" fill={btGreen ? "green" : "red"} />
+                    </svg>
+                    <div className="flex flex-col items-center mx-2">
+                      <h2 className={`text-xl font-semibold`}>
+                        Bluetooth{' '}
+                      </h2>
+                      {/* <div className="flex flex-col items-center">
+                        <div className='text-xs opacity-50'>Click to scan</div>
+                      </div> */}
+                      <div>
+                        {
+                          sterzoDevice != "" ? <div className="text-xs opacity-50 text-green-300">STEERING</div> : <div className="text-xs opacity-50 text-red-300">NO STEERING</div>
+                        }
+                        {
+                          powerDevice != "" ? <div className="text-xs opacity-50 text-green-300">TRAINER</div> : <div className="text-xs opacity-50 text-red-300">NO TRAINER</div>
+                        }
+                      </div>
+                    </div>
                   </div>
-                  {/* Adjusted for time elapsed display, assuming it's a string like "00:00:00" */}
-                  <div className="text-2xl font-bold w-32 text-right">
-                    {elapsedTime}
+                </button>
+
+              <div className="group rounded-lg border border-neutral-800 hover:border-neutral-800 bg-neutral-0 my-4 mx-2 hover:border-gray-300">
+                <button disabled={!awaitingGameStart} onClick={handleStartGame} className="w-48 rounded-lg border border-neutral-800 hover:border-green-500 hover:border-green-800 hover:bg-green-900/20 px-1 py-3 mx-2 my-2 rounded">
+                  <div className="text-green-600 font-bold ">
+                    Start
                   </div>
+                  <div className="text-xs text-white opacity-50">New game</div>
+                </button>
+                <button onClick={handleFinishGame} className="w-48 rounded-lg border border-neutral-800 hover:border-red-500 hover:border-red-800 hover:bg-red-900/20 px-1 py-3 mx-2 my-2 rounded">
+                  <div className="text-red-600 font-bold">
+                    Finish
+                  </div>
+                  <div className="text-xs text-white opacity-50">Download GPX and screenshot</div>
+                </button>
+              </div>
+
+              </div>
+            </div>
+          </div>
+          <div className="absolute bottom-0 left-0 w-screen backdrop-blur-sm bg-black/20">
+            {/* Center the footer button/controls */}
+            <div className="flex flex-col items-center">
+              <div className="pt-0 gap-2 grid w-full lg:mb-0 grid-cols-4 gap-2 m-2 p-2">
+                <button 
+                    onClick={changeCamera}
+                    className="group rounded-lg border border-neutral-800 transition-colors hover:border-neutral-700 hover:bg-neutral-800/30 p-2"
+                >
+                  <div className="text-md text-white">Change Camera</div>
+                </button>
+
+                <div className="group rounded-lg border border-neutral-800 transition-colors hover:border-neutral-700 hover:bg-neutral-800/30 text-white p-2">
+                    <SliderNumerical onSliderChange={handleSliderChange} label="Road Gradient Offset" units="%" />
+                </div>
+
+                <button onClick={saveFrame} className="group rounded-lg border border-neutral-800 transition-colors hover:border-neutral-700 hover:bg-neutral-800/30 p-2">
+                  <div className="text-md font-medium text-white">Take Screenshot</div>
+                  {savedCarlaFrame == "" ? <div className="text-xs opacity-50 text-white">No screenshot - will use first frame for ride picture.</div>: <div className="text-xs opacity-50 text-white">Screenshot saved!</div>}
+                </button>
+                
+                <div className="group rounded-lg border border-neutral-800 transition-colors hover:border-neutral-700 hover:bg-neutral-800/30 text-white p-2 w-full">
+                    <DropdownMenu availableMaps={availableMaps} onSelectMap={handleSelectMap} selectedMap={selectedMap} />
+                    {/* <div className="text-xs text-center opacity-50">Restart game to load map</div> */}
                 </div>
               </div>
             </div>
           </div>
-
-          {/* Debug full stats */}
-          { debug_full_stats ? (
-          <div className="absolute bottom-0 left-0">
-            <div className="m-2 relative flex px-10 justify-center backdrop-blur-md w-max rounded-xl bg-black/50">
-              <div className="flex flex-col gap-1 items-left justify-center font-size-xl">
-                <div className={noto_sans_mono.className}>
-                  <button className="text-white font-bold text-xl" onClick={sendAutopilotToggle}>{autopilotActual ? "Autopilot ON" : "Autopilot OFF"}</button>
-                  <button className="text-white font-bold text-xl" onClick={changeCamera}>Change Camera</button>
-                  <PerformanceLiveStats server_fps={serverFps} simulation_fps={simulationFps} />
-                  <KinematicsLiveStats speed={speed} xAcceleration={xAcceleration} yAcceleration={yAcceleration} xLocation={xLocation} yLocation={yLocation} latGnss={latGnss} lonGnss={lonGnss} altitude={altitude} roadGradient={roadGradient} />
-                  <ControlLiveStats throttle={throttle} steer={steer} brake={brake} reverse={reverse} hand_brake={handBrake} manual={manual} gear={gear} />
-                </div>
-              </div>
-            </div>
-          </div>
-          ) : null }
-
-          {isGameOn === false && (
-            <div className="absolute top-0 left-0 right-0 bottom-0 bg-black/80 flex justify-center items-center">
-              <span className="text-white font-bold text-2xl">Press 'Start' for new game</span>
-            </div>
-            )}
-        </div>
-      </div>
-
-      <div className="pb-32 pt-2 gap-2 grid text-center lg:max-w-5xl lg:w-full lg:mb-0 lg:grid-cols-4 lg:text-left">
-        <button 
-            onClick={changeCamera}
-            className="group rounded-lg border border-neutral-800 px-4 py-2 my-4 mx-2 transition-colors hover:border-neutral-700 hover:bg-neutral-800/30"
-        >
-          <div className="text-lg font-medium text-white">Change Camera</div>
-        </button>
-
-        <div className="group rounded-lg border border-neutral-800 px-4 py-2 my-4 mx-2 transition-colors hover:border-neutral-700 hover:bg-neutral-800/30 text-white">
-          <SliderNumerical onSliderChange={handleSliderChange} label="Road Gradient Offset" units="%" />
-        </div>
-
-        {/* <button onClick={openBTModal} className="group rounded-lg border border-neutral-800 px-4 my-4 mx-2 transition-colors hover:border-gray-300 hover:bg-gray-100 hover:dark:border-neutral-700 hover:dark:bg-neutral-800/30">
-          <div className="text-lg font-medium">Bluetooth Help</div>
-        </button> */}
-
-        <button onClick={saveFrame} className="group rounded-lg border border-neutral-800 px-4 py-2 my-4 mx-2 transition-colors hover:border-neutral-700 hover:bg-neutral-800/30">
-          <div className="text-lg font-medium text-white">Take Screenshot for Strava</div>
-          {savedCarlaFrame == "" ? <div className="text-xs opacity-50 text-white">No screenshot - will use first frame for ride picture.</div>: <div className="text-xs opacity-50 text-white">Screenshot saved!</div>}
-        </button>
-        
-        <div className="group rounded-lg border border-neutral-800 px-4 py-2 my-4 mx-2 transition-colors hover:border-neutral-700 hover:bg-neutral-800/30 text-white">
-            <DropdownMenu availableMaps={availableMaps} onSelectMap={handleSelectMap} selectedMap={selectedMap} />
-            <div className="text-xs text-center opacity-50">Restart game to load map</div>
         </div>
       </div>
     </main>
