@@ -2,7 +2,6 @@
 __init__.build/
 __init__.dist/
 __init__.onefile-build/
-cycarla_agent
 
 # mac
 .DS_Store
