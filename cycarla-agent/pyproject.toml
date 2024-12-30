@@ -20,6 +20,8 @@ dependencies = [
     "carla>=0.9.15",
 ]
 
+# See documentation:
+# https://packaging.python.org/en/latest/guides/writing-pyproject-toml/#creating-executable-scripts
 [project.scripts]
 cycarla-agent = "cycarla_agent:main"
 
