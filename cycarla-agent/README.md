@@ -8,6 +8,11 @@
 uv sync
 ```
 
+Install `cycarla-agent` as executable in editable mode:
+```
+uv pip install -e .
+```
+
 ```
 uv run cycarla-agent
 ```
