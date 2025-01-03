@@ -1,6 +1,6 @@
 [package]
 name = "cycarla-app"
-version = "0.2.0"
+version = "0.2.1"
 description = "CyCARLA Frontend App"
 authors = ["tensorturtle"]
 edition = "2021"

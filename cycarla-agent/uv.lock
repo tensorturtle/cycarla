@@ -35,7 +35,7 @@ wheels = [
 
 [[package]]
 name = "bleak"
-version = "0.22.3"
+version = "0.20.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "async-timeout" },
@@ -44,11 +44,10 @@ dependencies = [
     { name = "pyobjc-core", marker = "sys_platform == 'darwin'" },
     { name = "pyobjc-framework-corebluetooth", marker = "sys_platform == 'darwin'" },
     { name = "pyobjc-framework-libdispatch", marker = "sys_platform == 'darwin'" },
-    { name = "typing-extensions" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/fb/96/15750b50c0018338e2cce30de939130971ebfdf4f9d6d56c960f5657daad/bleak-0.22.3.tar.gz", hash = "sha256:3149c3c19657e457727aa53d9d6aeb89658495822cd240afd8aeca4dd09c045c", size = 122339 }
+sdist = { url = "https://files.pythonhosted.org/packages/87/95/a6f614fae12a6fe1cf517f8600004dd6abd4af0e0e1177c03164d0637e81/bleak-0.20.2.tar.gz", hash = "sha256:6c92a47abe34e6dea8ffc5cea9457cbff6e1be966854839dbc25cddb36b79ee4", size = 115999 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/0a/ce/3adf9e742bb22e4a4b3435f24111cb46a1d12731ba655ee00bb5ab0308cc/bleak-0.22.3-py3-none-any.whl", hash = "sha256:1e62a9f5e0c184826e6c906e341d8aca53793e4596eeaf4e0b191e7aca5c461c", size = 142719 },
+    { url = "https://files.pythonhosted.org/packages/61/b5/8900a62271b38049345fc26c4fe3e6848864d3a22f2e580e97b17b2bfecf/bleak-0.20.2-py3-none-any.whl", hash = "sha256:ce3106b7258212d92bb77be06f9301774f51f5bbc9f7cd50976ad794e9514dba", size = 135579 },
 ]
 
 [[package]]
@@ -125,7 +124,7 @@ wheels = [
 
 [[package]]
 name = "cycarla-agent"
-version = "0.2.0"
+version = "0.2.1"
 source = { virtual = "." }
 dependencies = [
     { name = "bleak" },
@@ -137,6 +136,7 @@ dependencies = [
     { name = "opencv-python" },
     { name = "pycycling" },
     { name = "pygame" },
+    { name = "pyinstaller" },
 ]
 
 [package.dev-dependencies]
@@ -147,7 +147,7 @@ dev = [
 
 [package.metadata]
 requires-dist = [
-    { name = "bleak", specifier = ">=0.22.3" },
+    { name = "bleak", specifier = "~=0.20.0" },
     { name = "carla", specifier = ">=0.9.15" },
     { name = "flask", specifier = ">=3.1.0" },
     { name = "flask-cors", specifier = ">=5.0.0" },
@@ -156,6 +156,7 @@ requires-dist = [
     { name = "opencv-python", specifier = ">=4.10.0.84" },
     { name = "pycycling", specifier = ">=0.4.0" },
     { name = "pygame", specifier = ">=2.6.1" },
+    { name = "pyinstaller", specifier = ">=6.11.1" },
 ]
 
 [package.metadata.requires-dev]
@@ -166,17 +167,17 @@ dev = [
 
 [[package]]
 name = "dbus-fast"
-version = "2.24.4"
+version = "1.95.2"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/1f/91/b04e2dca706bddcd419352b5f623e8860c04adf2dd6ceef6116df4de4f6a/dbus_fast-2.24.4.tar.gz", hash = "sha256:58f97e8342d6cd11ebb2c8ac959c5bb342eb83e29180528690b323a5a5def41c", size = 69702 }
+sdist = { url = "https://files.pythonhosted.org/packages/59/c5/34718c86fc171b7e7cd4870b4107f18667b024f75dd6a905b76660860111/dbus_fast-1.95.2.tar.gz", hash = "sha256:3dd64c5cd362ceead6cc02603b6b4cbda58b2cbb6ec816a2f21b1901dfc3cb61", size = 67947 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/60/3f/0017bc542e14b693c350943a570395b144c19450a95ea9b6fd230b7c7abe/dbus_fast-2.24.4-cp310-cp310-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:4640feb97e3b992052eb075a5dd606e0ba54ae3ce702d6d15d90b479da561547", size = 3913720 },
-    { url = "https://files.pythonhosted.org/packages/ed/8a/3537c5887fdf436f31da654385f8b88a4a1fec3eb6dc758d17960aba44cd/dbus_fast-2.24.4-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:9b0fd863108be7494cab3570b76aac68fbd54290d7edea9063afa33815d76015", size = 3974369 },
-    { url = "https://files.pythonhosted.org/packages/8c/18/69bca72d6b8c79857e89e664a4e7ac1e420a23479d33362faa489d9535ac/dbus_fast-2.24.4-cp310-cp310-manylinux_2_31_x86_64.whl", hash = "sha256:8bf8037e190071f02e01b2133effb1715b884bbbf5bd5e6dcf0998a6f7972d23", size = 3978156 },
-    { url = "https://files.pythonhosted.org/packages/68/40/8e10f37e14f5179966cf1db8027f5e6da60bc608e9fc8e9764eb7a302255/dbus_fast-2.24.4-cp310-cp310-musllinux_1_2_aarch64.whl", hash = "sha256:590f2767e3b8a9e66c7fb0500d439fe95793933682e525e3518f414d83a454bf", size = 3866627 },
-    { url = "https://files.pythonhosted.org/packages/00/49/cf888275546800c00c9b732e192df68f2c0339d255e1ee143141a96a81b3/dbus_fast-2.24.4-cp310-cp310-musllinux_1_2_x86_64.whl", hash = "sha256:cf9aba8ed59ef8c0026b321710442b8ccc876a37c883490fb2900bc009d7bd70", size = 4027037 },
-    { url = "https://files.pythonhosted.org/packages/62/7f/5e30b932639b5f3294c048b0afa59e27e4d9696d1f444e8162f84a98b19e/dbus_fast-2.24.4-pp310-pypy310_pp73-manylinux_2_17_aarch64.manylinux2014_aarch64.whl", hash = "sha256:837b1cd3fb445454f812f33f61e4657568a57d0ebaabe196f61484aff865a457", size = 684700 },
-    { url = "https://files.pythonhosted.org/packages/80/6b/fdc24cabfd7c6b0a0dc0542c998c93b8eec5c89d5ff05d7d6d3bdff4a438/dbus_fast-2.24.4-pp310-pypy310_pp73-manylinux_2_17_x86_64.manylinux_2_5_x86_64.manylinux1_x86_64.manylinux2014_x86_64.whl", hash = "sha256:a3e2338e8d06488ed9ec764c53a25c041322dd94ee6cd519fc028c8880666909", size = 714251 },
+    { url = "https://files.pythonhosted.org/packages/76/be/aa85f3872a7350aced6188f8e2708a3af6c4eb9bf0fb15859a03cde1c6f5/dbus_fast-1.95.2-cp310-cp310-manylinux_2_17_i686.manylinux_2_5_i686.manylinux1_i686.manylinux2014_i686.whl", hash = "sha256:69f19fb94ac714b917c51fcc329b51695f085f779841edd6e429170f1f073f47", size = 4666680 },
+    { url = "https://files.pythonhosted.org/packages/bf/0e/a3f3476e8ba796a61c41d669d47646c8e6792aaabf8dbb2d4cbba4a939dc/dbus_fast-1.95.2-cp310-cp310-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:c71e84a7ce3b050745dfb2bcd32ade891ecf6f4b06d3baa4dfe30ad09720a0be", size = 4672491 },
+    { url = "https://files.pythonhosted.org/packages/f6/2a/2bdb8b04931c587a55d3d25479f5c6e5511c0011136f0e8c70d03195f86c/dbus_fast-1.95.2-cp310-cp310-manylinux_2_31_x86_64.whl", hash = "sha256:3ffcd1c999599da7806d7887d5ce1e9f0d814aa35af92daecab542c9b70794c1", size = 4679660 },
+    { url = "https://files.pythonhosted.org/packages/a7/34/6265105a2f95abda7b8e0608025c92bbbc6a9f5b23b94e4a3bd4ec614087/dbus_fast-1.95.2-cp310-cp310-musllinux_1_1_i686.whl", hash = "sha256:85739b90e6f983494c3c7187d4daaa50f4f4369aa1e87e876066de97ca1bcd58", size = 4891326 },
+    { url = "https://files.pythonhosted.org/packages/e8/8a/6fddadc1cdf1c00c1d1dd2014abca77547b7255ec3a7745f5d3023ee67b2/dbus_fast-1.95.2-cp310-cp310-musllinux_1_1_x86_64.whl", hash = "sha256:e2c107caefa186919169e07a852edea3d931dfb6112584fa2c6e5653d91c0d2d", size = 4720824 },
+    { url = "https://files.pythonhosted.org/packages/39/55/6106ae9695ea0ccf657ea49e07d4f655f78d8bb631df35137bc9fba79ec0/dbus_fast-1.95.2-pp310-pypy310_pp73-manylinux_2_17_i686.manylinux_2_5_i686.manylinux1_i686.manylinux2014_i686.whl", hash = "sha256:76fb9d11bd6ebe1f832350ec57ada352f096f24b5731e38bcbad86ab9b27190b", size = 1678471 },
+    { url = "https://files.pythonhosted.org/packages/9d/c8/c29817ccadaab8a8d1e60a8515206288527a09bcb347b80db6eb800821bd/dbus_fast-1.95.2-pp310-pypy310_pp73-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", hash = "sha256:26045c50bbd8c1674814759332333799b073216b2b2cac9e1cfebf757c7f926d", size = 4672496 },
 ]
 
 [[package]]
@@ -435,52 +436,50 @@ wheels = [
 
 [[package]]
 name = "pyobjc-core"
-version = "10.3.2"
+version = "9.2"
 source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/5d/07/2b3d63c0349fe4cf34d787a52a22faa156225808db2d1531fe58fabd779d/pyobjc_core-10.3.2.tar.gz", hash = "sha256:dbf1475d864ce594288ce03e94e3a98dc7f0e4639971eb1e312bdf6661c21e0e", size = 935182 }
+sdist = { url = "https://files.pythonhosted.org/packages/48/d9/a13566ce8914746557b9e8637a5abe1caae86ed202b0fb072029626b8bb1/pyobjc-core-9.2.tar.gz", hash = "sha256:d734b9291fec91ff4e3ae38b9c6839debf02b79c07314476e87da8e90b2c68c3", size = 923758 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/a7/60/8f4d181ffa050b6b98f92bb7487a2a0241435ceee652b26729d7c4514fd3/pyobjc_core-10.3.2-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:acb40672d682851a5c7fd84e5041c4d069b62076168d72591abb5fcc871bb039", size = 774483 },
+    { url = "https://files.pythonhosted.org/packages/04/8f/e005f4863a7257285d5c98365e2d6e2dd717298d829453fc6eb25ac74a11/pyobjc_core-9.2-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:fa674a39949f5cde8e5c7bbcd24496446bfc67592b028aedbec7f81dc5fc4daa", size = 736822 },
 ]
 
 [[package]]
 name = "pyobjc-framework-cocoa"
-version = "10.3.2"
+version = "9.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "pyobjc-core", marker = "sys_platform == 'darwin'" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/39/41/4f09a5e9a6769b4dafb293ea597ed693cc0def0e07867ad0a42664f530b6/pyobjc_framework_cocoa-10.3.2.tar.gz", hash = "sha256:673968e5435845bef969bfe374f31a1a6dc660c98608d2b84d5cae6eafa5c39d", size = 4942530 }
+sdist = { url = "https://files.pythonhosted.org/packages/38/91/c54fdffda6d7cfad67ff617f19001163658d50bc72376d1584e691cf4895/pyobjc-framework-Cocoa-9.2.tar.gz", hash = "sha256:efd78080872d8c8de6c2b97e0e4eac99d6203a5d1637aa135d071d464eb2db53", size = 6170134 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/7f/92/8181f9d1cc5539ffb56fe9a91df54348eb0eb36764e53b0082267192ce4b/pyobjc_framework_Cocoa-10.3.2-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:61f44c2adab28fdf3aa3d593c9497a2d9ceb9583ed9814adb48828c385d83ff4", size = 381552 },
+    { url = "https://files.pythonhosted.org/packages/d7/b3/e9c6d3e8d53453567805ca461cf52a08807ca2c860c1364c27dc10cdc67e/pyobjc_framework_Cocoa-9.2-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:9e02d8a7cc4eb7685377c50ba4f17345701acf4c05b1e7480d421bff9e2f62a4", size = 390521 },
 ]
 
 [[package]]
 name = "pyobjc-framework-corebluetooth"
-version = "10.3.2"
+version = "9.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "pyobjc-core", marker = "sys_platform == 'darwin'" },
     { name = "pyobjc-framework-cocoa", marker = "sys_platform == 'darwin'" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/13/ca/35d205c3e153e7bc59a417560a45e27a2410439e6f78390f97c1a996c922/pyobjc_framework_corebluetooth-10.3.2.tar.gz", hash = "sha256:c0a077bc3a2466271efa382c1e024630bc43cc6f9ab8f3f97431ad08b1ad52bb", size = 50622 }
+sdist = { url = "https://files.pythonhosted.org/packages/f1/7a/239d5b1ac63056bb3e754c1f189f3e17051f3d2c3368c339d15b34f2ac48/pyobjc-framework-CoreBluetooth-9.2.tar.gz", hash = "sha256:cb2481b1dfe211ae9ce55f36537dc8155dbf0dc8ff26e0bc2e13f7afb0a291d1", size = 49737 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f7/b0/9006d9d6cc5780fc190629ff42d8825fe7737dbe2077fbaae38813f0242e/pyobjc_framework_CoreBluetooth-10.3.2-cp36-abi3-macosx_10_13_universal2.whl", hash = "sha256:973b78f47c7e2209a475e60bcc7d1b4a87be6645d39b4e8290ee82640e1cc364", size = 13891 },
-    { url = "https://files.pythonhosted.org/packages/02/dd/b415258a86495c23962005bab11604562828dd183a009d04a82bc1f3a816/pyobjc_framework_CoreBluetooth-10.3.2-cp36-abi3-macosx_10_9_universal2.whl", hash = "sha256:4bafdf1be15eae48a4878dbbf1bf19877ce28cbbba5baa0267a9564719ee736e", size = 13843 },
-    { url = "https://files.pythonhosted.org/packages/c4/7d/d8a340f3ca0862969a02c6fe053902388e45966040b41d7e023b9dcf97c8/pyobjc_framework_CoreBluetooth-10.3.2-cp36-abi3-macosx_10_9_x86_64.whl", hash = "sha256:4d7dc7494de66c850bda7b173579df7481dc97046fa229d480fe9bf90b2b9651", size = 10082 },
-    { url = "https://files.pythonhosted.org/packages/e9/10/d9554ce442269a3c25d9bed9d8a5ffdc1fb5ab71b74bc52749a5f26a96c7/pyobjc_framework_CoreBluetooth-10.3.2-cp36-abi3-macosx_11_0_universal2.whl", hash = "sha256:62e09e730f4d98384f1b6d44718812195602b3c82d5c78e09f60e8a934e7b266", size = 13815 },
+    { url = "https://files.pythonhosted.org/packages/2c/7b/b9395514ea3f1869cbc6bcc941ed9b4096071cce99585bb35d1b3b510eb8/pyobjc_framework_CoreBluetooth-9.2-cp36-abi3-macosx_10_9_universal2.whl", hash = "sha256:53d888742119d0f0c725d0b0c2389f68e8f21f0cba6d6aec288c53260a0196b6", size = 13959 },
+    { url = "https://files.pythonhosted.org/packages/f3/8b/336a0f6050ff434f0d8156f06c8f028895aadbfc42b694baacbf5904351f/pyobjc_framework_CoreBluetooth-9.2-cp36-abi3-macosx_10_9_x86_64.whl", hash = "sha256:179532882126526e38fe716a50fb0ee8f440e0b838d290252c515e622b5d0e49", size = 9900 },
+    { url = "https://files.pythonhosted.org/packages/f2/f3/650746cb0c634a0394515b7d899967730cc326c6a34dab7329d9beecc67a/pyobjc_framework_CoreBluetooth-9.2-cp36-abi3-macosx_11_0_universal2.whl", hash = "sha256:256a5031ea9d8a7406541fa1b0dfac549b1de93deae8284605f9355b13fb58be", size = 13979 },
 ]
 
 [[package]]
 name = "pyobjc-framework-libdispatch"
-version = "10.3.2"
+version = "9.2"
 source = { registry = "https://pypi.org/simple" }
 dependencies = [
     { name = "pyobjc-core", marker = "sys_platform == 'darwin'" },
-    { name = "pyobjc-framework-cocoa", marker = "sys_platform == 'darwin'" },
 ]
-sdist = { url = "https://files.pythonhosted.org/packages/4d/12/a908f3f94952c8c9e3d6e6bd425613a79692e7d400557ede047992439edc/pyobjc_framework_libdispatch-10.3.2.tar.gz", hash = "sha256:e9f4311fbf8df602852557a98d2a64f37a9d363acf4d75634120251bbc7b7304", size = 45132 }
+sdist = { url = "https://files.pythonhosted.org/packages/f1/73/455a8b92d3fc5b47b22e8055b6df19be96b2aa13715676e70a9cb7ed00b2/pyobjc-framework-libdispatch-9.2.tar.gz", hash = "sha256:542e7f7c2b041939db5ed6f3119c1d67d73ec14a996278b92485f8513039c168", size = 37690 }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/1f/0e/2d948a0708a8f870915a45a8d5808ef08dcf1c1942ffd2f5a52e41e9098c/pyobjc_framework_libdispatch-10.3.2-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:35233a8b1135567c7696087f924e398799467c7f129200b559e8e4fa777af860", size = 20196 },
+    { url = "https://files.pythonhosted.org/packages/56/f6/553893eaae9ddaa0164e608df0a9cf56dfa2832d1eaa49512db9e1110b71/pyobjc_framework_libdispatch-9.2-cp310-cp310-macosx_10_9_universal2.whl", hash = "sha256:88d4091d4bcb5702783d6e86b4107db973425a17d1de491543f56bd348909b60", size = 20953 },
 ]
 
 [[package]]
@@ -536,15 +535,6 @@ dependencies = [
 sdist = { url = "https://files.pythonhosted.org/packages/b0/d4/bfa032f961103eba93de583b161f0e6a5b63cebb8f2c7d0c6e6efe1e3d2e/simple_websocket-1.1.0.tar.gz", hash = "sha256:7939234e7aa067c534abdab3a9ed933ec9ce4691b0713c78acb195560aa52ae4", size = 17300 }
 wheels = [
     { url = "https://files.pythonhosted.org/packages/52/59/0782e51887ac6b07ffd1570e0364cf901ebc36345fea669969d2084baebb/simple_websocket-1.1.0-py3-none-any.whl", hash = "sha256:4af6069630a38ed6c561010f0e11a5bc0d4ca569b36306eb257cd9a192497c8c", size = 13842 },
-]
-
-[[package]]
-name = "typing-extensions"
-version = "4.12.2"
-source = { registry = "https://pypi.org/simple" }
-sdist = { url = "https://files.pythonhosted.org/packages/df/db/f35a00659bc03fec321ba8bce9420de607a1d37f8342eee1863174c69557/typing_extensions-4.12.2.tar.gz", hash = "sha256:1a7ead55c7e559dd4dee8856e3a88b41225abfe1ce8df57b7c13915fe121ffb8", size = 85321 }
-wheels = [
-    { url = "https://files.pythonhosted.org/packages/26/9f/ad63fc0248c5379346306f8668cda6e2e2e9c95e01216d2b8ffd9ff037d0/typing_extensions-4.12.2-py3-none-any.whl", hash = "sha256:04e5ca0351e0f3f85c6853954072df659d0d13fac324d0072316b67d7794700d", size = 37438 },
 ]
 
 [[package]]

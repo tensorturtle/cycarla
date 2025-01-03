@@ -26,10 +26,14 @@ Navigate to http://localhost:1420 to see the app in a browser.
 
 # Bundle & Distribute
 
-1. Update version number in `src-tauri/Cargo.toml`
-2. Git commit and push to main.
-3. Use Github.com to create a new release tag.
-4. Follow below directions to create distributable binaries/installers. The builds can be performed only by the same platform as the target.
+The version number has to be manually updated in three places:
++ `src-tauri/tauri.conf.json`
++ `src-tauri/Cargo.toml`
++ `package.json`
+
+1. Git commit and push to main.
+1. Use Github.com to create a new release tag.
+1. Follow below directions to create distributable binaries/installers. The builds can be performed only by the same platform as the target.
 
 ## Linux (Ubuntu)
 ```

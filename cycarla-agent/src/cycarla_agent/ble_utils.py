@@ -40,6 +40,8 @@ def filter_cycling_accessories(devices):
         'smart_trainers': [],
     }
 
+    print(f"Number of devices found: {len(devices)}")
+
     for k,v in devices.items():
         bledevice, advertisement_data = v
         services = advertisement_data.service_uuids
