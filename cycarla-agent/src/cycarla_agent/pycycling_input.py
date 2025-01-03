@@ -142,15 +142,15 @@ class PycyclingInput:
             await self.ftms.enable_indoor_bike_data_notify()
 
             supported_features = await self.ftms.get_fitness_machine_feature()
+            fitness_machine_features, _target_setting_features = supported_features
 
-            if not supported_features.resistance_level_supported:
+            if not fitness_machine_features.resistance_level_supported:
                 print("WARNING: Resistance level not supported on this smart trainer.")
                 return
 
-            if not supported_features.resistance_level_supported:
+            if not fitness_machine_features.resistance_level_supported:
                 print("WARNING: Resistance level not supported on this smart trainer.")
                 return
-            
 
 
             await self.ftms.enable_control_point_indicate()

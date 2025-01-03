@@ -15,12 +15,12 @@ uv run cycarla-agent
 # Compiled & Release
 
 ```
-uv run python -m nuitka --standalone --onefile src/cycarla_agent/__init__.py --output-filename=cycarla_agent_binary
+uv run python -m nuitka --standalone --onefile src/cycarla_agent/__init__.py --output-filename=cycarla_agent
 ```
 
 Run binary:
 ```
-./cycarla_agent_binary
+./cycarla_agent
 ```
 
 Name this binary with its version number and platform and upload it to Github releases.
