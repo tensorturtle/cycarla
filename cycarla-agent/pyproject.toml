@@ -1,7 +1,7 @@
 [project]
 name = "cycarla-agent"
-version = "0.2.1"
-description = "Intermediary server between Cycarla App and CARLA."
+version = "0.1.0"
+description = "Add your description here"
 readme = "README.md"
 authors = [
     { name = "tensorturtle", email = "tensorturtle@gmail.com" }
@@ -25,6 +25,10 @@ dependencies = [
 # https://packaging.python.org/en/latest/guides/writing-pyproject-toml/#creating-executable-scripts
 [project.scripts]
 cycarla-agent = "cycarla_agent:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
 
 [tool.uv]
 dev-dependencies = [
