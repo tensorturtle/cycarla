@@ -160,7 +160,7 @@ That's it! Now you should be able to see the CyCARLA App icon in the app menu. C
 
 ### 1. Install CARLA Simulator
 
-Download [CARLA 0.9.15 pre-compiled ZIP for Windows](https://carla-releases.s3.eu-west-3.amazonaws.com/Windows/CARLA_0.9.15.zip). Other versions can be found [here](https://github.com/carla-simulator/carla/releases)
+Download [CARLA 0.9.15 pre-compiled ZIP for Windows](https://tiny.carla.org/carla-0-9-15-windows). Other versions can be found [here](https://github.com/carla-simulator/carla/releases)
 
 Unzip it and find `CarlaUE4.exe`. Double click to launch it.
 
