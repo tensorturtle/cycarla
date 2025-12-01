@@ -1,3 +1,6 @@
+> [!WARNING]  
+> This project is no longer maintained. It has been replaced by [metacycle](https://github.com/tensorturtle/metacycle).
+
 ![banner](logo/cycarla-github-banner.png)
 
 # Introduction
